@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div style="display: none"></div>
+  <!--  <div>
     <header
       ref="headerRef"
       class="grid grid-cols-5 grid-rows-1 gap-2 overflow-x-auto overflow-y-hidden p-2"
@@ -237,22 +238,18 @@
       @hide-modal="confirmRemove = false"
       @resolve="deleteTeam"
     />
-  </div>
+  </div>-->
 </template>
 
 <script setup lang="ts">
 import { useI18n } from "@composables/i18n"
 import { useReadonlyStream } from "@composables/stream"
 import { defineActionHandler, invokeAction } from "@helpers/actions"
-import { installPWA, pwaDefferedPrompt } from "@modules/pwa"
-import { breakpointsTailwind, useBreakpoints, useNetwork } from "@vueuse/core"
+import { useNetwork } from "@vueuse/core"
 import { useService } from "dioc/vue"
-import * as TE from "fp-ts/TaskEither"
-import { pipe } from "fp-ts/function"
 import { computed, reactive, ref, watch } from "vue"
 import { useToast } from "~/composables/toast"
 import { GetMyTeamsQuery, TeamMemberRole } from "~/helpers/backend/graphql"
-import { deleteTeam as backendDeleteTeam } from "~/helpers/backend/mutations/Team"
 import { platform } from "~/platform"
 import {
   BANNER_PRIORITY_LOW,
@@ -260,13 +257,9 @@ import {
   BannerService,
 } from "~/services/banner.service"
 import { WorkspaceService } from "~/services/workspace.service"
-import IconDownload from "~icons/lucide/download"
-import IconLifeBuoy from "~icons/lucide/life-buoy"
-import IconSettings from "~icons/lucide/settings"
-import IconUploadCloud from "~icons/lucide/upload-cloud"
-import IconUser from "~icons/lucide/user"
-import IconUserPlus from "~icons/lucide/user-plus"
-import IconUsers from "~icons/lucide/users"
+import { applySetting, toggleSetting } from "~/newstore/settings"
+import { useSetting } from "~/composables/settings"
+import { changeAppLanguage } from "@modules/i18n"
 
 const t = useI18n()
 const toast = useToast()
@@ -274,9 +267,9 @@ const toast = useToast()
 /**
  * Feature flag to enable the workspace selector login conversion
  */
-const workspaceSelectorFlagEnabled = computed(
+/*const workspaceSelectorFlagEnabled = computed(
   () => !!platform.platformFeatureFlags.workspaceSwitcherLogin?.value
-)
+)*/
 
 /**
  * Once the PWA code is initialized, this holds a method
@@ -284,15 +277,15 @@ const workspaceSelectorFlagEnabled = computed(
  * prompt.
  */
 
-const showInstallButton = computed(() => !!pwaDefferedPrompt.value)
+/*const showInstallButton = computed(() => !!pwaDefferedPrompt.value)
 
 const showTeamsModal = ref(false)
 
 const breakpoints = useBreakpoints(breakpointsTailwind)
-const mdAndLarger = breakpoints.greater("md")
+const mdAndLarger = breakpoints.greater("md")*/
 
 const banner = useService(BannerService)
-const bannerContent = computed(() => banner.content.value?.content)
+/*const bannerContent = computed(() => banner.content.value?.content)*/
 let offlineBannerID: number | null = null
 
 const offlineBanner: BannerContent = {
@@ -302,6 +295,16 @@ const offlineBanner: BannerContent = {
   score: BANNER_PRIORITY_LOW,
   dismissible: true,
 }
+
+applySetting("BG_COLOR", "dark")
+
+document.documentElement.setAttribute("data-accent", "orange")
+applySetting("THEME_COLOR", "orange")
+
+changeAppLanguage("en")
+
+const sidebarLeft = useSetting("SIDEBAR_ON_LEFT")
+if (!sidebarLeft.value) toggleSetting("SIDEBAR_ON_LEFT")
 
 // Show the offline banner if the app is offline
 const network = reactive(useNetwork())
@@ -317,14 +320,14 @@ watch(isOnline, () => {
   }
 })
 
-const dismissBanner = () => {
+/*const dismissBanner = () => {
   if (banner.content.value) {
     banner.removeBanner(banner.content.value.id)
   } else if (offlineBannerID) {
     banner.removeBanner(offlineBannerID)
     offlineBannerID = null
   }
-}
+}*/
 
 const currentUser = useReadonlyStream(
   platform.auth.getProbableUserStream(),
@@ -343,7 +346,7 @@ const myTeams = useReadonlyStream(teamListAdapter.teamList$, null)
 
 const workspace = workspaceService.currentWorkspace
 
-const workspaceName = computed(() => {
+/*const workspaceName = computed(() => {
   return workspace.value.type === "personal"
     ? t("workspace.personal")
     : workspace.value.teamName
@@ -351,7 +354,7 @@ const workspaceName = computed(() => {
 
 const refetchTeams = () => {
   teamListAdapter.fetchList()
-}
+}*/
 
 watch(
   () => myTeams.value,
@@ -405,7 +408,7 @@ const inviteTeam = (team: { name: string }, teamID: string) => {
 }
 
 // Show the workspace selected team invite modal if the user is an owner of the team else show the default invite modal
-const handleInvite = () => {
+/*const handleInvite = () => {
   if (!currentUser.value) return invokeAction("modals.login.toggle")
 
   if (
@@ -418,7 +421,7 @@ const handleInvite = () => {
   } else {
     showTeamsModal.value = true
   }
-}
+}*/
 
 // Show the workspace selected team edit modal if the user is an owner of the team
 const handleTeamEdit = () => {
@@ -435,7 +438,7 @@ const handleTeamEdit = () => {
   }
 }
 
-const deleteTeam = () => {
+/*const deleteTeam = () => {
   if (!teamID.value) return
   pipe(
     backendDeleteTeam(teamID.value),
@@ -451,14 +454,14 @@ const deleteTeam = () => {
       }
     )
   )() // Tasks (and TEs) are lazy, so call the function returned
-}
+}*/
 
 // Template refs
-const tippyActions = ref<any | null>(null)
+/*const tippyActions = ref<any | null>(null)
 const profile = ref<any | null>(null)
 const settings = ref<any | null>(null)
 const logout = ref<any | null>(null)
-const accountActions = ref<any | null>(null)
+const accountActions = ref<any | null>(null)*/
 
 defineActionHandler("modals.team.edit", handleTeamEdit)
 

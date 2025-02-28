@@ -14,39 +14,39 @@
     </HoppSmartTab>
     <HoppSmartTab
       :id="'env'"
-      :icon="IconLayers"
-      :label="`${t('tab.environments')}`"
+      :icon="IconGlobe"
+      :label="`${t('tab.global_variables')}`"
     >
       <Environments />
     </HoppSmartTab>
-    <HoppSmartTab
+    <!-- <HoppSmartTab
       :id="'history'"
       :icon="IconClock"
       :label="`${t('tab.history')}`"
     >
       <History :page="'rest'" :selected-tab="selectedNavigationTab" />
-    </HoppSmartTab>
-    <HoppSmartTab
+    </HoppSmartTab> -->
+    <!-- <HoppSmartTab
       :id="'share-request'"
       :icon="IconShare2"
       :label="`${t('tab.shared_requests')}`"
     >
       <Share />
-    </HoppSmartTab>
+    </HoppSmartTab> -->
     <HoppSmartTab
-      :id="'codegen'"
-      :icon="IconCode"
-      :label="`${t('tab.codegen')}`"
+      :id="'csv_upload'"
+      :icon="IconImport"
+      :label="`${t('tab.csv_upload')}`"
     >
       <div
         class="flex items-center overflow-x-auto whitespace-nowrap border-b border-dividerLight px-4 py-2 text-tiny text-secondaryLight"
       >
         <span class="truncate"> {{ t("request.title") }} </span>
         <icon-lucide-chevron-right class="mx-2" />
-        {{ t("tab.code_snippet") }}
+        {{ t("tab.csv_upload") }}
       </div>
-      <HttpCodegen
-        v-if="selectedNavigationTab === 'codegen'"
+      <Csv
+        v-if="selectedNavigationTab === 'csv_upload'"
         :hide-label="true"
         class="px-4 mt-4"
       />
@@ -55,22 +55,15 @@
 </template>
 
 <script setup lang="ts">
-import IconClock from "~icons/lucide/clock"
-import IconLayers from "~icons/lucide/layers"
+import IconGlobe from "~icons/lucide/globe"
 import IconFolder from "~icons/lucide/folder"
-import IconShare2 from "~icons/lucide/share-2"
-import IconCode from "~icons/lucide/code"
+import IconImport from "~icons/lucide/folder-down"
 import { ref } from "vue"
 import { useI18n } from "@composables/i18n"
 
 const t = useI18n()
 
-type RequestOptionTabs =
-  | "history"
-  | "collections"
-  | "env"
-  | "share-request"
-  | "codegen"
+type RequestOptionTabs = "collections" | "env" | "csv_upload"
 
 const selectedNavigationTab = ref<RequestOptionTabs>("collections")
 </script>

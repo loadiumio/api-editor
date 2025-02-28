@@ -14,7 +14,7 @@
             style="width: auto; height: auto"
             class="hidden !overflow-auto md:flex md:flex-col"
           >
-            <AppSidenav />
+            <!--<AppSidenav />-->
           </Pane>
           <Pane class="flex flex-1 !overflow-auto">
             <Splitpanes
@@ -39,14 +39,14 @@
         </Splitpanes>
       </Pane>
       <Pane v-if="mdAndLarger" style="height: auto">
-        <AppFooter />
+        <!--<AppFooter />-->
       </Pane>
       <Pane
         v-else
         style="height: auto"
         class="fixed inset-x-0 bottom-0 z-10 flex flex-col !overflow-auto"
       >
-        <AppSidenav />
+        <!--<AppSidenav />-->
       </Pane>
     </Splitpanes>
     <AppActionHandler />

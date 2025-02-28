@@ -58,7 +58,7 @@
         :label="t('import.title')"
         :loading="loading"
         class="w-full"
-        @click="emit('importFromFile', fileContent)"
+        @click="emit('importFromFile', fileContent, fileDetails)"
       />
     </div>
   </div>
@@ -93,11 +93,12 @@ const importFilesCount = ref(0)
 const hasFile = ref(false)
 const showFileSizeLimitExceededWarning = ref(false)
 const fileContent = ref<string[]>([])
+const fileDetails = ref<any[]>([])
 
 const inputChooseFileToImportFrom = ref<HTMLInputElement | any>()
 
 const emit = defineEmits<{
-  (e: "importFromFile", content: string[]): void
+  (e: "importFromFile", content: string[], fileDetails: any[]): void
 }>()
 
 // Disable the import CTA if no file is selected, the file size limit is exceeded, or during an import action indicated by the `isLoading` prop
@@ -159,8 +160,16 @@ const onFileChange = async () => {
 
   const results = await Promise.allSettled(readerPromises)
 
-  const contentsArr = results
-    .filter((result) => result.status === "fulfilled")
+  const fulfilledFileDetails: any[] = []
+  const fulfilled = results.filter((result, index) => {
+    if (result.status === "fulfilled") {
+      fulfilledFileDetails.push(inputFileToImport.files[index])
+      return true
+    }
+    return false
+  })
+
+  const contentsArr = fulfilled
     .map((result) => (result as { value: string | null }).value)
     .filter(Boolean) as string[]
 
@@ -170,6 +179,7 @@ const onFileChange = async () => {
   }
 
   fileContent.value = contentsArr
+  fileDetails.value = fulfilledFileDetails
   hasFile.value = contentsArr.length > 0
 }
 </script>

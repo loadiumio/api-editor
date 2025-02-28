@@ -5,8 +5,7 @@
   >
     <span
       v-if="environmentIndex === 'Global'"
-      class="flex cursor-pointer items-center justify-center px-4"
-      @click="emit('edit-environment')"
+      class="flex items-center justify-center px-4"
     >
       <icon-lucide-globe class="svg-icons" />
     </span>
@@ -18,11 +17,10 @@
       <icon-lucide-layers class="svg-icons" />
     </span>
     <span
-      class="flex min-w-0 flex-1 cursor-pointer py-2 pr-2 transition group-hover:text-secondaryDark"
-      @click="emit('edit-environment')"
+      class="flex min-w-0 flex-1 py-2 pr-2 transition group-hover:text-secondaryDark"
     >
       <span class="truncate">
-        {{ environment.name }}
+        {{ t("environment.global_variables") }}
       </span>
     </span>
     <span>
@@ -44,8 +42,12 @@
             class="flex flex-col focus:outline-none"
             tabindex="0"
             role="menu"
-            @keyup.e="edit!.$el.click()"
-            @keyup.d="duplicate!.$el.click()"
+            @keyup.e="
+              !(environmentIndex === 'Global') ? edit!.$el.click() : null
+            "
+            @keyup.d="
+              !(environmentIndex === 'Global') ? duplicate!.$el.click() : null
+            "
             @keyup.j="exportAsJsonEl!.$el.click()"
             @keyup.delete="
               !(environmentIndex === 'Global')
@@ -55,6 +57,7 @@
             @keyup.escape="hide()"
           >
             <HoppSmartItem
+              v-if="environmentIndex !== 'Global'"
               ref="edit"
               :icon="IconEdit"
               :label="`${t('action.edit')}`"
@@ -68,6 +71,7 @@
               "
             />
             <HoppSmartItem
+              v-if="environmentIndex !== 'Global'"
               ref="duplicate"
               :icon="IconCopy"
               :label="t('action.duplicate')"
