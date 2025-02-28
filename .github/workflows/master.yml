@@ -3,8 +3,6 @@ name: Node.js CI
 on:
   push:
     branches: [main, master, next, patch]
-  pull_request:
-    branches: [main, master, next, patch]
 
 jobs:
   test:
@@ -34,7 +32,7 @@ jobs:
           run_install: true
 
       - name: Build project
-        run: npm run build
+        run: npm run generate
 
       - name: Push to S3
         run: |
