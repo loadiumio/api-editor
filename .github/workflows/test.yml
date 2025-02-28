@@ -5,7 +5,7 @@ on:
     branches: [test]
 
 env:
-  AWS_REGION: eu-west-1
+  AWS_REGION: eu-west-2
   AWS_S3_BUCKET: tf-loadium
 
 jobs:
