@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div style="display: none"></div>
+  <!--<div>
     <div
       class="sticky top-0 z-10 flex flex-shrink-0 flex-col overflow-x-auto bg-primary"
     >
@@ -104,49 +105,33 @@
     @hide-modal="displayCustomizeRequestModal(false, null)"
     @copy-shared-request="copySharedRequest"
     @create-shared-request="createSharedRequest"
-  />
+  />-->
 </template>
 
 <script lang="ts" setup>
-import IconHelpCircle from "~icons/lucide/help-circle"
-import IconPlus from "~icons/lucide/plus"
 import { useI18n } from "~/composables/i18n"
 import ShortcodeListAdapter from "~/helpers/shortcode/ShortcodeListAdapter"
-import { useReadonlyStream } from "~/composables/stream"
 import { onAuthEvent, onLoggedIn } from "~/composables/auth"
-import { computed } from "vue"
-import { useColorMode } from "~/composables/theming"
-import { defineActionHandler, invokeAction } from "~/helpers/actions"
-import { platform } from "~/platform"
-import { pipe } from "fp-ts/function"
-import * as TE from "fp-ts/TaskEither"
-import {
-  deleteShortcode as backendDeleteShortcode,
-  createShortcode,
-  updateEmbedProperties,
-} from "~/helpers/backend/mutations/Shortcode"
-import { GQLError } from "~/helpers/backend/GQLClient"
+import { defineActionHandler } from "~/helpers/actions"
+import { updateEmbedProperties } from "~/helpers/backend/mutations/Shortcode"
 import { useToast } from "~/composables/toast"
 import { ref } from "vue"
 import { HoppRESTRequest } from "@hoppscotch/data"
-import { copyToClipboard } from "~/helpers/utils/clipboard"
 import * as E from "fp-ts/Either"
-import { RESTTabService } from "~/services/tab/rest"
-import { useService } from "dioc/vue"
 import { watch } from "vue"
 
 const t = useI18n()
-const colorMode = useColorMode()
+/*const colorMode = useColorMode()*/
 const toast = useToast()
 
-const showConfirmModal = ref(false)
+/*const showConfirmModal = ref(false)
 const confirmModalTitle = ref("")
-const modalLoadingState = ref(false)
+const modalLoadingState = ref(false)*/
 
 const showShareRequestModal = ref(false)
 
-const sharedRequestID = ref("")
-const shareRequestCreatingLoading = ref(false)
+/*const sharedRequestID = ref("")
+const shareRequestCreatingLoading = ref(false)*/
 
 const requestToShare = ref<HoppRESTRequest | null>(null)
 
@@ -219,12 +204,12 @@ watch(
   { deep: true }
 )
 
-const restTab = useService(RESTTabService)
+/*const restTab = useService(RESTTabService)
 
 const currentUser = useReadonlyStream(
   platform.auth.getCurrentUserStream(),
   platform.auth.getCurrentUser()
-)
+)*/
 
 const step = ref(1)
 
@@ -260,7 +245,7 @@ const selectedWidget = ref<Widget>({
 })
 
 const adapter = new ShortcodeListAdapter(true)
-const adapterLoading = useReadonlyStream(adapter.loading$, false)
+/*const adapterLoading = useReadonlyStream(adapter.loading$, false)
 const adapterError = useReadonlyStream(adapter.error$, null)
 const sharedRequests = useReadonlyStream(adapter.shortcodes$, [])
 const hasMoreSharedRequests = useReadonlyStream(
@@ -270,7 +255,7 @@ const hasMoreSharedRequests = useReadonlyStream(
 
 const loading = computed(
   () => adapterLoading.value && sharedRequests.value.length === 0
-)
+)*/
 
 onLoggedIn(() => {
   if (adapter.isInitialized()) {
@@ -299,7 +284,7 @@ onAuthEvent((ev) => {
   }
 })
 
-const shareRequest = () => {
+/*const shareRequest = () => {
   if (currentUser.value) {
     const tab = restTab.currentActiveTab
     invokeAction("share.request", {
@@ -308,9 +293,9 @@ const shareRequest = () => {
   } else {
     invokeAction("modals.login.toggle")
   }
-}
+}*/
 
-const deleteSharedRequest = (codeID: string) => {
+/*const deleteSharedRequest = (codeID: string) => {
   if (currentUser.value) {
     sharedRequestID.value = codeID
     confirmModalTitle.value = `${t("confirm.remove_shared_request")}`
@@ -318,9 +303,9 @@ const deleteSharedRequest = (codeID: string) => {
   } else {
     invokeAction("modals.login.toggle")
   }
-}
+}*/
 
-const onDeleteSharedRequest = () => {
+/*const onDeleteSharedRequest = () => {
   modalLoadingState.value = true
   pipe(
     backendDeleteShortcode(sharedRequestID.value),
@@ -337,18 +322,18 @@ const onDeleteSharedRequest = () => {
       }
     )
   )()
-}
+}*/
 
-const loadMoreSharedRequests = () => {
+/*const loadMoreSharedRequests = () => {
   adapter.loadMore()
-}
+}*/
 
 const displayShareRequestModal = (show: boolean) => {
   showShareRequestModal.value = show
   step.value = 1
 }
 
-const displayCustomizeRequestModal = (
+/*const displayCustomizeRequestModal = (
   show: boolean,
   embedProperties?: string | null
 ) => {
@@ -404,9 +389,9 @@ const displayCustomizeRequestModal = (
       theme: parsedEmbedProperties.theme,
     }
   }
-}
+}*/
 
-const createSharedRequest = async (request: HoppRESTRequest | null) => {
+/*const createSharedRequest = async (request: HoppRESTRequest | null) => {
   if (request && selectedWidget.value) {
     const properties = {
       options: ["parameters", "body", "headers"],
@@ -455,9 +440,9 @@ const createSharedRequest = async (request: HoppRESTRequest | null) => {
       }
     }
   }
-}
+}*/
 
-const customizeSharedRequest = (
+/*const customizeSharedRequest = (
   request: HoppRESTRequest,
   shredRequestID: string,
   embedProperties?: string | null
@@ -467,9 +452,9 @@ const customizeSharedRequest = (
     id: shredRequestID,
   }
   displayCustomizeRequestModal(true, embedProperties)
-}
+}*/
 
-const copySharedRequest = (payload: {
+/*const copySharedRequest = (payload: {
   sharedRequestID: string | undefined
   content: string | undefined
 }) => {
@@ -477,9 +462,9 @@ const copySharedRequest = (payload: {
     copyToClipboard(payload.content)
     toast.success(t("state.copied_to_clipboard"))
   }
-}
+}*/
 
-const resolveConfirmModal = (title: string | null) => {
+/*const resolveConfirmModal = (title: string | null) => {
   if (title === `${t("confirm.remove_shared_request")}`) onDeleteSharedRequest()
   else {
     console.error(
@@ -489,9 +474,9 @@ const resolveConfirmModal = (title: string | null) => {
     showConfirmModal.value = false
     sharedRequestID.value = ""
   }
-}
+}*/
 
-const getErrorMessage = (err: GQLError<string>) => {
+/*const getErrorMessage = (err: GQLError<string>) => {
   if (err.type === "network_error") {
     return t("error.network_error")
   }
@@ -501,15 +486,15 @@ const getErrorMessage = (err: GQLError<string>) => {
     default:
       return t("error.something_went_wrong")
   }
-}
+}*/
 
-const openRequestInNewTab = (request: HoppRESTRequest) => {
+/*const openRequestInNewTab = (request: HoppRESTRequest) => {
   restTab.createNewTab({
     isDirty: false,
     request,
     type: "request",
   })
-}
+}*/
 
 defineActionHandler("share.request", ({ request }) => {
   requestToShare.value = request

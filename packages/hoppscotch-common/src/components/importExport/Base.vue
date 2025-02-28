@@ -50,6 +50,11 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  isUpload: {
+    type: Boolean,
+    default: () => false,
+    required: false,
+  },
 })
 
 const {

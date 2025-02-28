@@ -1,6 +1,6 @@
 <template>
-  <div class="flex divide-x divide-dividerLight">
-    <tippy
+  <div class="flex divide-x divide-dividerLight justify-end">
+    <!--<tippy
       interactive
       trigger="click"
       theme="popover"
@@ -153,8 +153,8 @@
           </HoppSmartTabs>
         </div>
       </template>
-    </tippy>
-    <span class="flex">
+    </tippy>-->
+    <span class="flex justify-end">
       <tippy
         interactive
         trigger="click"
@@ -252,7 +252,7 @@
             >
               {{ t("environment.no_active_environment") }}
             </div>
-            <div v-else class="my-2 flex flex-1 flex-col space-y-2 pl-4 pr-2">
+            <!--<div v-else class="my-2 flex flex-1 flex-col space-y-2 pl-4 pr-2">
               <div class="flex flex-1 space-x-4">
                 <span
                   class="min-w-[9rem] w-1/4 truncate text-tiny font-semibold"
@@ -286,7 +286,7 @@
               >
                 {{ t("environment.empty_variables") }}
               </div>
-            </div>
+            </div>-->
           </div>
         </template>
       </tippy>
@@ -295,9 +295,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useColorMode } from "@composables/theming"
 import { Environment, GlobalEnvironment } from "@hoppscotch/data"
-import { breakpointsTailwind, useBreakpoints } from "@vueuse/core"
 import { useService } from "dioc/vue"
 import { computed, onMounted, ref, watch } from "vue"
 import { TippyComponent } from "vue-tippy"
@@ -305,13 +303,8 @@ import { useI18n } from "~/composables/i18n"
 import { useReadonlyStream, useStream } from "~/composables/stream"
 import { invokeAction } from "~/helpers/actions"
 import { GetMyTeamsQuery } from "~/helpers/backend/graphql"
-import { getEnvActionErrorMessage } from "~/helpers/error-messages"
 import { TeamEnvironment } from "~/helpers/teams/TeamEnvironment"
 import TeamEnvironmentAdapter from "~/helpers/teams/TeamEnvironmentAdapter"
-import {
-  sortPersonalEnvironmentsAlphabetically,
-  sortTeamEnvironmentsAlphabetically,
-} from "~/helpers/utils/sortEnvironmentsAlphabetically"
 import {
   environments$,
   globalEnv$,
@@ -320,11 +313,8 @@ import {
 } from "~/newstore/environments"
 import { useLocalState } from "~/newstore/localstate"
 import { WorkspaceService } from "~/services/workspace.service"
-import IconCheck from "~icons/lucide/check"
 import IconEdit from "~icons/lucide/edit"
 import IconEye from "~icons/lucide/eye"
-import IconGlobe from "~icons/lucide/globe"
-import IconLayers from "~icons/lucide/layers"
 
 type Scope =
   | {
@@ -347,12 +337,12 @@ const emit = defineEmits<{
   (e: "update:modelValue", data: Scope): void
 }>()
 
-const breakpoints = useBreakpoints(breakpointsTailwind)
-const mdAndLarger = breakpoints.greater("md")
+/*const breakpoints = useBreakpoints(breakpointsTailwind)
+const mdAndLarger = breakpoints.greater("md")*/
 
 const t = useI18n()
 
-const colorMode = useColorMode()
+/*const colorMode = useColorMode()*/
 
 type EnvironmentType = "my-environments" | "team-environments"
 
@@ -391,23 +381,23 @@ watch(
 
 // TeamEnv List Adapter
 const teamEnvListAdapter = new TeamEnvironmentAdapter(undefined)
-const teamListLoading = useReadonlyStream(teamEnvListAdapter.loading$, false)
-const teamAdapterError = useReadonlyStream(teamEnvListAdapter.error$, null)
+/*const teamListLoading = useReadonlyStream(teamEnvListAdapter.loading$, false)
+const teamAdapterError = useReadonlyStream(teamEnvListAdapter.error$, null)*/
 const teamEnvironmentList = useReadonlyStream(
   teamEnvListAdapter.teamEnvironmentList$,
   []
 )
 
 // Sort environments alphabetically by default
-const alphabeticallySortedPersonalEnvironments = computed(() =>
+/*const alphabeticallySortedPersonalEnvironments = computed(() =>
   sortPersonalEnvironmentsAlphabetically(myEnvironments.value, "asc")
 )
 
 const alphabeticallySortedTeamEnvironments = computed(() =>
   sortTeamEnvironmentsAlphabetically(teamEnvironmentList.value, "asc")
-)
+)*/
 
-const handleEnvironmentChange = (
+/*const handleEnvironmentChange = (
   index: number,
   env?:
     | {
@@ -468,7 +458,7 @@ const isEnvActive = (id: string | number) => {
       selectedEnv.value.teamEnvID === id
     )
   }
-}
+}*/
 
 const selectedEnvironmentIndex = useStream(
   selectedEnvironmentIndex$,
@@ -476,9 +466,9 @@ const selectedEnvironmentIndex = useStream(
   setSelectedEnvironmentIndex
 )
 
-const isTeamSelected = computed(
+/*const isTeamSelected = computed(
   () => workspace.value.type === "team" && workspace.value.teamID !== undefined
-)
+)*/
 
 const selectedEnvTab = ref<EnvironmentType>("my-environments")
 
@@ -587,17 +577,17 @@ onMounted(() => {
 })
 
 // Template refs
-const envSelectorActions = ref<TippyComponent | null>(null)
+/*const envSelectorActions = ref<TippyComponent | null>(null)*/
 const envQuickPeekActions = ref<TippyComponent | null>(null)
 
 const globalEnvs = useReadonlyStream(globalEnv$, {} as GlobalEnvironment)
 
-const environmentVariables = computed(() => {
+/*const environmentVariables = computed(() => {
   if (selectedEnv.value.variables) {
     return selectedEnv.value.variables
   }
   return []
-})
+})*/
 
 const editGlobalEnv = () => {
   invokeAction("modals.global.environment.update", {})

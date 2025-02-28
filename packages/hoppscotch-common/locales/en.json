@@ -346,6 +346,7 @@
     "empty_schema": "No schema found",
     "endpoint": "Endpoint cannot be empty",
     "environments": "Environments are empty",
+    "global_variables": "Global Variables are empty",
     "folder": "Folder is empty",
     "headers": "This request does not have any headers",
     "history": "History is empty",
@@ -365,7 +366,8 @@
     "teams": "You don't belong to any workspaces",
     "tests": "There are no tests for this request",
     "access_tokens": "Access tokens are empty",
-    "response": "No response received"
+    "response": "No response received",
+    "csv_files": "There are no CSV files uploaded"
   },
   "environment": {
     "heading": "Environment",
@@ -557,6 +559,8 @@
     "from_postman": "Import from Postman",
     "from_postman_description": "Import from Postman collection",
     "from_postman_import_summary": "Collections, Requests and response examples will be imported.",
+    "csv": "Upload CSV File",
+    "csv_description": "Upload a CSV file",
     "from_url": "Import from URL",
     "gist_url": "Enter Gist URL",
     "from_har": "Import from HAR",
@@ -574,6 +578,7 @@
     "postman_environment": "Postman Environment",
     "postman_environment_description": "Import Postman Environment from a JSON file",
     "title": "Import",
+    "upload_title": "Upload",
     "file_size_limit_exceeded_warning_multiple_files": "Chosen files exceed the recommended limit of {sizeLimit}MB. Only the first {files} selected will be imported",
     "file_size_limit_exceeded_warning_single_file": "The currently chosen file exceeds the recommended limit of {sizeLimit}MB. Please select another file.",
     "success": "Successfully imported",
@@ -629,7 +634,8 @@
     "edit_response": "Edit Response",
     "import_export": "Import / Export",
     "response_name": "Response Name",
-    "share_request": "Share Request"
+    "share_request": "Share Request",
+    "file": "Upload File"
   },
   "mqtt": {
     "already_subscribed": "You are already subscribed to this topic.",
@@ -1124,7 +1130,9 @@
     "websocket": "WebSocket",
     "all_tests": "All Tests",
     "passed": "Passed",
-    "failed": "Failed"
+    "failed": "Failed",
+    "global_variables": "Global Variables",
+    "csv_upload": "CSV Upload"
   },
   "team": {
     "activity_logs": "Activity Logs",
@@ -1303,5 +1311,9 @@
     "generate_or_modify_test_script_input_placeholder": "Enter a prompt to generate or modify the test script",
     "modify_test_script_error": "Failed to modify test script",
     "modify_prerequest_error": "Failed to modify pre-request script"
+  },
+  "csv_import": {
+    "csv_files": "CSV Files",
+    "upload_file": "Upload a CSV file"
   }
 }

@@ -7,7 +7,10 @@ import { Ref } from "vue"
 export function FileSource(metadata: {
   acceptedFileTypes: string
   caption: string
-  onImportFromFile: (content: string[]) => any | Promise<any>
+  onImportFromFile: (
+    content: string[],
+    fileDetails: any[]
+  ) => any | Promise<any>
   isLoading?: Ref<boolean>
   description?: string
 }) {
