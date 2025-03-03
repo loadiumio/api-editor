@@ -23,12 +23,6 @@ import { platform } from "./platform"
 import { Toaster } from "@hoppscotch/ui"
 import { onMounted } from "vue"
 
-onMounted(() => {
-  if (window.location.pathname.includes("/api-editor/")) {
-    window.location.href = "/"
-  }
-})
-
 const t = useI18n()
 
 const errorInfo = ref<ErrorPageData | null>(null)
