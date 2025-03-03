@@ -579,7 +579,7 @@ const getExtensions = (readonly: boolean): Extension => {
     history(),
     keymap.of([...historyKeymap]),
   ]
-  return extensions
+  return extensions.filter(Boolean)
 }
 
 const triggerTextSelection = () => {
