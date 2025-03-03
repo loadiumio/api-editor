@@ -48,5 +48,5 @@ jobs:
 
       - name: Push to S3
         run: |
-          aws s3 sync dist s3://${{ env.AWS_S3_BUCKET }}/api-editor/
+          aws s3 sync packages/hoppscotch-selfhost-web/dist s3://${{ env.AWS_S3_BUCKET }}/api-editor/
           aws cloudfront create-invalidation --distribution-id ${{secrets.AWS_LANDING_CLOUDFRONT_ID_TEST}} --paths "/*"
