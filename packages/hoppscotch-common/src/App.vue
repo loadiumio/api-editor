@@ -21,7 +21,6 @@ import { useI18n } from "@composables/i18n"
 import { APP_IS_IN_DEV_MODE } from "@helpers/dev"
 import { platform } from "./platform"
 import { Toaster } from "@hoppscotch/ui"
-import { onMounted } from "vue"
 
 const t = useI18n()
 

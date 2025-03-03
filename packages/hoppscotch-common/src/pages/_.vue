@@ -17,6 +17,7 @@
     <p class="mb-4 text-secondaryLight">{{ message }}</p>
     <div class="mt-4 space-x-2">
       <HoppButtonSecondary
+        ref="homeButton"
         to="/"
         :icon="IconHome"
         filled
@@ -35,7 +36,7 @@
 <script setup lang="ts">
 import IconRefreshCW from "~icons/lucide/refresh-cw"
 import IconHome from "~icons/lucide/home"
-import { PropType, computed } from "vue"
+import { PropType, computed, ref, onMounted } from "vue"
 import { useI18n } from "@composables/i18n"
 import { useColorMode } from "@composables/theming"
 
@@ -46,6 +47,13 @@ export type ErrorPageData = {
 
 const colorMode = useColorMode()
 const t = useI18n()
+const homeButton = ref(null)
+
+onMounted(() => {
+  if (homeButton.value) {
+    homeButton.value.$el.click()
+  }
+})
 
 const props = defineProps({
   error: {
