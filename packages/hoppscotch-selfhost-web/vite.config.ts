@@ -21,11 +21,10 @@ import ImportMetaEnv from "@import-meta-env/unplugin"
 const ENV = loadEnv("development", path.resolve(__dirname, "../../"), ["VITE_"])
 
 export default defineConfig({
+  base: "/api-editor/", // Base path'i buraya ekledik
   envPrefix: process.env.HOPP_ALLOW_RUNTIME_ENV ? "VITE_BUILDTIME_" : "VITE_",
   envDir: path.resolve(__dirname, "../../"),
-  // TODO: Migrate @hoppscotch/data to full ESM
   define: {
-    // For 'util' polyfill required by dep of '@apidevtools/swagger-parser'
     "process.env": {},
   },
   server: {
@@ -52,7 +51,6 @@ export default defineConfig({
         __dirname,
         "../hoppscotch-common/postcss.config.cjs"
       ),
-      // TODO: Maybe leave ~ only for individual apps and not use on common
       "~": path.resolve(__dirname, "../hoppscotch-common/src"),
       "@hoppscotch/common": "@hoppscotch/common/src",
       "@composables": path.resolve(
@@ -79,7 +77,7 @@ export default defineConfig({
     dedupe: ["vue"],
   },
   plugins: [
-    Inspect(), // go to url -> /__inspect
+    Inspect(),
     HtmlConfig({
       metas: META_TAGS(ENV),
     }),
@@ -153,53 +151,53 @@ export default defineConfig({
         name: APP_INFO.name,
         short_name: APP_INFO.name,
         description: APP_INFO.shortDescription,
-        start_url: "/?source=pwa",
-        id: "/?source=pwa",
+        start_url: "/api-editor/?source=pwa",
+        id: "/api-editor/?source=pwa",
         protocol_handlers: [
           {
             protocol: "web+hoppscotch",
-            url: "/%s",
+            url: "/api-editor/%s",
           },
           {
             protocol: "web+hopp",
-            url: "/%s",
+            url: "/api-editor/%s",
           },
         ],
         background_color: APP_INFO.app.background,
         theme_color: APP_INFO.app.background,
         icons: [
           {
-            src: "/icons/pwa-16x16.png",
+            src: "/api-editor/icons/pwa-16x16.png",
             sizes: "16x16",
             type: "image/png",
           },
           {
-            src: "/icons/pwa-32x32.png",
+            src: "/api-editor/icons/pwa-32x32.png",
             sizes: "32x32",
             type: "image/png",
           },
           {
-            src: "/icons/pwa-128x128.png",
+            src: "/api-editor/icons/pwa-128x128.png",
             sizes: "128x128",
             type: "image/png",
           },
           {
-            src: "/icons/pwa-192x192.png",
+            src: "/api-editor/icons/pwa-192x192.png",
             sizes: "192x192",
             type: "image/png",
           },
           {
-            src: "/icons/pwa-256x256.png",
+            src: "/api-editor/icons/pwa-256x256.png",
             sizes: "256x256",
             type: "image/png",
           },
           {
-            src: "/icons/pwa-512x512.png",
+            src: "/api-editor/icons/pwa-512x512.png",
             sizes: "512x512",
             type: "image/png",
           },
           {
-            src: "/icons/pwa-1024x1024.png",
+            src: "/api-editor/icons/pwa-1024x1024.png",
             sizes: "1024x1024",
             type: "image/png",
           },
@@ -249,9 +247,9 @@ export default defineConfig({
     }),
     process.env.HOPP_ALLOW_RUNTIME_ENV
       ? ImportMetaEnv.vite({
-          example: "../../.env.example",
-          env: "../../.env",
-        })
+        example: "../../.env.example",
+        env: "../../.env",
+      })
       : [],
   ],
   css: {
