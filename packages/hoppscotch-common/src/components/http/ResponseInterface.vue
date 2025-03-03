@@ -113,7 +113,7 @@
 
       <HoppSmartPlaceholder
         v-else
-        :src="`/images/states/${colorMode.value}/add_files.svg`"
+        :src="`/api-editor/images/states/${colorMode.value}/add_files.svg`"
         :alt="`${t('empty.response')}`"
         :text="`${t('empty.response')}`"
       >

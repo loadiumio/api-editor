@@ -9,7 +9,7 @@
     <template #body>
       <HoppSmartPlaceholder
         v-if="!currentInterceptorSupportsCookies"
-        :src="`/images/states/${colorMode.value}/add_category.svg`"
+        :src="`/api-editor/images/states/${colorMode.value}/add_category.svg`"
         :alt="`${t('cookies.modal.interceptor_no_support')}`"
         :text="t('cookies.modal.interceptor_no_support')"
       >
@@ -38,7 +38,7 @@
         <div class="flex flex-col space-y-4">
           <HoppSmartPlaceholder
             v-if="workingCookieJar.size === 0"
-            :src="`/images/states/${colorMode.value}/blockchain.svg`"
+            :src="`/api-editor/images/states/${colorMode.value}/blockchain.svg`"
             :alt="`${t('cookies.modal.empty_domains')}`"
             :text="t('cookies.modal.empty_domains')"
             class="mt-6"

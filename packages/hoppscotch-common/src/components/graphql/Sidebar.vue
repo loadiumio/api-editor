@@ -54,7 +54,7 @@
       </div>
       <HoppSmartPlaceholder
         v-else
-        :src="`/images/states/${colorMode.value}/blockchain.svg`"
+        :src="`/api-editor/images/states/${colorMode.value}/blockchain.svg`"
         :alt="`${t('empty.schema')}`"
         :text="t('empty.schema')"
       >

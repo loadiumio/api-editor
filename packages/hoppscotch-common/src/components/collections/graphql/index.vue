@@ -66,7 +66,7 @@
     </div>
     <HoppSmartPlaceholder
       v-if="collections.length === 0"
-      :src="`/images/states/${colorMode.value}/pack.svg`"
+      :src="`/api-editor/images/states/${colorMode.value}/pack.svg`"
       :alt="`${t('empty.collections')}`"
       :text="t('empty.collections')"
     >

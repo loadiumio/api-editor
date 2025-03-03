@@ -192,7 +192,7 @@
           </div>
           <HoppSmartPlaceholder
             v-if="authType === 'None'"
-            :src="`/images/states/${colorMode.value}/login.svg`"
+            :src="`/api-editor/images/states/${colorMode.value}/login.svg`"
             :alt="`${t('socketio.connection_not_authorized')}`"
             :text="`${t('socketio.connection_not_authorized')}`"
           >

@@ -154,7 +154,7 @@
       </draggable>
       <HoppSmartPlaceholder
         v-if="workingUrlEncodedParams.length === 0 && !isBulkEditing"
-        :src="`/images/states/${colorMode.value}/add_category.svg`"
+        :src="`/api-editor/images/states/${colorMode.value}/add_category.svg`"
         :alt="`${t('empty.body')}`"
         :text="t('empty.body')"
       >

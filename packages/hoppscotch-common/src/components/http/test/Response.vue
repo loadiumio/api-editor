@@ -27,7 +27,7 @@
     />
     <HoppSmartPlaceholder
       v-else
-      :src="`/images/states/${colorMode.value}/add_files.svg`"
+      :src="`/api-editor/images/states/${colorMode.value}/add_files.svg`"
       :alt="`${t('collection_runner.response_body_lost_rerun')}`"
       :text="`${t('collection_runner.response_body_lost_rerun')}`"
     >

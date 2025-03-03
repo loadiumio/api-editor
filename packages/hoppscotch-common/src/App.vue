@@ -21,6 +21,13 @@ import { useI18n } from "@composables/i18n"
 import { APP_IS_IN_DEV_MODE } from "@helpers/dev"
 import { platform } from "./platform"
 import { Toaster } from "@hoppscotch/ui"
+import { onMounted } from "vue"
+
+onMounted(() => {
+  if (window.location.pathname === "/api-editor/") {
+    window.location.href = "/"
+  }
+})
 
 const t = useI18n()
 
