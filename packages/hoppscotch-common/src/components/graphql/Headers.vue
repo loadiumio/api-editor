@@ -208,7 +208,7 @@
 
     <HoppSmartPlaceholder
       v-if="workingHeaders.length === 0"
-      :src="`/api-editor/images/states/${colorMode.value}/add_category.svg`"
+      :src="`/images/states/${colorMode.value}/add_category.svg`"
       :alt="`${t('empty.headers')}`"
       :text="t('empty.headers')"
     >

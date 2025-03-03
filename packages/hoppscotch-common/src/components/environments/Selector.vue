@@ -98,7 +98,7 @@
               />
               <HoppSmartPlaceholder
                 v-if="alphabeticallySortedPersonalEnvironments.length === 0"
-                :src="`/api-editor/images/states/${colorMode.value}/blockchain.svg`"
+                :src="`/images/states/${colorMode.value}/blockchain.svg`"
                 :alt="`${t('empty.environments')}`"
                 :text="t('empty.environments')"
               />
@@ -137,7 +137,7 @@
                 />
                 <HoppSmartPlaceholder
                   v-if="alphabeticallySortedTeamEnvironments.length === 0"
-                  :src="`/api-editor/images/states/${colorMode.value}/blockchain.svg`"
+                  :src="`/images/states/${colorMode.value}/blockchain.svg`"
                   :alt="`${t('empty.environments')}`"
                   :text="t('empty.environments')"
                 />

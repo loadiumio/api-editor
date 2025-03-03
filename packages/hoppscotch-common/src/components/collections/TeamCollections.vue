@@ -372,7 +372,7 @@
           </HoppSmartPlaceholder>
           <HoppSmartPlaceholder
             v-else-if="node === null"
-            :src="`/api-editor/images/states/${colorMode.value}/pack.svg`"
+            :src="`/images/states/${colorMode.value}/pack.svg`"
             :alt="`${t('empty.collections')}`"
             :text="t('empty.collections')"
             @drop.stop
@@ -411,7 +411,7 @@
           </HoppSmartPlaceholder>
           <HoppSmartPlaceholder
             v-else-if="node.data.type === 'collections'"
-            :src="`/api-editor/images/states/${colorMode.value}/pack.svg`"
+            :src="`/images/states/${colorMode.value}/pack.svg`"
             :alt="`${t('empty.collections')}`"
             :text="t('empty.collections')"
             @drop.stop
@@ -433,7 +433,7 @@
           </HoppSmartPlaceholder>
           <HoppSmartPlaceholder
             v-else-if="node.data.type === 'folders'"
-            :src="`/api-editor/images/states/${colorMode.value}/pack.svg`"
+            :src="`/images/states/${colorMode.value}/pack.svg`"
             :alt="`${t('empty.folder')}`"
             :text="t('empty.folder')"
             @drop.stop

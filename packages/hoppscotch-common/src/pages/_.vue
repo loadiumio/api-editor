@@ -6,7 +6,7 @@
     :class="{ 'min-h-screen': statusCode !== 404 }"
   >
     <img
-      :src="`/api-editor/images/states/${colorMode.value}/youre_lost.svg`"
+      :src="`/images/states/${colorMode.value}/youre_lost.svg`"
       loading="lazy"
       class="mb-2 inline-flex h-46 w-46 flex-col object-contain object-center"
       :alt="message"

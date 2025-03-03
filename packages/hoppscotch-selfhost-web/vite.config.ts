@@ -43,6 +43,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
+      "/images": "/api-editor/images",
       "tailwind.config.cjs": path.resolve(
         __dirname,
         "../hoppscotch-common/tailwind.config.cjs"

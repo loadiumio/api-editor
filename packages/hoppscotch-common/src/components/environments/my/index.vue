@@ -19,7 +19,7 @@
     />
     <HoppSmartPlaceholder
       v-if="!alphabeticallySortedPersonalEnvironments.length"
-      :src="`/api-editor/images/states/${colorMode.value}/blockchain.svg`"
+      :src="`/images/states/${colorMode.value}/blockchain.svg`"
       :alt="`${t('empty.environments')}`"
       :text="t('empty.environments')"
     >
@@ -85,7 +85,7 @@
             <div class="divide-y divide-dividerLight">
               <HoppSmartPlaceholder
                 v-if="tab.variables.length === 0"
-                :src="`/api-editor/images/states/${colorMode.value}/blockchain.svg`"
+                :src="`/images/states/${colorMode.value}/blockchain.svg`"
                 :alt="tab.emptyStateLabel"
                 :text="tab.emptyStateLabel"
               >

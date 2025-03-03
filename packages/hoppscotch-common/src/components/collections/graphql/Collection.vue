@@ -218,7 +218,7 @@
           v-if="
             collection.folders.length === 0 && collection.requests.length === 0
           "
-          :src="`/api-editor/images/states/${colorMode.value}/pack.svg`"
+          :src="`/images/states/${colorMode.value}/pack.svg`"
           :alt="`${t('empty.collection')}`"
           :text="t('empty.collection')"
         >

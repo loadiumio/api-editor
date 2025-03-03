@@ -215,7 +215,7 @@
             folder.requests &&
             folder.requests.length === 0
           "
-          :src="`/api-editor/images/states/${colorMode.value}/pack.svg`"
+          :src="`/images/states/${colorMode.value}/pack.svg`"
           :alt="`${t('empty.folder')}`"
           :text="t('empty.folder')"
         />

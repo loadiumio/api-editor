@@ -13,7 +13,7 @@
 
   <HoppSmartPlaceholder
     v-else-if="accessTokens.length === 0"
-    :src="`/api-editor/images/states/${colorMode.value}/pack.svg`"
+    :src="`/images/states/${colorMode.value}/pack.svg`"
     :alt="`${t('empty.access_tokens')}`"
     :text="t('empty.access_tokens')"
     @drop.stop

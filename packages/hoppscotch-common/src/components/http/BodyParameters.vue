@@ -215,7 +215,7 @@
 
     <HoppSmartPlaceholder
       v-if="workingParams.length === 0 && !isBulkEditing"
-      :src="`/api-editor/images/states/${colorMode.value}/upload_single_file.svg`"
+      :src="`/images/states/${colorMode.value}/upload_single_file.svg`"
       :alt="`${t('empty.body')}`"
       :text="t('empty.body')"
     >

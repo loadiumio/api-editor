@@ -159,7 +159,7 @@
           </draggable>
           <HoppSmartPlaceholder
             v-if="protocols.length === 0"
-            :src="`/api-editor/images/states/${colorMode.value}/add_category.svg`"
+            :src="`/images/states/${colorMode.value}/add_category.svg`"
             :alt="`${t('empty.protocols')}`"
             :text="`${t('empty.protocols')}`"
           />
