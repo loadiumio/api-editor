@@ -24,7 +24,7 @@ import { Toaster } from "@hoppscotch/ui"
 import { onMounted } from "vue"
 
 onMounted(() => {
-  if (window.location.pathname === "/api-editor/") {
+  if (window.location.pathname.includes("/api-editor/")) {
     window.location.href = "/"
   }
 })
