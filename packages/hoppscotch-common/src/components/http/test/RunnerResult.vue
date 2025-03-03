@@ -77,7 +77,7 @@
       (selectedTestTab === 'failed' &&
         tab.document.testRunnerMeta.failedTests === 0)
     "
-    :src="`/images/states/${colorMode.value}/pack.svg`"
+    :src="`/api-editor/images/states/${colorMode.value}/pack.svg`"
     :text="
       selectedTestTab === 'passed'
         ? `${t('collection_runner.no_passed_tests')}`

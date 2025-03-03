@@ -145,7 +145,7 @@
       </draggable>
       <HoppSmartPlaceholder
         v-if="workingRequestVariables.length === 0"
-        :src="`/images/states/${colorMode.value}/add_files.svg`"
+        :src="`/api-editor/images/states/${colorMode.value}/add_files.svg`"
         :alt="`${t('empty.request_variables')}`"
         :text="t('empty.request_variables')"
       >

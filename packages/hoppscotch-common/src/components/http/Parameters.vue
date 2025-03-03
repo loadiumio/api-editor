@@ -82,7 +82,7 @@
       </draggable>
       <HoppSmartPlaceholder
         v-if="workingParams.length === 0"
-        :src="`/images/states/${colorMode.value}/add_files.svg`"
+        :src="`/api-editor/images/states/${colorMode.value}/add_files.svg`"
         :alt="`${t('empty.parameters')}`"
         :text="t('empty.parameters')"
       >

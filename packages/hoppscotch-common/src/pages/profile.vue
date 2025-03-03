@@ -10,7 +10,7 @@
         </div>
         <HoppSmartPlaceholder
           v-else-if="currentUser === null"
-          :src="`/images/states/${colorMode.value}/login.svg`"
+          :src="`/api-editor/images/states/${colorMode.value}/login.svg`"
           :alt="`${t('empty.profile')}`"
           :text="`${t('empty.profile')}`"
         >

@@ -81,7 +81,7 @@
     </div>
     <HoppSmartPlaceholder
       v-if="auth.authType === 'none'"
-      :src="`/images/states/${colorMode.value}/login.svg`"
+      :src="`/api-editor/images/states/${colorMode.value}/login.svg`"
       :alt="`${t('empty.authorization')}`"
       :text="t('empty.authorization')"
     >

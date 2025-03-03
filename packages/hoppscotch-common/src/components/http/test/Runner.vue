@@ -78,7 +78,7 @@
         v-else-if="
           !testRunnerConfig.persistResponses && !selectedRequest?.response
         "
-        :src="`/images/states/${colorMode.value}/add_files.svg`"
+        :src="`/api-editor/images/states/${colorMode.value}/add_files.svg`"
         :alt="`${t('collection_runner.no_response_persist')}`"
         :text="`${t('collection_runner.no_response_persist')}`"
       >
@@ -92,7 +92,7 @@
 
       <HoppSmartPlaceholder
         v-else-if="!selectedRequest"
-        :src="`/images/states/${colorMode.value}/pack.svg`"
+        :src="`/api-editor/images/states/${colorMode.value}/pack.svg`"
         :alt="`${t('collection_runner.response_body_lost_rerun')}`"
         :text="`${t('collection_runner.response_body_lost_rerun')}`"
       >

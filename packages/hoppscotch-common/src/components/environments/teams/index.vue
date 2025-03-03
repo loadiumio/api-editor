@@ -49,7 +49,7 @@
         !alphabeticallySortedTeamEnvironments.length &&
         !adapterError
       "
-      :src="`/images/states/${colorMode.value}/blockchain.svg`"
+      :src="`/api-editor/images/states/${colorMode.value}/blockchain.svg`"
       :alt="`${t('empty.environments')}`"
       :text="t('empty.environments')"
     >

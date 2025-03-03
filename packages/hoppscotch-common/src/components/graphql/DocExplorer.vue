@@ -45,7 +45,7 @@
 
   <HoppSmartPlaceholder
     v-else
-    :src="`/images/states/${colorMode.value}/pack.svg`"
+    :src="`/api-editor/images/states/${colorMode.value}/pack.svg`"
     :alt="t('empty.empty_schema')"
     :text="t('empty.empty_schema')"
   >

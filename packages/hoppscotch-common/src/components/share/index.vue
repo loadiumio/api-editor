@@ -35,7 +35,7 @@
 
       <HoppSmartPlaceholder
         v-else-if="!currentUser"
-        :src="`/images/states/${colorMode.value}/add_files.svg`"
+        :src="`/api-editor/images/states/${colorMode.value}/add_files.svg`"
         :alt="`${t('empty.shared_requests_logout')}`"
         :text="`${t('empty.shared_requests_logout')}`"
       >
@@ -73,7 +73,7 @@
 
       <HoppSmartPlaceholder
         v-else
-        :src="`/images/states/${colorMode.value}/add_files.svg`"
+        :src="`/api-editor/images/states/${colorMode.value}/add_files.svg`"
         :alt="`${t('empty.shared_requests')}`"
         :text="t('empty.shared_requests')"
         @drop.stop

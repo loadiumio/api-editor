@@ -117,13 +117,13 @@
     </div>
     <HoppSmartPlaceholder
       v-if="!isHistoryStoreEnabled && !isFetchingHistoryStoreStatus"
-      :src="`/images/states/${colorMode.value}/time.svg`"
+      :src="`/api-editor/images/states/${colorMode.value}/time.svg`"
       :alt="`${t('empty.history')}`"
       :text="t('settings.history_disabled')"
     />
     <HoppSmartPlaceholder
       v-else-if="history.length === 0"
-      :src="`/images/states/${colorMode.value}/time.svg`"
+      :src="`/api-editor/images/states/${colorMode.value}/time.svg`"
       :alt="`${t('empty.history')}`"
       :text="t('empty.history')"
     />
