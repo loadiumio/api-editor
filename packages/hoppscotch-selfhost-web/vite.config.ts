@@ -75,7 +75,7 @@ export default defineConfig({
       util: "util",
       querystring: "qs",
     },
-    dedupe: ["vue"],
+    dedupe: ["vue", "@codemirror/state"],
   },
   plugins: [
     Inspect(),
