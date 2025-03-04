@@ -114,7 +114,7 @@
                     })}`"
                     :name="'param' + index"
                   />
-                  <SmartEnvInput
+                  <!--<SmartEnvInput
                     v-model="env.value"
                     :placeholder="`${t('count.value', { count: index + 1 })}`"
                     :envs="liveEnvs"
@@ -123,6 +123,12 @@
                     :select-text-on-mount="
                       env.key ? env.key === editingVariableName : false
                     "
+                  />-->
+                  <input
+                    v-model="env.value"
+                    class="flex flex-1 bg-transparent px-4 py-2"
+                    :placeholder="`${t('count.value', { count: index + 1 })}`"
+                    :name="'value' + index"
                   />
                   <div class="flex">
                     <HoppButtonSecondary
