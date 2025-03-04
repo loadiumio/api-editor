@@ -470,12 +470,18 @@ const initView = (el: any) => {
   const extensions: Extension[] = getExtensions(
     props.readonly || isSecret.value
   )
+
+  console.log("🔍 Checking Extensions Before CodeMirror:", extensions)
   const flattedExtensions: Extension[] = extensions.flat().filter(Boolean)
+  console.log(
+    "🔍 Checking Flatted Extensions Before CodeMirror:",
+    flattedExtensions
+  )
   view.value = new EditorView({
     parent: el,
     state: EditorState.create({
       doc: props.modelValue,
-      extensions: flattedExtensions,
+      extensions: extensions,
     }),
   })
 }
@@ -505,8 +511,8 @@ const getExtensions = (readonly: boolean): Extension[] => {
       parent: document.body,
       position: "absolute",
     }),
-    props.environmentHighlights ? envTooltipPlugin : [],
-    props.predefinedVariablesHighlights ? predefinedVariablePlugin : [],
+    props.environmentHighlights ? envTooltipPlugin : null,
+    props.predefinedVariablesHighlights ? predefinedVariablePlugin : null,
     placeholderExt(props.placeholder),
     EditorView.domEventHandlers({
       paste(ev) {
@@ -528,7 +534,7 @@ const getExtensions = (readonly: boolean): Extension[] => {
           activateOnTyping: true,
           override: [envAutoCompletion],
         })
-      : [],
+      : null,
     ViewPlugin.fromClass(
       class {
         update(update: ViewUpdate) {
@@ -580,9 +586,9 @@ const getExtensions = (readonly: boolean): Extension[] => {
       }
     ),
     history(),
-    keymap.of([...historyKeymap]),
+    keymap.of([...historyKeymap] as const),
   ]
-  return extensions
+  return extensions.filter(Boolean)
 }
 
 const triggerTextSelection = () => {
@@ -597,22 +603,33 @@ const triggerTextSelection = () => {
 }
 onMounted(() => {
   if (editor.value) {
-    if (!view.value) initView(editor.value)
+    if (!view.value) {
+      console.log("view init")
+      initView(editor.value)
+    }
     if (props.selectTextOnMount) triggerTextSelection()
     if (props.focus) view.value?.focus()
     platform.ui?.onCodemirrorInstanceMount?.(editor.value)
+  } else {
+    console.log("editor init fail")
   }
 })
 
-watch(editor, () => {
-  if (editor.value) {
-    if (!view.value) initView(editor.value)
-    if (props.selectTextOnMount) triggerTextSelection()
-  } else {
-    view.value?.destroy()
-    view.value = undefined
-  }
-})
+watch(
+  editor,
+  () => {
+    if (editor.value) {
+      console.log("🔄 Editor ref updated, initializing...")
+      if (!view.value) initView(editor.value)
+      if (props.selectTextOnMount) triggerTextSelection()
+    } else {
+      console.warn("❌ Editor ref is now null. Destroying CodeMirror.")
+      view.value?.destroy()
+      view.value = undefined
+    }
+  },
+  { flush: "post" }
+)
 </script>
 
 <style lang="scss" scoped>
