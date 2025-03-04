@@ -470,7 +470,7 @@ const initView = (el: any) => {
   const extensions: Extension[] = getExtensions(
     props.readonly || isSecret.value
   )
-  const flattedExtensions: Extension[] = extensions.filter(Boolean)
+  const flattedExtensions: Extension[] = extensions.flat().filter(Boolean)
   view.value = new EditorView({
     parent: el,
     state: EditorState.create({

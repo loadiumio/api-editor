@@ -418,7 +418,7 @@ export function useCodemirror(
 
     if (environmentTooltip) extensions.push(environmentTooltip.extension)
     if (predefinedVariable) extensions.push(predefinedVariable.extension)
-    const flattedExtensions: Extension = extensions.filter(Boolean)
+    const flattedExtensions: Extension = extensions.flat().filter(Boolean)
     view.value = new EditorView({
       parent: el,
       state: EditorState.create({
