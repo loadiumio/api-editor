@@ -467,19 +467,21 @@ const initView = (el: any) => {
     el.addEventListener("keyup", debouncedTextSelection(140))
   }
 
-  const extensions: Extension = getExtensions(props.readonly || isSecret.value)
-  const flattedExtensions: Extension = extensions.flat().filter(Boolean)
+  const extensions: Extension[] = getExtensions(
+    props.readonly || isSecret.value
+  )
+  //const flattedExtensions: Extension = extensions.flat().filter(Boolean)
   view.value = new EditorView({
     parent: el,
     state: EditorState.create({
       doc: props.modelValue,
-      extensions: flattedExtensions,
+      extensions: [...extensions],
     }),
   })
 }
 
-const getExtensions = (readonly: boolean): Extension => {
-  const extensions: Extension = [
+const getExtensions = (readonly: boolean): Extension[] => {
+  const extensions: Extension[] = [
     EditorView.contentAttributes.of({ "aria-label": props.placeholder }),
     EditorView.contentAttributes.of({ "data-enable-grammarly": "false" }),
     EditorView.updateListener.of((update) => {
