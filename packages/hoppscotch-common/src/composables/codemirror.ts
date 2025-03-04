@@ -418,12 +418,11 @@ export function useCodemirror(
 
     if (environmentTooltip) extensions.push(environmentTooltip.extension)
     if (predefinedVariable) extensions.push(predefinedVariable.extension)
-    //const flattedExtensions: Extension = extensions.flat().filter(Boolean)
     view.value = new EditorView({
       parent: el,
       state: EditorState.create({
         doc: parseDoc(value.value, options.extendedEditorConfig.mode ?? ""),
-        extensions: extensions.filter(Boolean),
+        extensions: extensions,
       }),
       // scroll to top when mounting
       scrollTo: EditorView.scrollIntoView(0),

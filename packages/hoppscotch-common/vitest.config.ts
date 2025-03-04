@@ -17,6 +17,7 @@ export default defineConfig({
         "../hoppscotch-common/src/composables"
       ),
     },
+    dedupe: ["codemirror/state", "codemirror/view"],
   },
   plugins: [
     Vue(),

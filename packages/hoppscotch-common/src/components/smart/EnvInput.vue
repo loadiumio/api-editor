@@ -467,27 +467,18 @@ const initView = (el: any) => {
     el.addEventListener("keyup", debouncedTextSelection(140))
   }
 
-  const extensions: Extension[] = getExtensions(
-    props.readonly || isSecret.value
-  )
-
-  console.log("🔍 Checking Extensions Before CodeMirror:", extensions)
-  const flattedExtensions: Extension[] = extensions.flat().filter(Boolean)
-  console.log(
-    "🔍 Checking Flatted Extensions Before CodeMirror:",
-    flattedExtensions
-  )
+  const extensions: Extension = getExtensions(props.readonly || isSecret.value)
   view.value = new EditorView({
     parent: el,
     state: EditorState.create({
       doc: props.modelValue,
-      extensions: flattedExtensions,
+      extensions: extensions,
     }),
   })
 }
 
-const getExtensions = (readonly: boolean): Extension[] => {
-  const extensions: Extension[] = [
+const getExtensions = (readonly: boolean): Extension => {
+  const extensions: Extension = [
     EditorView.contentAttributes.of({ "aria-label": props.placeholder }),
     EditorView.contentAttributes.of({ "data-enable-grammarly": "false" }),
     EditorView.updateListener.of((update) => {
@@ -511,8 +502,8 @@ const getExtensions = (readonly: boolean): Extension[] => {
       parent: document.body,
       position: "absolute",
     }),
-    props.environmentHighlights ? envTooltipPlugin : null,
-    props.predefinedVariablesHighlights ? predefinedVariablePlugin : null,
+    props.environmentHighlights ? envTooltipPlugin : [],
+    props.predefinedVariablesHighlights ? predefinedVariablePlugin : [],
     placeholderExt(props.placeholder),
     EditorView.domEventHandlers({
       paste(ev) {
@@ -534,7 +525,7 @@ const getExtensions = (readonly: boolean): Extension[] => {
           activateOnTyping: true,
           override: [envAutoCompletion],
         })
-      : null,
+      : [],
     ViewPlugin.fromClass(
       class {
         update(update: ViewUpdate) {
@@ -586,9 +577,9 @@ const getExtensions = (readonly: boolean): Extension[] => {
       }
     ),
     history(),
-    keymap.of([...historyKeymap] as const),
+    keymap.of([...historyKeymap]),
   ]
-  return extensions.filter(Boolean)
+  return extensions
 }
 
 const triggerTextSelection = () => {
@@ -603,33 +594,22 @@ const triggerTextSelection = () => {
 }
 onMounted(() => {
   if (editor.value) {
-    if (!view.value) {
-      console.log("view init")
-      initView(editor.value)
-    }
+    if (!view.value) initView(editor.value)
     if (props.selectTextOnMount) triggerTextSelection()
     if (props.focus) view.value?.focus()
     platform.ui?.onCodemirrorInstanceMount?.(editor.value)
-  } else {
-    console.log("editor init fail")
   }
 })
 
-watch(
-  editor,
-  () => {
-    if (editor.value) {
-      console.log("🔄 Editor ref updated, initializing...")
-      if (!view.value) initView(editor.value)
-      if (props.selectTextOnMount) triggerTextSelection()
-    } else {
-      console.warn("❌ Editor ref is now null. Destroying CodeMirror.")
-      view.value?.destroy()
-      view.value = undefined
-    }
-  },
-  { flush: "post" }
-)
+watch(editor, () => {
+  if (editor.value) {
+    if (!view.value) initView(editor.value)
+    if (props.selectTextOnMount) triggerTextSelection()
+  } else {
+    view.value?.destroy()
+    view.value = undefined
+  }
+})
 </script>
 
 <style lang="scss" scoped>
