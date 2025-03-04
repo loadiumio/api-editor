@@ -423,7 +423,7 @@ export function useCodemirror(
       parent: el,
       state: EditorState.create({
         doc: parseDoc(value.value, options.extendedEditorConfig.mode ?? ""),
-        flattedExtensions,
+        extensions: flattedExtensions,
       }),
       // scroll to top when mounting
       scrollTo: EditorView.scrollIntoView(0),

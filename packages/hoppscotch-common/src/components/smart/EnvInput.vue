@@ -473,7 +473,7 @@ const initView = (el: any) => {
     parent: el,
     state: EditorState.create({
       doc: props.modelValue,
-      flattedExtensions,
+      extensions: flattedExtensions,
     }),
   })
 }
