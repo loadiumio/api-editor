@@ -469,10 +469,8 @@ const initView = (el: any) => {
 
   const extensions: Extension = getExtensions(props.readonly || isSecret.value)
   const flattedExtensions: Extension = extensions.flat().filter(Boolean)
-  const safeExtensions = structuredClone(extensions)
   console.log("Editor Extensions:", extensions) //[...extensions]
   console.log("Editor Extensions:", flattedExtensions)
-  console.log("Editor Extensions:", safeExtensions)
   view.value = new EditorView({
     parent: el,
     state: EditorState.create({
