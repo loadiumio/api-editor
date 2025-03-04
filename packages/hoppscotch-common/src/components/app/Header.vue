@@ -296,7 +296,7 @@ const offlineBanner: BannerContent = {
   dismissible: true,
 }
 
-applySetting("BG_COLOR", "dark")
+applySetting("BG_COLOR", "light")
 
 document.documentElement.setAttribute("data-accent", "orange")
 applySetting("THEME_COLOR", "orange")
