@@ -468,6 +468,7 @@ const initView = (el: any) => {
   }
 
   const extensions: Extension = getExtensions(props.readonly || isSecret.value)
+  console.log("Editor Extensions:", extensions)
   view.value = new EditorView({
     parent: el,
     state: EditorState.create({
