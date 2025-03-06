@@ -38,13 +38,13 @@
       :icon="IconImport"
       :label="`${t('tab.csv_upload')}`"
     >
-      <div
+      <!--<div
         class="flex items-center overflow-x-auto whitespace-nowrap border-b border-dividerLight px-4 py-2 text-tiny text-secondaryLight"
       >
         <span class="truncate"> {{ t("request.title") }} </span>
         <icon-lucide-chevron-right class="mx-2" />
         {{ t("tab.csv_upload") }}
-      </div>
+      </div>-->
       <Csv
         v-if="selectedNavigationTab === 'csv_upload'"
         :hide-label="true"

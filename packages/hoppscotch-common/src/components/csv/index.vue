@@ -3,7 +3,9 @@
     <span class="flex items-center justify-center px-4">
       <icon-lucide-file class="svg-icons" />
     </span>
-    <span class="flex min-w-0 flex-1 py-2 pr-2 transition">
+    <span
+      class="flex min-w-0 flex-1 py-2 pr-2 transition group-hover:text-secondaryDark"
+    >
       <span class="truncate">
         {{ t("csv_import.csv_files") }}
       </span>
@@ -11,7 +13,7 @@
   </div>
   <div>
     <div class="flex flex-col">
-      <div class="my-4 flex flex-col border border-divider rounded">
+      <div class="my-0 flex flex-col border border-divider rounded">
         <HoppSmartTabs v-model="selectedFileOption" render-inactive-tabs>
           <template #actions>
             <div class="flex flex-1 items-center justify-between">
