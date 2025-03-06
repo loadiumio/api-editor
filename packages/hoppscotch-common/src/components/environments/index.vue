@@ -3,7 +3,7 @@
     <div
       class="sticky top-0 z-10 flex flex-shrink-0 flex-col overflow-x-auto bg-primary"
     >
-      <WorkspaceCurrent :section="t('tab.global_variables')" />
+      <!--<WorkspaceCurrent :section="t('tab.global_variables')" />-->
       <EnvironmentsMyEnvironment
         environment-index="Global"
         :environment="globalEnvironment"
@@ -11,7 +11,6 @@
           duplicateGlobalEnvironmentLoading
         "
         :show-context-menu-loading-state="workspace.type === 'team'"
-        class="border-b border-dividerLight"
         @duplicate-global-environment="duplicateGlobalEnvironment"
         @edit-environment="editEnvironment('Global')"
       />

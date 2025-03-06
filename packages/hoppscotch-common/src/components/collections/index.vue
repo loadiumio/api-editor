@@ -17,12 +17,22 @@
         saveRequest ? 'top: calc(-1 * var(--line-height-body))' : 'top: 0'
       "
     >
-      <WorkspaceCurrent :section="t('tab.collections')" />
+      <!--<WorkspaceCurrent :section="t('tab.collections')" />-->
+      <div class="group flex items-stretch">
+        <span class="flex items-center justify-center px-4">
+          <icon-lucide-folder class="svg-icons" />
+        </span>
+        <span class="flex min-w-0 flex-1 py-2 pr-2 transition group-hover:text-secondaryDark">
+          <span class="truncate">
+            {{ t("tab.collections") }}
+          </span>
+        </span>
+      </div>
       <input
         v-model="filterTexts"
         type="search"
         autocomplete="off"
-        class="flex w-full bg-transparent px-4 py-2 h-8"
+        class="flex w-full bg-transparent px-4 py-2 h-8 border-t border-divider"
         :placeholder="t('action.search')"
       />
     </div>

@@ -63,7 +63,7 @@
   </div>-->
   <div>
     <div class="flex flex-col">
-      <div class="my-4 flex flex-col border border-divider rounded">
+      <div class="mb-4 flex flex-col border border-divider rounded">
         <HoppSmartTabs v-model="selectedEnvOption" render-inactive-tabs>
           <template #actions>
             <div class="flex flex-1 items-center justify-between">
