@@ -63,9 +63,9 @@
             />
             <!-- END Render TabContents -->
           </HoppSmartWindow>
-          <template #actions>
+          <!--<template #actions>
             <EnvironmentsSelector class="h-full" />
-          </template>
+          </template>-->
         </HoppSmartWindows>
       </template>
       <template #sidebar>
