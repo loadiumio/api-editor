@@ -17,9 +17,9 @@
         </div>
       </div>
     </template>
-    <template #secondary>
+    <!--<template #secondary>
       <HttpResponse :document="tab.document" :is-embed="true" />
-    </template>
+    </template>-->
   </AppPaneLayout>
 </template>
 

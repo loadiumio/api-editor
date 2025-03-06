@@ -8,9 +8,9 @@
         v-model:inherited-properties="tab.document.inheritedProperties"
       />
     </template>
-    <template #secondary>
+    <!--<template #secondary>
       <HttpResponse v-model:document="tab.document" :is-embed="false" />
-    </template>
+    </template>-->
   </AppPaneLayout>
 </template>
 
