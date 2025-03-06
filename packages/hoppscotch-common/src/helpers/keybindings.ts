@@ -8,7 +8,7 @@ import { isDOMElement, isTypableElement } from "./utils/dom"
  * true -> Keybindings are checked
  * false -> Key presses are ignored (Keybindings are not checked)
  */
-let keybindingsEnabled = true
+let keybindingsEnabled = false
 
 /**
  * Alt is also regarded as macOS OPTION (⌥) key
