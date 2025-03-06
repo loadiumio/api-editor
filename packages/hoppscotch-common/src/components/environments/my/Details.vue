@@ -35,7 +35,7 @@
                 <HoppButtonSecondary
                   v-tippy="{ theme: 'tooltip' }"
                   :icon="IconPlus"
-                  :title="t('add.newxxx')"
+                  :title="t('add.new')"
                   @click="addEnvironmentVariable"
                 />
               </div>
@@ -56,7 +56,7 @@
                 >
                   <template #body>
                     <HoppButtonSecondary
-                      :label="`${t('add.newxxx')}`"
+                      :label="`${t('add.new')}`"
                       filled
                       :icon="IconPlus"
                       @click="addEnvironmentVariable"
