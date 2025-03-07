@@ -108,7 +108,7 @@
                   <input
                     v-model="env.key"
                     v-focus
-                    class="flex flex-1 bg-transparent px-4 py-2"
+                    class="flex w-full bg-transparent px-4 py-2"
                     :placeholder="`${t('count.variable', {
                       count: index + 1,
                     })}`"
@@ -126,9 +126,15 @@
                   />-->
                   <input
                     v-model="env.value"
-                    class="flex flex-1 bg-transparent px-4 py-2"
+                    class="flex w-full bg-transparent px-4 py-2"
                     :placeholder="`${t('count.value', { count: index + 1 })}`"
                     :name="'value' + index"
+                  />
+                  <input
+                    v-model="env.description"
+                    class="flex w-full bg-transparent px-4 py-2"
+                    :placeholder="`${t('count.description', { count: index + 1 })}`"
+                    :name="'description' + index"
                   />
                   <div class="flex">
                     <HoppButtonSecondary
@@ -202,6 +208,7 @@ type EnvironmentVariable = {
     value: string
     key: string
     secret: boolean
+    description: string
   }
 }
 type SelectedEnv = "variables" | "secret"
@@ -211,7 +218,10 @@ const editingName = ref<string | null>("Global")
 const toast = useToast()
 const idTicker = ref(0)
 const vars = ref<EnvironmentVariable[]>([
-  { id: idTicker.value++, env: { key: "", value: "", secret: false } },
+  {
+    id: idTicker.value++,
+    env: { key: "", value: "", secret: false, description: "" },
+  },
 ])
 const secretEnvironmentService = useService(SecretEnvironmentService)
 
