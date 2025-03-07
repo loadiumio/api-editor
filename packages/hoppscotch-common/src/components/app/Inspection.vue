@@ -20,13 +20,13 @@
                 {{ t("inspections.title") }}
               </span>
             </span>
-            <HoppButtonSecondary
+            <!--<HoppButtonSecondary
               v-tippy="{ theme: 'tooltip' }"
               to="https://docs.hoppscotch.io/documentation/features/inspections"
               blank
               :title="t('app.wiki')"
               :icon="IconHelpCircle"
-            />
+            />-->
           </div>
           <div
             v-for="(inspector, index) in inspectionResults"

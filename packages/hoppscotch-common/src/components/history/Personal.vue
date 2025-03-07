@@ -12,13 +12,13 @@
           :placeholder="`${t('action.search')}`"
         />
         <div class="flex">
-          <HoppButtonSecondary
+          <!--<HoppButtonSecondary
             v-tippy="{ theme: 'tooltip' }"
             to="https://docs.hoppscotch.io/documentation/features/history"
             blank
             :title="t('app.wiki')"
             :icon="IconHelpCircle"
-          />
+          />-->
           <tippy interactive trigger="click" theme="popover">
             <HoppButtonSecondary
               v-tippy="{ theme: 'tooltip' }"

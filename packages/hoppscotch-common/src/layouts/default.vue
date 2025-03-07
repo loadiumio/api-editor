@@ -128,7 +128,7 @@ onMounted(() => {
     toast.show(`${t("app.we_use_cookies")}`, {
       duration: 0,
       action: [
-        {
+        /*{
           text: `${t("action.learn_more")}`,
           onClick: (_, toastObject) => {
             persistenceService.setLocalConfig("cookiesAllowed", "yes")
@@ -137,7 +137,7 @@ onMounted(() => {
               .open("https://docs.hoppscotch.io/support/privacy", "_blank")
               ?.focus()
           },
-        },
+        },*/
         {
           text: `${t("action.dismiss")}`,
           onClick: (_, toastObject) => {

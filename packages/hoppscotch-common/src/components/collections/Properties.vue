@@ -53,13 +53,13 @@
           >
             <span>{{ t("collection_runner.collection_id") }}</span>
 
-            <HoppButtonSecondary
+            <!--<HoppButtonSecondary
               v-tippy="{ theme: 'tooltip' }"
               to="https://docs.hoppscotch.io/documentation/clients/cli/overview#running-collections-present-on-the-api-client"
               blank
               :title="t('app.wiki')"
               :icon="IconHelpCircle"
-            />
+            />-->
           </div>
 
           <div class="p-4">

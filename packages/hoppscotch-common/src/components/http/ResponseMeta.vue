@@ -5,14 +5,14 @@
     <AppShortcutsPrompt v-if="response == null && !isEmbed" class="flex-1" />
 
     <div v-if="response == null && isEmbed">
-      <HoppButtonSecondary
+      <!--<HoppButtonSecondary
         :label="`${t('app.documentation')}`"
         to="https://docs.hoppscotch.io/documentation/features/rest-api-testing#response"
         :icon="IconExternalLink"
         blank
         outline
         reverse
-      />
+      />-->
     </div>
 
     <div v-else-if="response" class="flex flex-1 flex-col">

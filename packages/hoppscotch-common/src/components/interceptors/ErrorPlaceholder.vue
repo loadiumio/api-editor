@@ -9,7 +9,7 @@
         <span>
           {{ t("error.please_install_extension") }}
         </span>
-        <span>
+        <!--<span>
           {{ t("error.check_how_to_add_origin") }}
           <HoppSmartLink
             blank
@@ -18,7 +18,7 @@
           >
             here
           </HoppSmartLink>
-        </span>
+        </span>-->
       </div>
       <div class="flex flex-col space-y-2 py-4">
         <HoppSmartItem

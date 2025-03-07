@@ -28,12 +28,12 @@
         >
           {{ t('data_sharing.toggle_description') }}
         </HoppSmartToggle>
-        <HoppSmartAnchor
+        <!--<HoppSmartAnchor
           blank
           to="https://docs.hoppscotch.io/documentation/self-host/community-edition/telemetry"
           :label="t('data_sharing.see_shared')"
           class="underline"
-        />
+        />-->
       </div>
       <div class="flex flex-col items-start space-y-5">
         <div>
@@ -56,12 +56,12 @@
           class="mx-10"
           @click="submitSelection"
         />
-        <HoppSmartAnchor
+        <!--<HoppSmartAnchor
           blank
           to="http://docs.hoppscotch.io"
           :icon="IconBookOpenText"
           :label="t('app.read_documentation')"
-        />
+        />-->
       </div>
     </div>
   </div>

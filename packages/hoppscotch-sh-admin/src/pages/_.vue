@@ -16,13 +16,13 @@
       </h1>
       <p class="mb-4 text-lg text-secondaryDark">{{ message }}</p>
       <p class="mt-4 space-x-2">
-        <HoppButtonSecondary
+        <!--<HoppButtonSecondary
           to="https://docs.hoppscotch.io/documentation"
           :icon="IconTextSearch"
           filled
           blank
           label="Documentation"
-        />
+        />-->
         <HoppButtonSecondary
           :icon="IconRefreshCW"
           label="Reload"

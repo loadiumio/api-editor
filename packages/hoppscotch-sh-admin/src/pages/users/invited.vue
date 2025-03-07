@@ -15,12 +15,12 @@
           <p class="my-1 text-secondaryLight">
             {{ t('users.pending_invites_description') }}
           </p>
-          <HoppSmartAnchor
+          <!--<HoppSmartAnchor
             blank
             to="https://docs.hoppscotch.io/documentation/self-host/community-edition/admin-dashboard#pending-invites"
             :label="t('support.more_info')"
             class="underline ml-1"
-          />
+          />-->
           <icon-lucide-arrow-up-right class="underline w-4 h-4" />
         </div>
       </div>

@@ -7,13 +7,13 @@
         {{ t("preRequest.javascript_code") }}
       </label>
       <div class="flex">
-        <HoppButtonSecondary
+        <!--<HoppButtonSecondary
           v-tippy="{ theme: 'tooltip' }"
           to="https://docs.hoppscotch.io/documentation/getting-started/rest/pre-request-scripts"
           blank
           :title="t('app.wiki')"
           :icon="IconHelpCircle"
-        />
+        />-->
         <HoppButtonSecondary
           v-tippy="{ theme: 'tooltip' }"
           :title="t('action.clear')"
@@ -46,11 +46,11 @@
         <div class="pb-2 text-secondaryLight">
           {{ t("helpers.pre_request_script") }}
         </div>
-        <HoppSmartAnchor
+        <!--<HoppSmartAnchor
           :label="`${t('preRequest.learn')}`"
           to="https://docs.hoppscotch.io/documentation/getting-started/rest/pre-request-scripts"
           blank
-        />
+        />-->
         <h4 class="pt-6 font-bold text-secondaryLight">
           {{ t("preRequest.snippets") }}
         </h4>

@@ -15,7 +15,7 @@ export const documentation: HoppSupportOptionsMenuItem = {
   icon: IconBook,
   action: {
     type: "link",
-    href: "https://docs.hoppscotch.io",
+    href: "",
   },
 }
 
@@ -39,7 +39,7 @@ export const changelog: HoppSupportOptionsMenuItem = {
   icon: IconGift,
   action: {
     type: "link",
-    href: "https://docs.hoppscotch.io/documentation/changelog",
+    href: "",
   },
 }
 

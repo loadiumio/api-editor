@@ -129,10 +129,10 @@ export class EnvironmentInspectorService extends Service implements Inspector {
                 severity: 3,
                 isApplicable: true,
                 locations: itemLocation,
-                doc: {
+                /*doc: {
                   text: this.t("action.learn_more"),
                   link: "https://docs.hoppscotch.io/documentation/features/inspections",
-                },
+                },*/
               })
             }
           })
@@ -284,10 +284,10 @@ export class EnvironmentInspectorService extends Service implements Inspector {
                     severity: 2,
                     isApplicable: true,
                     locations: itemLocation,
-                    doc: {
+                    /*doc: {
                       text: this.t("action.learn_more"),
                       link: "https://docs.hoppscotch.io/documentation/features/inspections",
-                    },
+                    },*/
                   })
                 }
               }

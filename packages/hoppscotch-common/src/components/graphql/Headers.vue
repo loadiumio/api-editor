@@ -11,13 +11,13 @@
       {{ t("tab.headers") }}
     </label>
     <div class="flex">
-      <HoppButtonSecondary
+      <!--<HoppButtonSecondary
         v-tippy="{ theme: 'tooltip' }"
         to="https://docs.hoppscotch.io/documentation/features/graphql-api-testing"
         blank
         :title="t('app.wiki')"
         :icon="IconHelpCircle"
-      />
+      />-->
       <HoppButtonSecondary
         v-tippy="{ theme: 'tooltip' }"
         :title="t('action.clear_all')"
