@@ -247,7 +247,7 @@ import { useReadonlyStream } from "@composables/stream"
 import { defineActionHandler, invokeAction } from "@helpers/actions"
 import { useNetwork } from "@vueuse/core"
 import { useService } from "dioc/vue"
-import { computed, reactive, ref, watch } from "vue"
+import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from "vue"
 import { useToast } from "~/composables/toast"
 import { GetMyTeamsQuery, TeamMemberRole } from "~/helpers/backend/graphql"
 import { platform } from "~/platform"
@@ -296,12 +296,23 @@ const offlineBanner: BannerContent = {
   dismissible: true,
 }
 
-applySetting("BG_COLOR", "light")
+onMounted(() => {
+  window.addEventListener("message", handleMessage)
+  changeAppLanguage("en")
+  document.documentElement.setAttribute("data-accent", "orange")
+  applySetting("THEME_COLOR", "orange")
+  window.parent.postMessage({ status: "READY" }, "*")
+})
 
-document.documentElement.setAttribute("data-accent", "orange")
-applySetting("THEME_COLOR", "orange")
+onBeforeUnmount(() => {
+  window.removeEventListener("message", handleMessage)
+})
 
-changeAppLanguage("en")
+const handleMessage = (event: MessageEvent) => {
+  if (event.data.theme) {
+    applySetting("BG_COLOR", event.data.theme === "dark" ? "dark" : "light")
+  }
+}
 
 const sidebarLeft = useSetting("SIDEBAR_ON_LEFT")
 if (!sidebarLeft.value) toggleSetting("SIDEBAR_ON_LEFT")
