@@ -26,13 +26,13 @@
           <HoppSmartTabs v-model="selectedEnvOption" render-inactive-tabs>
             <template #actions>
               <div class="flex flex-1 items-center justify-between">
-                <HoppButtonSecondary
+                <!--<HoppButtonSecondary
                   v-tippy="{ theme: 'tooltip' }"
                   to="https://docs.hoppscotch.io/documentation/features/environments"
                   blank
                   :title="t('app.wiki')"
                   :icon="IconHelpCircle"
-                />
+                />-->
                 <HoppButtonSecondary
                   v-if="!isViewer"
                   v-tippy="{ theme: 'tooltip' }"

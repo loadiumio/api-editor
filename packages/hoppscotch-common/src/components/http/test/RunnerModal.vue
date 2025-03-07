@@ -75,14 +75,14 @@
                   <span>
                     {{ t("collection_runner.keep_variable_values") }}
                   </span>
-                  <HoppButtonSecondary
+                  <!--<HoppButtonSecondary
                     v-tippy="{ theme: 'tooltip' }"
                     class="!py-0 pl-2"
                     to="https://docs.hoppscotch.io/documentation/features/inspections"
                     blank
                     :title="t('app.wiki')"
                     :icon="IconHelpCircle"
-                  />
+                  />-->
                 </HoppSmartCheckbox>
               </div>
             </section>
@@ -128,14 +128,14 @@
           </template>
         </HoppSmartTab>
         <template #actions>
-          <HoppButtonSecondary
+          <!--<HoppButtonSecondary
             v-tippy="{ theme: 'tooltip' }"
             class="!py-0 pl-2"
             :to="runnerLink"
             blank
             :title="t('app.wiki')"
             :icon="IconHelpCircle"
-          />
+          />-->
         </template>
       </HoppSmartTabs>
     </template>

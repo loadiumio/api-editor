@@ -24,7 +24,7 @@
     </div>
 
     <div class="flex items-center">
-      <div class="inline-flex items-center mr-5">
+      <!--<div class="inline-flex items-center mr-5">
         <HoppButtonSecondary
           to="https://docs.hoppscotch.io/documentation/self-host/community-edition/getting-started"
           blank
@@ -33,7 +33,7 @@
           :icon="IconHelpCircle"
           class="rounded hover:bg-primaryDark focus-visible:bg-primaryDark"
         />
-      </div>
+      </div>-->
       <div v-if="currentUser" class="relative">
         <tippy
           interactive

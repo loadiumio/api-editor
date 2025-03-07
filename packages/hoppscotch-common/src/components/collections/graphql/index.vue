@@ -23,13 +23,13 @@
           @click="displayModalAdd(true)"
         />
         <div class="flex">
-          <HoppButtonSecondary
+          <!--<HoppButtonSecondary
             v-tippy="{ theme: 'tooltip' }"
             to="https://docs.hoppscotch.io/documentation/features/collections"
             blank
             :title="t('app.wiki')"
             :icon="IconHelpCircle"
-          />
+          />-->
           <HoppButtonSecondary
             v-if="!saveRequest"
             v-tippy="{ theme: 'tooltip' }"

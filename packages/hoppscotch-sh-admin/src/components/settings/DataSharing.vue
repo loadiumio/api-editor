@@ -20,18 +20,18 @@
           >
             {{ t('configs.data_sharing.toggle_description') }}
           </HoppSmartToggle>
-          <HoppButtonSecondary
+          <!--<HoppButtonSecondary
             v-tippy="{ theme: 'tooltip', allowHTML: true }"
             blank
             to="https://docs.hoppscotch.io/documentation/self-host/community-edition/telemetry"
             :title="t('support.documentation')"
             :icon="IconHelpCircle"
             class="rounded hover:bg-primaryDark focus-visible:bg-primaryDark"
-          />
+          />-->
         </div>
       </div>
 
-      <HoppButtonSecondary
+      <!--<HoppButtonSecondary
         outline
         filled
         :icon="IconShieldQuestion"
@@ -39,7 +39,7 @@
         to="https://docs.hoppscotch.io/documentation/self-host/community-edition/telemetry"
         blank
         class="w-min my-2"
-      />
+      />-->
       <p class="my-1 text-secondaryLight">
         {{ t('configs.data_sharing.description') }}
       </p>

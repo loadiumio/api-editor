@@ -63,13 +63,13 @@
           @change="authActive = !authActive"
           >{{ t("state.enabled") }}</HoppSmartCheckbox
         >
-        <HoppButtonSecondary
+        <!--<HoppButtonSecondary
           v-tippy="{ theme: 'tooltip' }"
           to="https://docs.hoppscotch.io/documentation/features/authorization"
           blank
           :title="t('app.wiki')"
           :icon="IconHelpCircle"
-        />
+        />-->
         <HoppButtonSecondary
           v-tippy="{ theme: 'tooltip' }"
           :title="t('action.clear')"
@@ -85,14 +85,14 @@
       :text="t('empty.authorization')"
     >
       <template #body>
-        <HoppButtonSecondary
+        <!--<HoppButtonSecondary
           outline
           :label="t('app.documentation')"
           to="https://docs.hoppscotch.io/documentation/features/authorization"
           blank
           :icon="IconExternalLink"
           reverse
-        />
+        />-->
       </template>
     </HoppSmartPlaceholder>
     <div v-else class="flex flex-1 border-b border-dividerLight">
@@ -161,14 +161,14 @@
         <div class="pb-2 text-secondaryLight">
           {{ t("helpers.authorization") }}
         </div>
-        <HoppSmartAnchor
+        <!--<HoppSmartAnchor
           class="link"
           :label="t('authorization.learn')"
           :icon="IconExternalLink"
           to="https://docs.hoppscotch.io/documentation/features/authorization"
           blank
           reverse
-        />
+        />-->
       </div>
     </div>
   </div>

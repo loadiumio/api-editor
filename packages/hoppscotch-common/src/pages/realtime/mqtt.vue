@@ -125,7 +125,7 @@
             class="!rounded-none"
             @click="showSubscriptionModal(true)"
           />
-          <span class="flex">
+          <!--<span class="flex">
             <HoppButtonSecondary
               v-tippy="{ theme: 'tooltip' }"
               to="https://docs.hoppscotch.io/documentation/getting-started/realtime/mqtt"
@@ -133,7 +133,7 @@
               :title="t('app.wiki')"
               :icon="IconHelpCircle"
             />
-          </span>
+          </span>-->
         </div>
       </div>
       <HoppSmartPlaceholder

@@ -49,7 +49,7 @@
               @keyup.c="chat!.$el.click()"
               @keyup.escape="hide()"
             >
-              <HoppSmartItem
+              <!--<HoppSmartItem
                 ref="documentation"
                 :icon="IconBook"
                 :label="`${t('app.documentation')}`"
@@ -57,7 +57,7 @@
                 blank
                 :shortcut="['D']"
                 @click="hide()"
-              />
+              />-->
               <HoppSmartItem
                 ref="shortcuts"
                 :icon="IconZap"
@@ -121,13 +121,13 @@
                   }
                 "
               />
-              <HoppSmartItem
+              <!--<HoppSmartItem
                 :icon="IconLock"
                 :label="`${t('app.terms_and_privacy')}`"
                 to="https://docs.hoppscotch.io/support/privacy"
                 blank
                 @click="hide()"
-              />
+              />-->
               <div
                 class="flex px-4 py-2 opacity-50"
                 @dblclick="

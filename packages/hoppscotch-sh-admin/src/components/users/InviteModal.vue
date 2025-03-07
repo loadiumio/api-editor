@@ -19,14 +19,14 @@
         </p>
 
         <div class="flex justify-between">
-          <HoppButtonSecondary
+          <!--<HoppButtonSecondary
             v-tippy="{ theme: 'tooltip', allowHTML: true }"
             to="https://docs.hoppscotch.io/documentation/self-host/community-edition/admin-dashboard#invite-users-to-your-hoppscotch-instance"
             blank
             :title="t('support.documentation')"
             :icon="IconCircleHelp"
             class="rounded hover:bg-primaryDark focus-visible:bg-primaryDark"
-          />
+          />-->
           <span class="flex space-x-2">
             <HoppButtonPrimary
               :label="t('users.add_user')"

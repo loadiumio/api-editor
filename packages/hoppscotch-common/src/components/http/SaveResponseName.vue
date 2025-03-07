@@ -89,10 +89,10 @@ const hasSameNameInspectionResult: ComputedRef<InspectorResult[]> = computed(
           type: "text",
           text: t("response.same_name_inspector_warning"),
         },
-        doc: {
+        /*doc: {
           text: t("action.learn_more"),
           link: "https://docs.hoppscotch.io/documentation/getting-started/rest/response-handling#save-a-response-as-an-example",
-        },
+        },*/
         locations: {
           type: "url",
         },

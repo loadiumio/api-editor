@@ -74,7 +74,7 @@
       <div v-if="!allowedAuthProviders">
         <p>{{ t('state.require_auth_provider') }}</p>
         <p>{{ t('state.configure_auth') }}</p>
-        <div class="mt-5">
+        <!--<div class="mt-5">
           <a
             href="https://docs.hoppscotch.io/documentation/self-host/getting-started"
           >
@@ -86,7 +86,7 @@
               :label="t('state.self_host_docs')"
             />
           </a>
-        </div>
+        </div>-->
       </div>
       <div v-if="mode === 'email-sent'" class="flex flex-col px-4">
         <div class="flex flex-col items-center justify-center max-w-md">

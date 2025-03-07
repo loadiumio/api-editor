@@ -33,14 +33,14 @@
         </div>
       </div>
     </div>
-    <HoppButtonSecondary
+    <!--<HoppButtonSecondary
       :label="`${t('app.documentation')}`"
       to="https://docs.hoppscotch.io/documentation/features/rest-api-testing#response"
       :icon="IconExternalLink"
       blank
       outline
       reverse
-    />
+    />-->
   </div>
 </template>
 

@@ -102,10 +102,10 @@ export class ExtensionInspectorService extends Service implements Inspector {
           locations: {
             type: "url",
           },
-          doc: {
+          /*doc: {
             text: this.t("action.learn_more"),
             link: "https://docs.hoppscotch.io/documentation/features/interceptor#browser-extension",
-          },
+          },*/
         })
       }
 

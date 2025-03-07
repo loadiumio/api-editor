@@ -181,14 +181,14 @@
       :text="t('helpers.tests')"
     >
       <template #body>
-        <HoppButtonSecondary
+        <!--<HoppButtonSecondary
           outline
           :label="`${t('action.learn_more')}`"
           to="https://docs.hoppscotch.io/documentation/getting-started/rest/tests"
           blank
           :icon="IconExternalLink"
           reverse
-        />
+        />-->
       </template>
     </HoppSmartPlaceholder>
     <EnvironmentsMyDetails

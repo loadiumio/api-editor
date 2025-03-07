@@ -122,14 +122,14 @@
           <icon-lucide-info class="svg-icons mr-1.5" />
           <span>{{ filterResponseError.error }}</span>
         </div>
-        <HoppButtonSecondary
+        <!--<HoppButtonSecondary
           v-if="showResponse"
           v-tippy="{ theme: 'tooltip' }"
           :title="t('app.wiki')"
           :icon="IconHelpCircle"
           to="https://github.com/JSONPath-Plus/JSONPath"
           blank
-        />
+        />-->
       </div>
     </div>
     <div class="h-full relative overflow-auto flex flex-col flex-1">
