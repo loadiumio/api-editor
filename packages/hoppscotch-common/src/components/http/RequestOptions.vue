@@ -49,7 +49,7 @@
         :envs="envs"
       />
     </HoppSmartTab>
-    <HoppSmartTab
+    <!--<HoppSmartTab
       v-if="showPreRequestScriptTab"
       :id="'preRequestScript'"
       :label="`${t('tab.pre_request_script')}`"
@@ -65,8 +65,8 @@
         v-if="'preRequestScript' in request"
         v-model="request.preRequestScript"
       />
-    </HoppSmartTab>
-    <HoppSmartTab
+    </HoppSmartTab>-->
+    <!--<HoppSmartTab
       v-if="showTestsTab"
       :id="'tests'"
       :label="`${t('tab.tests')}`"
@@ -79,7 +79,7 @@
       "
     >
       <HttpTests v-if="'testScript' in request" v-model="request.testScript" />
-    </HoppSmartTab>
+    </HoppSmartTab>-->
     <HoppSmartTab
       v-if="properties?.includes('requestVariables') ?? true"
       :id="'requestVariables'"
@@ -140,7 +140,7 @@ const emit = defineEmits<{
 const request = useVModel(props, "modelValue", emit)
 const selectedOptionTab = useVModel(props, "optionTab", emit)
 
-const showPreRequestScriptTab = computed(() => {
+/*const showPreRequestScriptTab = computed(() => {
   return (
     props.properties?.includes("preRequestScript") ??
     "preRequestScript" in request.value
@@ -149,7 +149,7 @@ const showPreRequestScriptTab = computed(() => {
 
 const showTestsTab = computed(() => {
   return props.properties?.includes("tests") ?? "testScript" in request.value
-})
+})*/
 
 const changeOptionTab = (e: RESTOptionTabs) => {
   selectedOptionTab.value = e
