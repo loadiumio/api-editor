@@ -136,7 +136,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ComputedRef, onBeforeUnmount, onMounted, ref } from "vue"
+import { computed, ComputedRef, onMounted, ref } from "vue"
 import { useI18n } from "~/composables/i18n"
 import { useColorMode } from "~/composables/theming"
 import IconImport from "~icons/lucide/folder-down"
@@ -152,10 +152,6 @@ const colorMode = useColorMode()
 onMounted(() => {
   const storedFiles: CSVFile[] = getFiles().files
   csvFiles.value.push(...storedFiles)
-})
-
-onBeforeUnmount(() => {
-  setFiles(csvFiles.value)
 })
 
 const selectedFileOption = ref<string>("files")
@@ -203,12 +199,14 @@ const displayModalImport = (shouldDisplay: boolean, importedFiles?: any[]) => {
       recycleEOF: false,
     }))
     csvFiles.value.push(...newFiles)
+    setFiles(csvFiles.value)
   }
   showModalImport.value = shouldDisplay
 }
 
 const deleteFile = (index: number) => {
   csvFiles.value.splice(index, 1)
+  setFiles(csvFiles.value)
 }
 
 const toggleCollapse = (index: number) => {
