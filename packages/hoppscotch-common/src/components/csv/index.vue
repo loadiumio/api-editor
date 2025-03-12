@@ -93,7 +93,7 @@
                       <input
                         v-model="file.variableNames"
                         class="flex w-full border bg-transparent px-4 py-2"
-                        :placeholder="'Variable 1, Variable 2...'"
+                        :placeholder="'Variable1, Variable2...'"
                         :name="'variableNames' + index"
                       />
                     </div>
