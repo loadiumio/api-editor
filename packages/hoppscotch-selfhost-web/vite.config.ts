@@ -248,9 +248,9 @@ export default defineConfig({
     }),
     process.env.HOPP_ALLOW_RUNTIME_ENV
       ? ImportMetaEnv.vite({
-        example: "../../.env.example",
-        env: "../../.env",
-      })
+          example: "../../.env.example",
+          env: "../../.env",
+        })
       : [],
   ],
   css: {

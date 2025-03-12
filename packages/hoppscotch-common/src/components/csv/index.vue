@@ -18,7 +18,9 @@
           <template #actions>
             <div class="flex flex-1 items-center justify-between">
               <HoppButtonSecondary
-                :icon="IconImport"
+                v-tippy="{ theme: 'tooltip' }"
+                :icon="IconFilePlus"
+                :title="t('csv_import.import')"
                 class="!rounded-none"
                 @click="displayModalImport(true)"
               />
@@ -59,26 +61,66 @@
               <template v-else>
                 <div
                   v-for="(file, index) in csvFiles"
-                  :key="`file-${file.name}`"
-                  class="flex flex-1 items-center justify-between"
+                  :key="`file-${file.fileData.name}`"
                   @click="displayModalEdit(true, file)"
                 >
-                  <div class="group flex items-stretch">
-                    <span class="flex items-center justify-center px-4">
-                      <icon-lucide-file class="svg-icons" />
-                    </span>
-                    <span class="flex min-w-0 flex-1 py-2 pr-2 transition">
-                      <span class="truncate">
-                        {{ file.name }}
+                  <div
+                    class="flex flex-1 items-center justify-between border-dividerLight"
+                    @click="toggleCollapse(index)"
+                  >
+                    <div class="group flex items-stretch">
+                      <span class="flex items-center justify-center px-4">
+                        <icon-lucide-file class="svg-icons" />
                       </span>
-                    </span>
+                      <span class="flex min-w-0 flex-1 py-2 pr-2 transition">
+                        <span class="truncate">
+                          {{ file.fileData.name }}
+                        </span>
+                      </span>
+                    </div>
+                    <HoppButtonSecondary
+                      v-tippy="{ theme: 'tooltip' }"
+                      :icon="IconTrash2"
+                      :title="t('action.delete')"
+                      color="red"
+                      class="!rounded-none"
+                      @click="deleteFile(index)"
+                    />
                   </div>
-                  <HoppButtonSecondary
-                    :icon="IconTrash2"
-                    color="red"
-                    class="!rounded-none"
-                    @click="deleteFile(index)"
-                  />
+                  <div v-show="!collapsedFiles[index]" class="w-full p-4">
+                    <div class="grid grid-cols-2 items-center gap-4 mb-4">
+                      <label>{{ t("csv_import.variableNames") }}</label>
+                      <input
+                        v-model="file.variableNames"
+                        class="flex w-full border bg-transparent px-4 py-2"
+                        :placeholder="'Variable 1, Variable 2...'"
+                        :name="'variableNames' + index"
+                      />
+                    </div>
+                    <div class="grid grid-cols-2 items-center gap-4 mb-4">
+                      <label>{{ t("csv_import.delimiter") }}</label>
+                      <input
+                        v-model="file.delimiter"
+                        class="flex w-full border bg-transparent px-4 py-2"
+                        :placeholder="'Delimiter'"
+                        :name="'delimiter' + index"
+                      />
+                    </div>
+                    <div class="flex items-center justify-between mb-4">
+                      <span>{{ t("csv_import.ignoreFirst") }}</span>
+                      <HoppSmartToggle
+                        :on="file.ignoreFirst"
+                        @change="file.ignoreFirst = !file.ignoreFirst"
+                      />
+                    </div>
+                    <div class="flex items-center justify-between">
+                      <span>{{ t("csv_import.recycleEOF") }}</span>
+                      <HoppSmartToggle
+                        :on="file.recycleEOF"
+                        @change="file.recycleEOF = !file.recycleEOF"
+                      />
+                    </div>
+                  </div>
                 </div>
               </template>
             </div>
@@ -86,11 +128,6 @@
         </HoppSmartTabs>
       </div>
     </div>
-    <!-- <CSVDetails
-      :show="showModalDetails"
-      :target-file="targetFile"
-      @hide-modal="displayModalEdit(false)"
-    /> -->
     <CsvImport
       v-if="showModalImport"
       @hide-modal="displayModalImport(false, $event)"
@@ -99,21 +136,32 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ComputedRef, ref } from "vue"
+import { computed, ComputedRef, onBeforeUnmount, onMounted, ref } from "vue"
 import { useI18n } from "~/composables/i18n"
 import { useColorMode } from "~/composables/theming"
 import IconImport from "~icons/lucide/folder-down"
 import IconTrash2 from "~icons/lucide/trash-2"
+import IconFilePlus from "~icons/lucide/file-plus"
 
 import { pipe } from "fp-ts/lib/function"
+import { CSVFile, getFiles, setFiles } from "~/newstore/files"
 
 const t = useI18n()
 const colorMode = useColorMode()
 
+onMounted(() => {
+  const storedFiles: CSVFile[] = getFiles().files
+  csvFiles.value.push(...storedFiles)
+})
+
+onBeforeUnmount(() => {
+  setFiles(csvFiles.value)
+})
+
 const selectedFileOption = ref<string>("files")
 
-const csvFiles = ref<File[]>([])
-const targetFile = ref<File | null>(null)
+const csvFiles = ref<CSVFile[]>([])
+const targetFile = ref<CSVFile | null>(null)
 const showModalImport = ref(false)
 const showModalDetails = ref(false)
 
@@ -123,7 +171,7 @@ const tabsData: ComputedRef<
     label: string
     emptyStateLabel: string
     isSecret: boolean
-    files: File[]
+    files: CSVFile[]
   }[]
 > = computed(() => {
   return [
@@ -138,20 +186,32 @@ const tabsData: ComputedRef<
 })
 
 const csvFileList = computed(() => pipe(csvFiles.value))
+const collapsedFiles = ref(Array(csvFileList.value.length).fill(true))
 
-const displayModalEdit = (shouldDisplay: boolean, file?: File) => {
+const displayModalEdit = (shouldDisplay: boolean, file?: CSVFile) => {
   targetFile.value = file ?? null
   showModalDetails.value = shouldDisplay
 }
 
-const displayModalImport = (shouldDisplay: boolean, data?: any[]) => {
-  if (data) {
-    csvFiles.value.push(...data)
+const displayModalImport = (shouldDisplay: boolean, importedFiles?: any[]) => {
+  if (importedFiles) {
+    const newFiles = importedFiles.map((file: File) => ({
+      fileData: file,
+      variableNames: "",
+      delimiter: "",
+      ignoreFirst: false,
+      recycleEOF: false,
+    }))
+    csvFiles.value.push(...newFiles)
   }
   showModalImport.value = shouldDisplay
 }
 
 const deleteFile = (index: number) => {
   csvFiles.value.splice(index, 1)
+}
+
+const toggleCollapse = (index: number) => {
+  collapsedFiles.value[index] = !collapsedFiles.value[index]
 }
 </script>

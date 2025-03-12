@@ -1314,6 +1314,11 @@
   },
   "csv_import": {
     "csv_files": "CSV Files",
-    "upload_file": "Upload a CSV file"
+    "upload_file": "Upload a CSV file",
+    "import": "Import",
+    "variableNames": "Variable Names (delimited)",
+    "delimiter": "Delimiter (use '/t' for tab)",
+    "ignoreFirst": "Ignore first line?",
+    "recycleEOF": "Recycle on End of File?"
   }
 }

@@ -95,16 +95,11 @@
               ref="sendTippyActions"
               class="flex flex-col focus:outline-none"
               tabindex="0"
-              @keyup.c="curl.$el.click()"
-              @keyup.s="show.$el.click()"
-              @keyup.delete="clearAll.$el.click()"
-              @keyup.escape="hide()"
             >
               <HoppSmartItem
                 ref="curl"
                 :label="`${t('import.curl')}`"
                 :icon="IconFileCode"
-                :shortcut="['C']"
                 @click="
                   () => {
                     showCurlImportModal = !showCurlImportModal
@@ -116,7 +111,6 @@
                 ref="show"
                 :label="`${t('show.code')}`"
                 :icon="IconCode2"
-                :shortcut="['S']"
                 @click="
                   () => {
                     showCodegenModal = !showCodegenModal
@@ -128,7 +122,6 @@
                 ref="clearAll"
                 :label="`${t('action.clear_all')}`"
                 :icon="IconRotateCCW"
-                :shortcut="['⌫']"
                 @click="
                   () => {
                     clearContent()
@@ -195,18 +188,6 @@
                   "
                 />
                 <hr />
-                <HoppSmartItem
-                  ref="copyRequestAction"
-                  :label="t('request.share_request')"
-                  :icon="IconShare2"
-                  :loading="fetchingShareLink"
-                  @click="
-                    () => {
-                      shareRequest()
-                      hide()
-                    }
-                  "
-                />
               </div>
             </template>
           </tippy>
@@ -254,7 +235,6 @@ import IconFileCode from "~icons/lucide/file-code"
 import IconFolderPlus from "~icons/lucide/folder-plus"
 import IconRotateCCW from "~icons/lucide/rotate-ccw"
 import IconSave from "~icons/lucide/save"
-import IconShare2 from "~icons/lucide/share-2"
 import { getDefaultRESTRequest } from "~/helpers/rest/default"
 import { RESTHistoryEntry, restHistory$ } from "~/newstore/history"
 import { platform } from "~/platform"
@@ -319,7 +299,6 @@ const saveTippyActions = ref<any | null>(null)
 const curl = ref<any | null>(null)
 const show = ref<any | null>(null)
 const clearAll = ref<any | null>(null)
-const copyRequestAction = ref<any | null>(null)
 const saveRequestAction = ref<any | null>(null)
 
 const history = useReadonlyStream<RESTHistoryEntry[]>(restHistory$, [])
@@ -472,8 +451,6 @@ const currentUser = useReadonlyStream(
   platform.auth.getCurrentUserStream(),
   platform.auth.getCurrentUser()
 )
-
-const fetchingShareLink = ref(false)
 
 const shareRequest = () => {
   if (currentUser.value) {
