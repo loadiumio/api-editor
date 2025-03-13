@@ -98,21 +98,11 @@
                   ref="tippyActions"
                   class="flex flex-col focus:outline-none"
                   tabindex="0"
-                  @keyup.r="requestAction?.$el.click()"
-                  @keyup.n="folderAction?.$el.click()"
-                  @keyup.e="edit?.$el.click()"
-                  @keyup.d="duplicateAction?.$el.click()"
-                  @keyup.delete="deleteAction?.$el.click()"
-                  @keyup.x="exportAction?.$el.click()"
-                  @keyup.p="propertiesAction?.$el.click()"
-                  @keyup.t="runCollectionAction?.$el.click()"
-                  @keyup.escape="hide()"
                 >
                   <HoppSmartItem
                     ref="requestAction"
                     :icon="IconFilePlus"
                     :label="t('request.new')"
-                    :shortcut="['R']"
                     @click="
                       () => {
                         emit('add-request')
@@ -124,7 +114,6 @@
                     ref="folderAction"
                     :icon="IconFolderPlus"
                     :label="t('folder.new')"
-                    :shortcut="['N']"
                     @click="
                       () => {
                         emit('add-folder')
@@ -136,7 +125,6 @@
                     ref="runCollectionAction"
                     :icon="IconPlaySquare"
                     :label="t('collection_runner.run_collection')"
-                    :shortcut="['T']"
                     @click="
                       () => {
                         emit('run-collection', props.id)
@@ -148,7 +136,6 @@
                     ref="edit"
                     :icon="IconEdit"
                     :label="t('action.edit')"
-                    :shortcut="['E']"
                     @click="
                       () => {
                         emit('edit-collection')
@@ -161,7 +148,6 @@
                     :icon="IconCopy"
                     :label="t('action.duplicate')"
                     :loading="duplicateCollectionLoading"
-                    :shortcut="['D']"
                     @click="
                       () => {
                         emit('duplicate-collection'),
@@ -173,7 +159,6 @@
                     ref="exportAction"
                     :icon="IconDownload"
                     :label="t('export.title')"
-                    :shortcut="['X']"
                     :loading="exportLoading"
                     @click="
                       () => {
@@ -186,7 +171,6 @@
                     ref="deleteAction"
                     :icon="IconTrash2"
                     :label="t('action.delete')"
-                    :shortcut="['⌫']"
                     @click="
                       () => {
                         emit('remove-collection')
@@ -198,7 +182,6 @@
                     ref="propertiesAction"
                     :icon="IconSettings2"
                     :label="t('action.properties')"
-                    :shortcut="['P']"
                     @click="
                       () => {
                         emit('edit-properties')

@@ -298,6 +298,8 @@ const offlineBanner: BannerContent = {
 
 onMounted(() => {
   window.addEventListener("message", handleMessage)
+  const sidebarLeft = useSetting("SIDEBAR_ON_LEFT")
+  if (!sidebarLeft.value) toggleSetting("SIDEBAR_ON_LEFT")
   changeAppLanguage("en")
   document.documentElement.setAttribute("data-accent", "orange")
   applySetting("THEME_COLOR", "orange")
@@ -313,9 +315,6 @@ const handleMessage = (event: MessageEvent) => {
     applySetting("BG_COLOR", event.data.theme === "dark" ? "dark" : "light")
   }
 }
-
-const sidebarLeft = useSetting("SIDEBAR_ON_LEFT")
-if (!sidebarLeft.value) toggleSetting("SIDEBAR_ON_LEFT")
 
 // Show the offline banner if the app is offline
 const network = reactive(useNetwork())

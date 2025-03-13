@@ -14,7 +14,6 @@ import { FileSource } from "~/helpers/import-export/import/import-sources/FileSo
 import { ImporterOrExporter } from "../importExport/types"
 import IconFolderPlus from "~icons/lucide/folder-plus"
 import { ref } from "vue"
-//import * as E from "fp-ts/Either"
 
 const isCSVImporterInProgress = ref(false)
 
@@ -32,12 +31,12 @@ const CSVImport: ImporterOrExporter = {
     caption: "import.csv",
     onImportFromFile: async (content, details) => {
       isCSVImporterInProgress.value = true
-      const res = true
-
-      //if (E.isRight(res))
-      if (res) {
-        //console.log(content)
-        emit("hide-modal", [...details])
+      if (content) {
+        const files: any[] = details.map((file, index) => {
+          file["data"] = content[index]
+          return file
+        })
+        emit("hide-modal", [...files])
       } else {
         showImportFailedError()
       }
@@ -51,7 +50,7 @@ const CSVImport: ImporterOrExporter = {
 const importerModules = [CSVImport]
 
 const emit = defineEmits<{
-  (e: "hide-modal", importedFiles?: any[]): () => void
+  (e: "hide-modal", files?: any[]): () => void
 }>()
 
 function showImportFailedError() {

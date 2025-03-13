@@ -42,26 +42,12 @@
             class="flex flex-col focus:outline-none"
             tabindex="0"
             role="menu"
-            @keyup.e="
-              !(environmentIndex === 'Global') ? edit!.$el.click() : null
-            "
-            @keyup.d="
-              !(environmentIndex === 'Global') ? duplicate!.$el.click() : null
-            "
-            @keyup.j="exportAsJsonEl!.$el.click()"
-            @keyup.delete="
-              !(environmentIndex === 'Global')
-                ? deleteAction!.$el.click()
-                : null
-            "
-            @keyup.escape="hide()"
           >
             <HoppSmartItem
               v-if="environmentIndex !== 'Global'"
               ref="edit"
               :icon="IconEdit"
               :label="`${t('action.edit')}`"
-              :shortcut="['E']"
               :disabled="duplicateGlobalEnvironmentLoading"
               @click="
                 () => {
@@ -75,7 +61,6 @@
               ref="duplicate"
               :icon="IconCopy"
               :label="t('action.duplicate')"
-              :shortcut="['D']"
               :loading="duplicateGlobalEnvironmentLoading"
               @click="
                 () => {
@@ -88,7 +73,6 @@
               ref="exportAsJsonEl"
               :icon="IconEdit"
               :label="`${t('export.as_json')}`"
-              :shortcut="['J']"
               :disabled="duplicateGlobalEnvironmentLoading"
               @click="
                 () => {
@@ -102,7 +86,6 @@
               ref="deleteAction"
               :icon="IconTrash2"
               :label="`${t('action.delete')}`"
-              :shortcut="['⌫']"
               :disabled="duplicateGlobalEnvironmentLoading"
               @click="
                 () => {
