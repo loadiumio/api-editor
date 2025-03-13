@@ -84,7 +84,7 @@
                       :title="t('action.delete')"
                       color="red"
                       class="!rounded-none"
-                      @click="deleteFile(index)"
+                      @click="displayDeleteConfirmModal(index)"
                     />
                   </div>
                   <div v-show="!collapsedFiles[index]" class="w-full p-4">
@@ -132,6 +132,12 @@
       v-if="showModalImport"
       @hide-modal="displayModalImport(false, $event)"
     />
+    <HoppSmartConfirmModal
+      :show="showConfirmModal"
+      :title="t('csv_import.remove_file')"
+      @hide-modal="showConfirmModal = false"
+      @resolve="resolveConfirmModal"
+    />
   </div>
 </template>
 
@@ -158,8 +164,10 @@ const selectedFileOption = ref<string>("files")
 
 const csvFiles = ref<CSVFile[]>([])
 const targetFile = ref<CSVFile | null>(null)
+const deleteTargetIndex = ref(0)
 const showModalImport = ref(false)
 const showModalDetails = ref(false)
+const showConfirmModal = ref(false)
 
 const tabsData: ComputedRef<
   {
@@ -211,5 +219,15 @@ const deleteFile = (index: number) => {
 
 const toggleCollapse = (index: number) => {
   collapsedFiles.value[index] = !collapsedFiles.value[index]
+}
+
+const displayDeleteConfirmModal = (index: number) => {
+  showConfirmModal.value = true
+  deleteTargetIndex.value = index
+}
+
+const resolveConfirmModal = () => {
+  deleteFile(deleteTargetIndex.value)
+  showConfirmModal.value = false
 }
 </script>
