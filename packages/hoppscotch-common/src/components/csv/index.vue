@@ -89,7 +89,7 @@
                   </div>
                   <div v-show="!collapsedFiles[index]" class="w-full p-4">
                     <div class="grid grid-cols-2 items-center gap-4 mb-4">
-                      <label>{{ t("csv_import.variableNames") }}</label>
+                      <label>{{ t("csv_import.variable_names") }}</label>
                       <input
                         v-model="file.variableNames"
                         class="flex w-full border bg-transparent px-4 py-2"
@@ -107,14 +107,14 @@
                       />
                     </div>
                     <div class="flex items-center justify-between mb-4">
-                      <span>{{ t("csv_import.ignoreFirst") }}</span>
+                      <span>{{ t("csv_import.ignore_first") }}</span>
                       <HoppSmartToggle
                         :on="file.ignoreFirst"
                         @change="file.ignoreFirst = !file.ignoreFirst"
                       />
                     </div>
                     <div class="flex items-center justify-between">
-                      <span>{{ t("csv_import.recycleEOF") }}</span>
+                      <span>{{ t("csv_import.recycle_eof") }}</span>
                       <HoppSmartToggle
                         :on="file.recycleEOF"
                         @change="file.recycleEOF = !file.recycleEOF"
@@ -151,8 +151,10 @@ import IconFilePlus from "~icons/lucide/file-plus"
 
 import { pipe } from "fp-ts/lib/function"
 import { CSVFile, getFiles, setFiles } from "~/newstore/files"
+import { useToast } from "@composables/toast"
 
 const t = useI18n()
+const toast = useToast()
 const colorMode = useColorMode()
 
 onMounted(() => {
@@ -199,13 +201,21 @@ const displayModalEdit = (shouldDisplay: boolean, file?: CSVFile) => {
 
 const displayModalImport = (shouldDisplay: boolean, importedFiles?: any[]) => {
   if (importedFiles) {
-    const newFiles = importedFiles.map((file: File) => ({
-      fileData: file,
-      variableNames: "",
-      delimiter: "",
-      ignoreFirst: false,
-      recycleEOF: false,
-    }))
+    const existingFileNames = new Set(
+      csvFiles.value.map((file) => file.fileData.name)
+    )
+    const newFiles = importedFiles
+      .filter((file: File) => {
+        if (!existingFileNames.has(file.name)) return true
+        toast.error(`${t("csv_import.same_file_name")}`)
+      })
+      .map((file: File) => ({
+        fileData: file,
+        variableNames: "",
+        delimiter: "",
+        ignoreFirst: false,
+        recycleEOF: false,
+      }))
     csvFiles.value.push(...newFiles)
     setFiles(csvFiles.value)
   }
