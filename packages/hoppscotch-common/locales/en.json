@@ -1132,7 +1132,8 @@
     "passed": "Passed",
     "failed": "Failed",
     "global_variables": "Global Variables",
-    "csv_upload": "CSV Upload"
+    "csv_upload": "CSV Upload",
+    "script": "Script"
   },
   "team": {
     "activity_logs": "Activity Logs",
@@ -1322,5 +1323,10 @@
     "recycle_eof": "Recycle on End of File?",
     "same_file_name": "You can upload files with different names.",
     "remove_file": "Are you sure you want to permanently delete this file?"
+  },
+  "sleep": {
+    "add_sleep": "Add sleep",
+    "time": "Time (milliseconds)",
+    "milli_second": "Millisecond"
   }
 }

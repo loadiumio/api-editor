@@ -6,9 +6,9 @@
     render-inactive-tabs
   >
     <HoppSmartTab
-      :id="'collections'"
+      :id="'script'"
       :icon="IconFolder"
-      :label="`${t('tab.collections')}`"
+      :label="`${t('tab.script')}`"
     >
       <Collections />
     </HoppSmartTab>
@@ -35,7 +35,7 @@
     </HoppSmartTab> -->
     <HoppSmartTab
       :id="'csv_upload'"
-      :icon="IconImport"
+      :icon="IconFile"
       :label="`${t('tab.csv_upload')}`"
     >
       <!--<div
@@ -57,13 +57,13 @@
 <script setup lang="ts">
 import IconGlobe from "~icons/lucide/globe"
 import IconFolder from "~icons/lucide/folder"
-import IconImport from "~icons/lucide/folder-down"
+import IconFile from "~icons/lucide/file"
 import { ref } from "vue"
 import { useI18n } from "@composables/i18n"
 
 const t = useI18n()
 
-type RequestOptionTabs = "collections" | "env" | "csv_upload"
+type RequestOptionTabs = "script" | "env" | "csv_upload"
 
-const selectedNavigationTab = ref<RequestOptionTabs>("collections")
+const selectedNavigationTab = ref<RequestOptionTabs>("script")
 </script>

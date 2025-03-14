@@ -68,6 +68,13 @@
           />
           <HoppButtonSecondary
             v-tippy="{ theme: 'tooltip' }"
+            :icon="IconClock"
+            :title="t('sleep.add_sleep')"
+            class="hidden group-hover:inline-flex"
+            @click="emit('add-sleep')"
+          />
+          <HoppButtonSecondary
+            v-tippy="{ theme: 'tooltip' }"
             :icon="IconFolderPlus"
             :title="t('folder.new')"
             class="hidden group-hover:inline-flex"
@@ -106,6 +113,17 @@
                     @click="
                       () => {
                         emit('add-request')
+                        hide()
+                      }
+                    "
+                  />
+                  <HoppSmartItem
+                    ref="sleepAction"
+                    :icon="IconClock"
+                    :label="t('sleep.add_sleep')"
+                    @click="
+                      () => {
+                        emit('add-sleep')
                         hide()
                       }
                     "
@@ -236,6 +254,7 @@ import IconMoreVertical from "~icons/lucide/more-vertical"
 import IconPlaySquare from "~icons/lucide/play-square"
 import IconSettings2 from "~icons/lucide/settings-2"
 import IconTrash2 from "~icons/lucide/trash-2"
+import IconClock from "~icons/lucide/clock"
 
 type CollectionType = "my-collections" | "team-collections"
 type FolderType = "collection" | "folder"
@@ -291,6 +310,7 @@ const emit = defineEmits<{
   (event: "update-collection-order", payload: DataTransfer): void
   (event: "update-last-collection-order", payload: DataTransfer): void
   (event: "run-collection", collectionID: string): void
+  (event: "add-sleep"): void
 }>()
 
 const tippyActions = ref<HTMLDivElement | null>(null)
@@ -303,6 +323,7 @@ const exportAction = ref<HTMLButtonElement | null>(null)
 const options = ref<TippyComponent | null>(null)
 const propertiesAction = ref<HTMLButtonElement | null>(null)
 const runCollectionAction = ref<HTMLButtonElement | null>(null)
+const sleepAction = ref<HTMLButtonElement | null>(null)
 
 const dragging = ref(false)
 const ordering = ref(false)

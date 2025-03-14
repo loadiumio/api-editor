@@ -56,11 +56,18 @@
               @update:model-value="onTabUpdate"
             />
             <!-- When document.type === 'request' the tab type is HoppTab<HoppRequestDocument>-->
-            <HttpRequestTab
-              v-if="tab.document.type === 'request'"
-              :model-value="tab"
-              @update:model-value="onTabUpdate"
-            />
+            <template v-if="tab.document.type === 'request'">
+              <HttpSleepTab
+                v-if="tab.document.request.method === 'SLEEP'"
+                :model-value="tab"
+                @update:model-value="onTabUpdate"
+              />
+              <HttpRequestTab
+                v-else
+                :model-value="tab"
+                @update:model-value="onTabUpdate"
+              />
+            </template>
             <!-- END Render TabContents -->
           </HoppSmartWindow>
           <!--<template #actions>

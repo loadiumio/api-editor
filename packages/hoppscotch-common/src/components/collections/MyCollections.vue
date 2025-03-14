@@ -50,6 +50,13 @@
                   folder: node.data.data.data,
                 })
             "
+            @add-sleep="
+              node.data.type === 'collections' &&
+                emit('add-sleep', {
+                  path: node.id,
+                  folder: node.data.data.data,
+                })
+            "
             @add-folder="
               node.data.type === 'collections' &&
                 emit('add-folder', {
@@ -141,6 +148,13 @@
             @add-request="
               node.data.type === 'folders' &&
                 emit('add-request', {
+                  path: node.id,
+                  folder: node.data.data.data,
+                })
+            "
+            @add-sleep="
+              node.data.type === 'folders' &&
+                emit('add-sleep', {
                   path: node.id,
                   folder: node.data.data.data,
                 })
@@ -485,6 +499,13 @@ const emit = defineEmits<{
   (event: "display-modal-add"): void
   (
     event: "add-request",
+    payload: {
+      path: string
+      folder: HoppCollection
+    }
+  ): void
+  (
+    event: "add-sleep",
     payload: {
       path: string
       folder: HoppCollection
