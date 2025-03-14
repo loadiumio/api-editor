@@ -13,7 +13,21 @@
 import { FileSource } from "~/helpers/import-export/import/import-sources/FileSource"
 import { ImporterOrExporter } from "../importExport/types"
 import IconFolderPlus from "~icons/lucide/folder-plus"
-import { ref } from "vue"
+import { PropType, ref } from "vue"
+import { CSVFile } from "~/newstore/files"
+import { useI18n } from "~/composables/i18n"
+import { useToast } from "@composables/toast"
+
+const t = useI18n()
+const toast = useToast()
+
+const props = defineProps({
+  currentFiles: {
+    type: Array as PropType<CSVFile[]>,
+    default: () => [],
+    required: true,
+  },
+})
 
 const isCSVImporterInProgress = ref(false)
 
@@ -29,14 +43,14 @@ const CSVImport: ImporterOrExporter = {
   component: FileSource({
     acceptedFileTypes: ".csv",
     caption: "import.csv",
-    onImportFromFile: async (content, details) => {
+    onImportFromFile: async (fileContents, files) => {
       isCSVImporterInProgress.value = true
-      if (content) {
-        const files: any[] = details.map((file, index) => {
-          file["data"] = content[index]
-          return file
-        })
-        emit("hide-modal", [...files])
+      if (fileContents && files) {
+        const filteredFiles = filterFilesByName(files)
+        checkSameFileName(filteredFiles.length, files.length)
+        const CSVFiles = createFiles(fileContents, filteredFiles)
+        emit("hide-modal")
+        emit("add-files", [...CSVFiles])
       } else {
         showImportFailedError()
       }
@@ -50,8 +64,36 @@ const CSVImport: ImporterOrExporter = {
 const importerModules = [CSVImport]
 
 const emit = defineEmits<{
-  (e: "hide-modal", files?: any[]): () => void
+  (e: "hide-modal"): () => void
+  (e: "add-files", files: any[]): () => void
 }>()
+
+const checkSameFileName = (filteredFileCount: number, fileCount: number) => {
+  if (filteredFileCount !== fileCount) {
+    toast.error(`${t("csv_import.same_file_name")}`)
+  }
+}
+
+const filterFilesByName = (fileDetails: any[]) => {
+  const existingFileNames = new Set(
+    props.currentFiles.map((file) => file.fileData.name)
+  )
+  return fileDetails.filter((file: File) => !existingFileNames.has(file.name))
+}
+
+const createFiles = (fileContents: any[], files: any[]) => {
+  const filesWithContent = files.map((file, index) => {
+    file["data"] = fileContents[index]
+    return file
+  })
+  return filesWithContent.map((file: File) => ({
+    fileData: file,
+    variableNames: "",
+    delimiter: "",
+    ignoreFirst: false,
+    recycleEOF: false,
+  }))
+}
 
 function showImportFailedError() {
   throw new Error("Function not implemented.")

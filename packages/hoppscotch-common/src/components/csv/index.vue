@@ -84,12 +84,12 @@
                       :title="t('action.delete')"
                       color="red"
                       class="!rounded-none"
-                      @click="deleteFile(index)"
+                      @click="displayDeleteConfirmationModal(index)"
                     />
                   </div>
                   <div v-show="!collapsedFiles[index]" class="w-full p-4">
                     <div class="grid grid-cols-2 items-center gap-4 mb-4">
-                      <label>{{ t("csv_import.variableNames") }}</label>
+                      <label>{{ t("csv_import.variable_names") }}</label>
                       <input
                         v-model="file.variableNames"
                         class="flex w-full border bg-transparent px-4 py-2"
@@ -107,14 +107,14 @@
                       />
                     </div>
                     <div class="flex items-center justify-between mb-4">
-                      <span>{{ t("csv_import.ignoreFirst") }}</span>
+                      <span>{{ t("csv_import.ignore_first") }}</span>
                       <HoppSmartToggle
                         :on="file.ignoreFirst"
                         @change="file.ignoreFirst = !file.ignoreFirst"
                       />
                     </div>
                     <div class="flex items-center justify-between">
-                      <span>{{ t("csv_import.recycleEOF") }}</span>
+                      <span>{{ t("csv_import.recycle_eof") }}</span>
                       <HoppSmartToggle
                         :on="file.recycleEOF"
                         @change="file.recycleEOF = !file.recycleEOF"
@@ -130,7 +130,15 @@
     </div>
     <CsvImport
       v-if="showModalImport"
-      @hide-modal="displayModalImport(false, $event)"
+      :current-files="[...csvFiles]"
+      @hide-modal="displayModalImport(false)"
+      @add-files="addImportedFiles($event)"
+    />
+    <HoppSmartConfirmModal
+      :show="showConfirmModal"
+      :title="t('csv_import.remove_file')"
+      @hide-modal="showConfirmModal = false"
+      @resolve="resolveConfirmModal"
     />
   </div>
 </template>
@@ -158,8 +166,10 @@ const selectedFileOption = ref<string>("files")
 
 const csvFiles = ref<CSVFile[]>([])
 const targetFile = ref<CSVFile | null>(null)
+const deleteTargetIndex = ref(0)
 const showModalImport = ref(false)
 const showModalDetails = ref(false)
+const showConfirmModal = ref(false)
 
 const tabsData: ComputedRef<
   {
@@ -189,19 +199,13 @@ const displayModalEdit = (shouldDisplay: boolean, file?: CSVFile) => {
   showModalDetails.value = shouldDisplay
 }
 
-const displayModalImport = (shouldDisplay: boolean, importedFiles?: any[]) => {
-  if (importedFiles) {
-    const newFiles = importedFiles.map((file: File) => ({
-      fileData: file,
-      variableNames: "",
-      delimiter: "",
-      ignoreFirst: false,
-      recycleEOF: false,
-    }))
-    csvFiles.value.push(...newFiles)
-    setFiles(csvFiles.value)
-  }
+const displayModalImport = (shouldDisplay: boolean) => {
   showModalImport.value = shouldDisplay
+}
+
+const addImportedFiles = (importedFiles: any[]) => {
+  csvFiles.value.push(...importedFiles)
+  setFiles(csvFiles.value)
 }
 
 const deleteFile = (index: number) => {
@@ -211,5 +215,15 @@ const deleteFile = (index: number) => {
 
 const toggleCollapse = (index: number) => {
   collapsedFiles.value[index] = !collapsedFiles.value[index]
+}
+
+const displayDeleteConfirmationModal = (index: number) => {
+  showConfirmModal.value = true
+  deleteTargetIndex.value = index
+}
+
+const resolveConfirmModal = () => {
+  deleteFile(deleteTargetIndex.value)
+  showConfirmModal.value = false
 }
 </script>
