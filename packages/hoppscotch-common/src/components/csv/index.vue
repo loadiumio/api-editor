@@ -84,7 +84,7 @@
                       :title="t('action.delete')"
                       color="red"
                       class="!rounded-none"
-                      @click="displayDeleteConfirmModal(index)"
+                      @click="displayDeleteConfirmationModal(index)"
                     />
                   </div>
                   <div v-show="!collapsedFiles[index]" class="w-full p-4">
@@ -130,7 +130,9 @@
     </div>
     <CsvImport
       v-if="showModalImport"
-      @hide-modal="displayModalImport(false, $event)"
+      :current-files="[...csvFiles]"
+      @hide-modal="displayModalImport(false)"
+      @add-files="addImportedFiles($event)"
     />
     <HoppSmartConfirmModal
       :show="showConfirmModal"
@@ -151,10 +153,8 @@ import IconFilePlus from "~icons/lucide/file-plus"
 
 import { pipe } from "fp-ts/lib/function"
 import { CSVFile, getFiles, setFiles } from "~/newstore/files"
-import { useToast } from "@composables/toast"
 
 const t = useI18n()
-const toast = useToast()
 const colorMode = useColorMode()
 
 onMounted(() => {
@@ -199,27 +199,13 @@ const displayModalEdit = (shouldDisplay: boolean, file?: CSVFile) => {
   showModalDetails.value = shouldDisplay
 }
 
-const displayModalImport = (shouldDisplay: boolean, importedFiles?: any[]) => {
-  if (importedFiles) {
-    const existingFileNames = new Set(
-      csvFiles.value.map((file) => file.fileData.name)
-    )
-    const newFiles = importedFiles
-      .filter((file: File) => {
-        if (!existingFileNames.has(file.name)) return true
-        toast.error(`${t("csv_import.same_file_name")}`)
-      })
-      .map((file: File) => ({
-        fileData: file,
-        variableNames: "",
-        delimiter: "",
-        ignoreFirst: false,
-        recycleEOF: false,
-      }))
-    csvFiles.value.push(...newFiles)
-    setFiles(csvFiles.value)
-  }
+const displayModalImport = (shouldDisplay: boolean) => {
   showModalImport.value = shouldDisplay
+}
+
+const addImportedFiles = (importedFiles: any[]) => {
+  csvFiles.value.push(...importedFiles)
+  setFiles(csvFiles.value)
 }
 
 const deleteFile = (index: number) => {
@@ -231,7 +217,7 @@ const toggleCollapse = (index: number) => {
   collapsedFiles.value[index] = !collapsedFiles.value[index]
 }
 
-const displayDeleteConfirmModal = (index: number) => {
+const displayDeleteConfirmationModal = (index: number) => {
   showConfirmModal.value = true
   deleteTargetIndex.value = index
 }
