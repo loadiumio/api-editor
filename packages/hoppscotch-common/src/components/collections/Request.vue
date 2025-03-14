@@ -98,17 +98,12 @@
                 ref="tippyActions"
                 class="flex flex-col focus:outline-none"
                 tabindex="0"
-                @keyup.e="edit?.$el.click()"
-                @keyup.d="duplicate?.$el.click()"
-                @keyup.delete="deleteAction?.$el.click()"
-                @keyup.s="shareAction?.$el.click()"
-                @keyup.escape="hide()"
               >
                 <HoppSmartItem
+                  v-if="request.method !== 'SLEEP'"
                   ref="edit"
                   :icon="IconEdit"
                   :label="t('action.edit')"
-                  :shortcut="['E']"
                   @click="
                     () => {
                       emit('edit-request')
@@ -121,7 +116,6 @@
                   :icon="IconCopy"
                   :label="t('action.duplicate')"
                   :loading="duplicateRequestLoading"
-                  :shortcut="['D']"
                   @click="
                     () => {
                       emit('duplicate-request')
@@ -132,22 +126,9 @@
                   ref="deleteAction"
                   :icon="IconTrash2"
                   :label="t('action.delete')"
-                  :shortcut="['⌫']"
                   @click="
                     () => {
                       emit('remove-request')
-                      hide()
-                    }
-                  "
-                />
-                <HoppSmartItem
-                  ref="shareAction"
-                  :icon="IconShare2"
-                  :label="t('action.share')"
-                  :shortcut="['S']"
-                  @click="
-                    () => {
-                      emit('share-request')
                       hide()
                     }
                   "
@@ -208,7 +189,6 @@ import IconEdit from "~icons/lucide/edit"
 import IconCopy from "~icons/lucide/copy"
 import IconTrash2 from "~icons/lucide/trash-2"
 import IconRotateCCW from "~icons/lucide/rotate-ccw"
-import IconShare2 from "~icons/lucide/share-2"
 import IconArrowRight from "~icons/lucide/chevron-right"
 import IconArrowDown from "~icons/lucide/chevron-down"
 import { ref, PropType, watch, computed } from "vue"
@@ -310,7 +290,6 @@ const edit = ref<HTMLButtonElement | null>(null)
 const deleteAction = ref<HTMLButtonElement | null>(null)
 const options = ref<TippyComponent | null>(null)
 const duplicate = ref<HTMLButtonElement | null>(null)
-const shareAction = ref<HTMLButtonElement | null>(null)
 
 const dragging = ref(false)
 const ordering = ref(false)

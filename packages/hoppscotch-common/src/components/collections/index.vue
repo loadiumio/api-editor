@@ -24,7 +24,7 @@
         </span>
         <span class="flex min-w-0 flex-1 py-2 pr-2 transition group-hover:text-secondaryDark">
           <span class="truncate">
-            {{ t("tab.collections") }}
+            {{ t("tab.script") }}
           </span>
         </span>
       </div>
@@ -69,12 +69,12 @@
       @remove-folder="removeFolder"
       @remove-request="removeRequest"
       @remove-response="removeResponse"
-      @share-request="shareRequest"
       @select="selectPicked"
       @select-response="selectResponse"
       @select-request="selectRequest"
       @update-request-order="updateRequestOrder"
       @update-collection-order="updateCollectionOrder"
+      @add-sleep="addSleep"
     />
     <CollectionsTeamCollections
       v-else
@@ -123,7 +123,6 @@
           path: $event.path,
         })
       "
-      @share-request="shareRequest"
       @select-request="selectRequest"
       @select-response="selectResponse"
       @select="selectPicked"
@@ -241,7 +240,7 @@ import { pipe } from "fp-ts/function"
 import { cloneDeep, debounce, isEqual } from "lodash-es"
 import { PropType, computed, nextTick, onMounted, ref, watch } from "vue"
 import { useReadonlyStream } from "~/composables/stream"
-import { defineActionHandler, invokeAction } from "~/helpers/actions"
+import { defineActionHandler } from "~/helpers/actions"
 import { GQLError } from "~/helpers/backend/GQLClient"
 import {
   getCompleteCollectionTree,
@@ -375,10 +374,6 @@ const confirmModalTitle = ref<string | null>(null)
 
 const filterTexts = ref("")
 
-const currentUser = useReadonlyStream(
-  platform.auth.getCurrentUserStream(),
-  platform.auth.getCurrentUser()
-)
 const myCollections = useReadonlyStream(restCollections$, [], "deep")
 
 // Draging
@@ -555,16 +550,6 @@ watch(
   },
   {
     immediate: true,
-  }
-)
-
-// Switch to my-collections and reset the team collection when user logout
-watch(
-  () => currentUser.value,
-  (user) => {
-    if (!user) {
-      switchToMyCollections()
-    }
   }
 )
 
@@ -785,24 +770,10 @@ const addNewRootCollection = (name: string) => {
       })
     )
 
-    platform.analytics?.logEvent({
-      type: "HOPP_CREATE_COLLECTION",
-      platform: "rest",
-      workspaceType: "personal",
-      isRootCollection: true,
-    })
-
     displayModalAdd(false)
   } else if (hasTeamWriteAccess.value) {
     if (!collectionsType.value.selectedTeam) return
     modalLoadingState.value = true
-
-    platform.analytics?.logEvent({
-      type: "HOPP_CREATE_COLLECTION",
-      platform: "rest",
-      workspaceType: "team",
-      isRootCollection: true,
-    })
 
     pipe(
       createNewRootCollection(name, collectionsType.value.selectedTeam.teamID),
@@ -831,11 +802,40 @@ const addRequest = (payload: {
   displayModalAddRequest(true)
 }
 
+const addSleep = (payload: {
+  path: string
+  folder: HoppCollection | TeamCollection
+}) => {
+  const { path, folder } = payload
+  editingFolder.value = folder
+  editingFolderPath.value = path
+  onAddSleep()
+}
+
 const requestContext = computed(() => {
   return tabs.currentActiveTab.value.document.type === "request"
     ? tabs.currentActiveTab.value.document.request
     : null
 })
+
+const onAddSleep = () => {
+  const newRequest = {
+    ...getDefaultRESTRequest(),
+    name: "",
+  }
+
+  const sleepParam = {
+    key: "time",
+    value: "0",
+    active: true,
+    description: "",
+  }
+  newRequest.method = "SLEEP"
+  newRequest.params.push(sleepParam)
+  const path = editingFolderPath.value
+  if (!path) return
+  saveRESTRequestAs(path, newRequest)
+}
 
 const onAddRequest = (requestName: string) => {
   const request =
@@ -872,13 +872,6 @@ const onAddRequest = (requestName: string) => {
         auth,
         headers,
       },
-    })
-
-    platform.analytics?.logEvent({
-      type: "HOPP_SAVE_REQUEST",
-      workspaceType: "personal",
-      createdNow: true,
-      platform: "rest",
     })
 
     displayModalAddRequest(false)
@@ -955,26 +948,12 @@ const onAddFolder = (folderName: string) => {
     if (!path) return
     addRESTFolder(folderName, path)
 
-    platform.analytics?.logEvent({
-      type: "HOPP_CREATE_COLLECTION",
-      workspaceType: "personal",
-      isRootCollection: false,
-      platform: "rest",
-    })
-
     displayModalAddFolder(false)
   } else if (hasTeamWriteAccess.value) {
     const folder = editingFolder.value
     if (!folder || !folder.id) return
 
     modalLoadingState.value = true
-
-    platform.analytics?.logEvent({
-      type: "HOPP_CREATE_COLLECTION",
-      workspaceType: "personal",
-      isRootCollection: false,
-      platform: "rest",
-    })
 
     pipe(
       createChildCollection(folderName, folder.id),
@@ -2655,10 +2634,10 @@ const initializeDownloadCollection = async (
   const result = await platform.io.saveFileWithDialog({
     data: collectionJSON,
     contentType: "application/json",
-    suggestedFilename: `${name ?? "collection"}.json`,
+    suggestedFilename: `${name ?? "script"}.json`,
     filters: [
       {
-        name: "Hoppscotch Collection JSON file",
+        name: "Loadium Script JSON file",
         extensions: ["json"],
       },
     ],
@@ -2705,17 +2684,6 @@ const exportData = async (collection: HoppCollection | TeamCollection) => {
         }
       )
     )()
-  }
-}
-
-const shareRequest = ({ request }: { request: HoppRESTRequest }) => {
-  if (currentUser.value) {
-    // opens the share request modal
-    invokeAction("share.request", {
-      request,
-    })
-  } else {
-    invokeAction("modals.login.toggle")
   }
 }
 

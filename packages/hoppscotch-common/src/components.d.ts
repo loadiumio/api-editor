@@ -184,6 +184,7 @@ declare module 'vue' {
     HttpResponseMeta: typeof import('./components/http/ResponseMeta.vue')['default']
     HttpSaveResponseName: typeof import('./components/http/SaveResponseName.vue')['default']
     HttpSidebar: typeof import('./components/http/Sidebar.vue')['default']
+    HttpSleepTab: typeof import('./components/http/SleepTab.vue')['default']
     HttpTabHead: typeof import('./components/http/TabHead.vue')['default']
     HttpTestEnv: typeof import('./components/http/test/Env.vue')['default']
     HttpTestFolder: typeof import('./components/http/test/Folder.vue')['default']
