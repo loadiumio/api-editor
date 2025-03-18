@@ -31,7 +31,8 @@
     "cross-env": "7.0.3",
     "http-server": "14.1.1",
     "husky": "9.1.6",
-    "lint-staged": "15.2.10"
+    "lint-staged": "15.2.10",
+    "@intlify/shared": "10.0.5"
   },
   "pnpm": {
     "overrides": {
@@ -51,7 +52,9 @@
       "nanoid@3.3.7": "3.3.8",
       "execa@0.10.0": "2.0.0",
       "@codemirror/view": "6.25.1",
-      "@codemirror/state": "6.4.1"
+      "@codemirror/state": "6.4.1",
+      "@intlify/vite-plugin-vue-i18n": "6.0.1",
+      "@intlify/shared": "10.0.5"
     },
     "packageExtensions": {
       "@hoppscotch/httpsnippet": {
