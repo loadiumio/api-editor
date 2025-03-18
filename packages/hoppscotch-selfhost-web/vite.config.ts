@@ -40,6 +40,9 @@ export default defineConfig({
     rollupOptions: {
       maxParallelFileOps: 2,
     },
+    commonjsOptions: {
+      include: [/node_modules/],
+    },
   },
   resolve: {
     alias: {
@@ -74,8 +77,15 @@ export default defineConfig({
       stream: "stream-browserify",
       util: "util",
       querystring: "qs",
+      "@intlify/shared": path.resolve(
+        __dirname,
+        "node_modules/@intlify/shared/dist/shared.cjs"
+      ),
     },
     dedupe: ["vue"],
+  },
+  optimizeDeps: {
+    exclude: ["@intlify/shared"],
   },
   plugins: [
     Inspect(),
