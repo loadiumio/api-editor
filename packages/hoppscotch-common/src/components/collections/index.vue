@@ -1380,6 +1380,15 @@ const duplicateRequest = (payload: {
   const { folderPath, request } = payload
   if (!folderPath) return
 
+  if (request.method === "SLEEP") {
+    const newRequest = {
+      ...cloneDeep(request),
+    }
+    saveRESTRequestAs(folderPath, newRequest)
+    toast.success(t("request.duplicated"))
+    return
+  }
+
   const newRequest = {
     ...cloneDeep(request),
     name: `${request.name} - ${t("action.duplicate")}`,
@@ -1695,6 +1704,9 @@ const onRemoveRequest = () => {
 
       // since the request is deleted, we need to remove the saved responses as well
       possibleTab.value.document.request.responses = {}
+      if (possibleTab.value.document.request.method === "SLEEP") {
+        tabs.closeTab(possibleTab.value.id)
+      }
     }
 
     const requestToRemove = navigateToFolderWithIndexPath(
