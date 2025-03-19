@@ -70,9 +70,17 @@
             </template>
             <!-- END Render TabContents -->
           </HoppSmartWindow>
-          <!--<template #actions>
-            <EnvironmentsSelector class="h-full" />
-          </template>-->
+          <template #actions>
+            <!--<EnvironmentsSelector class="h-full" />-->
+            <div class="flex justify-end h-full">
+              <HoppButtonSecondary
+                v-tippy="{ theme: 'tooltip' }"
+                :icon="IconImport"
+                :title="t('modal.import_export')"
+                @click="displayModalImportExport(true)"
+              />
+            </div>
+          </template>
         </HoppSmartWindows>
       </template>
       <template #sidebar>
@@ -136,6 +144,11 @@
       :text="contextMenu.text"
       @hide-modal="contextMenu.show = false"
     />
+    <CollectionsImportExport
+      v-if="showModalImportExport"
+      :collections-type="collectionsType"
+      @hide-modal="displayModalImportExport(false)"
+    />
   </div>
 </template>
 
@@ -160,6 +173,7 @@ import { RESTTabService } from "~/services/tab/rest"
 import { HoppTab } from "~/services/tab"
 import { HoppRequestDocument, HoppTabDocument } from "~/helpers/rest/document"
 import { AuthorizationInspectorService } from "~/services/inspection/inspectors/authorization.inspector"
+import IconImport from "~icons/lucide/folder-down"
 
 const savingRequest = ref(false)
 const confirmingCloseForTabID = ref<string | null>(null)
@@ -173,6 +187,8 @@ const renameTabID = ref<string | null>(null)
 const t = useI18n()
 
 const tabs = useService(RESTTabService)
+
+type CollectionType = { type: "my-collections"; selectedTeam: undefined }
 
 const currentTabID = tabs.currentTabID
 
@@ -197,6 +213,12 @@ const contextMenu = ref<PopupDetails>({
     left: 0,
   },
   text: null,
+})
+
+const showModalImportExport = ref(false)
+const collectionsType = ref<CollectionType>({
+  type: "my-collections",
+  selectedTeam: undefined,
 })
 
 const activeTabs = tabs.getActiveTabs()
@@ -261,6 +283,10 @@ const removeTab = (tabID: string) => {
     tabs.closeTab(tabState.id)
     inspectionService.deleteTabInspectorResult(tabState.id)
   }
+}
+
+const displayModalImportExport = (show: boolean) => {
+  showModalImportExport.value = show
 }
 
 const closeOtherTabsAction = (tabID: string) => {

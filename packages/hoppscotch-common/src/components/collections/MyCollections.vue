@@ -14,7 +14,7 @@
         class="!rounded-none"
         @click="emit('display-modal-add')"
       />
-      <span class="flex">
+      <!--<span class="flex">
         <HoppButtonSecondary
           v-if="!saveRequest"
           v-tippy="{ theme: 'tooltip' }"
@@ -22,7 +22,7 @@
           :title="t('modal.import_export')"
           @click="emit('display-modal-import-export')"
         />
-      </span>
+      </span>-->
     </div>
     <div class="flex flex-1 flex-col">
       <HoppSmartTree :adapter="myAdapter">
@@ -345,13 +345,13 @@
           <HoppSmartPlaceholder
             v-else-if="node === null"
             :src="`/api-editor/images/states/${colorMode.value}/pack.svg`"
-            :alt="`${t('empty.collections')}`"
-            :text="t('empty.collections')"
+            :alt="`${t('empty.script')}`"
+            :text="t('empty.script')"
           >
             <template #body>
               <div class="flex flex-col items-center space-y-4">
                 <span class="text-center text-secondaryLight">
-                  {{ t("collection.import_or_create") }}
+                  {{ t("script.import_or_create") }}
                 </span>
                 <div class="flex flex-col items-stretch gap-4">
                   <HoppButtonPrimary
@@ -375,8 +375,8 @@
           <HoppSmartPlaceholder
             v-else-if="node.data.type === 'collections'"
             :src="`/api-editor/images/states/${colorMode.value}/pack.svg`"
-            :alt="`${t('empty.collections')}`"
-            :text="t('empty.collections')"
+            :alt="`${t('empty.script')}`"
+            :text="t('empty.script')"
           >
             <template #body>
               <HoppButtonSecondary
@@ -385,7 +385,7 @@
                 outline
                 @click="
                   node.data.type === 'collections' &&
-                    emit('add-folder', {
+                    emit('add-request', {
                       path: node.id,
                       folder: node.data.data.data,
                     })

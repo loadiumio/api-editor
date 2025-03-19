@@ -367,7 +367,8 @@
     "tests": "There are no tests for this request",
     "access_tokens": "Access tokens are empty",
     "response": "No response received",
-    "csv_files": "There are no CSV files uploaded"
+    "csv_files": "There are no CSV files uploaded",
+    "script": "Script is empty"
   },
   "environment": {
     "heading": "Environment",
@@ -1328,5 +1329,9 @@
     "add_sleep": "Add sleep",
     "time": "Time (milliseconds)",
     "milli_second": "Millisecond"
+  },
+  "script": {
+    "import_or_create": "Import or create a script",
+    "new": "New Script"
   }
 }

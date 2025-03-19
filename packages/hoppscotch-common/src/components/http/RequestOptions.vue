@@ -38,7 +38,7 @@
         @change-tab="changeOptionTab"
       />
     </HoppSmartTab>
-    <HoppSmartTab
+    <!--<HoppSmartTab
       v-if="properties?.includes('authorization') ?? true"
       :id="'authorization'"
       :label="`${t('tab.authorization')}`"
@@ -48,7 +48,7 @@
         :inherited-properties="inheritedProperties"
         :envs="envs"
       />
-    </HoppSmartTab>
+    </HoppSmartTab>-->
     <!--<HoppSmartTab
       v-if="showPreRequestScriptTab"
       :id="'preRequestScript'"

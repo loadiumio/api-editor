@@ -73,7 +73,7 @@
             class="hidden group-hover:inline-flex"
             @click="emit('add-sleep')"
           />
-          <HoppButtonSecondary
+          <!--<HoppButtonSecondary
             v-tippy="{ theme: 'tooltip' }"
             :icon="IconFolderPlus"
             :title="t('folder.new')"
@@ -86,7 +86,7 @@
             :title="t('collection_runner.run_collection')"
             class="hidden group-hover:inline-flex"
             @click="emit('run-collection', props.id)"
-          />
+          />-->
           <span>
             <tippy
               ref="options"
@@ -128,7 +128,7 @@
                       }
                     "
                   />
-                  <HoppSmartItem
+                  <!--<HoppSmartItem
                     ref="folderAction"
                     :icon="IconFolderPlus"
                     :label="t('folder.new')"
@@ -149,7 +149,7 @@
                         hide()
                       }
                     "
-                  />
+                  />-->
                   <HoppSmartItem
                     ref="edit"
                     :icon="IconEdit"
