@@ -375,12 +375,12 @@
           <HoppSmartPlaceholder
             v-else-if="node.data.type === 'collections'"
             :src="`/api-editor/images/states/${colorMode.value}/pack.svg`"
-            :alt="`${t('empty.script')}`"
-            :text="t('empty.script')"
+            :alt="`${t('empty.thread_group')}`"
+            :text="t('empty.thread_group')"
           >
             <template #body>
               <HoppButtonSecondary
-                :label="t('add.new')"
+                :label="t('request.add')"
                 filled
                 outline
                 @click="

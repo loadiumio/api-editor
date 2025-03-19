@@ -368,7 +368,8 @@
     "access_tokens": "Access tokens are empty",
     "response": "No response received",
     "csv_files": "There are no CSV files uploaded",
-    "script": "Script is empty"
+    "script": "Script is empty",
+    "thread_group": "Thread Group is empty"
   },
   "environment": {
     "heading": "Environment",

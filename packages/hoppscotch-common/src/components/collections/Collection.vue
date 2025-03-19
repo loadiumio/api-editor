@@ -196,7 +196,7 @@
                       }
                     "
                   />
-                  <HoppSmartItem
+                  <!--<HoppSmartItem
                     ref="propertiesAction"
                     :icon="IconSettings2"
                     :label="t('action.properties')"
@@ -206,7 +206,7 @@
                         hide()
                       }
                     "
-                  />
+                  />-->
                 </div>
               </template>
             </tippy>
