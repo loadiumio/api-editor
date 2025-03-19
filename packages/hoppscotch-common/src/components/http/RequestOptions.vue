@@ -38,48 +38,6 @@
         @change-tab="changeOptionTab"
       />
     </HoppSmartTab>
-    <!--<HoppSmartTab
-      v-if="properties?.includes('authorization') ?? true"
-      :id="'authorization'"
-      :label="`${t('tab.authorization')}`"
-    >
-      <HttpAuthorization
-        v-model="request.auth"
-        :inherited-properties="inheritedProperties"
-        :envs="envs"
-      />
-    </HoppSmartTab>-->
-    <!--<HoppSmartTab
-      v-if="showPreRequestScriptTab"
-      :id="'preRequestScript'"
-      :label="`${t('tab.pre_request_script')}`"
-      :indicator="
-        'preRequestScript' in request &&
-        request.preRequestScript &&
-        request.preRequestScript.length > 0
-          ? true
-          : false
-      "
-    >
-      <HttpPreRequestScript
-        v-if="'preRequestScript' in request"
-        v-model="request.preRequestScript"
-      />
-    </HoppSmartTab>-->
-    <!--<HoppSmartTab
-      v-if="showTestsTab"
-      :id="'tests'"
-      :label="`${t('tab.tests')}`"
-      :indicator="
-        'testScript' in request &&
-        request.testScript &&
-        request.testScript.length > 0
-          ? true
-          : false
-      "
-    >
-      <HttpTests v-if="'testScript' in request" v-model="request.testScript" />
-    </HoppSmartTab>-->
     <HoppSmartTab
       v-if="properties?.includes('requestVariables') ?? true"
       :id="'requestVariables'"
@@ -139,17 +97,6 @@ const emit = defineEmits<{
 
 const request = useVModel(props, "modelValue", emit)
 const selectedOptionTab = useVModel(props, "optionTab", emit)
-
-/*const showPreRequestScriptTab = computed(() => {
-  return (
-    props.properties?.includes("preRequestScript") ??
-    "preRequestScript" in request.value
-  )
-})
-
-const showTestsTab = computed(() => {
-  return props.properties?.includes("tests") ?? "testScript" in request.value
-})*/
 
 const changeOptionTab = (e: RESTOptionTabs) => {
   selectedOptionTab.value = e

@@ -73,20 +73,6 @@
             class="hidden group-hover:inline-flex"
             @click="emit('add-sleep')"
           />
-          <!--<HoppButtonSecondary
-            v-tippy="{ theme: 'tooltip' }"
-            :icon="IconFolderPlus"
-            :title="t('folder.new')"
-            class="hidden group-hover:inline-flex"
-            @click="emit('add-folder')"
-          />
-          <HoppButtonSecondary
-            v-tippy="{ theme: 'tooltip' }"
-            :icon="IconPlaySquare"
-            :title="t('collection_runner.run_collection')"
-            class="hidden group-hover:inline-flex"
-            @click="emit('run-collection', props.id)"
-          />-->
           <span>
             <tippy
               ref="options"
@@ -128,28 +114,6 @@
                       }
                     "
                   />
-                  <!--<HoppSmartItem
-                    ref="folderAction"
-                    :icon="IconFolderPlus"
-                    :label="t('folder.new')"
-                    @click="
-                      () => {
-                        emit('add-folder')
-                        hide()
-                      }
-                    "
-                  />
-                  <HoppSmartItem
-                    ref="runCollectionAction"
-                    :icon="IconPlaySquare"
-                    :label="t('collection_runner.run_collection')"
-                    @click="
-                      () => {
-                        emit('run-collection', props.id)
-                        hide()
-                      }
-                    "
-                  />-->
                   <HoppSmartItem
                     ref="edit"
                     :icon="IconEdit"
@@ -196,17 +160,6 @@
                       }
                     "
                   />
-                  <!--<HoppSmartItem
-                    ref="propertiesAction"
-                    :icon="IconSettings2"
-                    :label="t('action.properties')"
-                    @click="
-                      () => {
-                        emit('edit-properties')
-                        hide()
-                      }
-                    "
-                  />-->
                 </div>
               </template>
             </tippy>
@@ -249,10 +202,7 @@ import IconEdit from "~icons/lucide/edit"
 import IconFilePlus from "~icons/lucide/file-plus"
 import IconFolder from "~icons/lucide/folder"
 import IconFolderOpen from "~icons/lucide/folder-open"
-import IconFolderPlus from "~icons/lucide/folder-plus"
 import IconMoreVertical from "~icons/lucide/more-vertical"
-import IconPlaySquare from "~icons/lucide/play-square"
-import IconSettings2 from "~icons/lucide/settings-2"
 import IconTrash2 from "~icons/lucide/trash-2"
 import IconClock from "~icons/lucide/clock"
 
@@ -315,14 +265,11 @@ const emit = defineEmits<{
 
 const tippyActions = ref<HTMLDivElement | null>(null)
 const requestAction = ref<HTMLButtonElement | null>(null)
-const folderAction = ref<HTMLButtonElement | null>(null)
 const edit = ref<HTMLButtonElement | null>(null)
 const duplicateAction = ref<HTMLButtonElement | null>(null)
 const deleteAction = ref<HTMLButtonElement | null>(null)
 const exportAction = ref<HTMLButtonElement | null>(null)
 const options = ref<TippyComponent | null>(null)
-const propertiesAction = ref<HTMLButtonElement | null>(null)
-const runCollectionAction = ref<HTMLButtonElement | null>(null)
 const sleepAction = ref<HTMLButtonElement | null>(null)
 
 const dragging = ref(false)
