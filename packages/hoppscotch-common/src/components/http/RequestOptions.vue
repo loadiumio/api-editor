@@ -43,9 +43,12 @@
       :id="'requestVariables'"
       :label="`${t('tab.variables')}`"
       :info="`${newActiveRequestVariablesCount}`"
-      :align-last="true"
     >
-      <HttpRequestVariables v-model="request.requestVariables" />
+      <HttpRequestVariables
+        v-model:json-path-variables="request.jsonPathVariables"
+        v-model:regex-variables="request.regexVariables"
+        v-model:css-variables="request.cssSelectorVariables"
+      />
     </HoppSmartTab>
   </HoppSmartTabs>
 </template>
@@ -66,10 +69,8 @@ const VALID_OPTION_TABS = [
   "params",
   "bodyParams",
   "headers",
-  "authorization",
-  "preRequestScript",
-  "tests",
   "requestVariables",
+  "allVariables",
 ] as const
 
 export type RESTOptionTabs = (typeof VALID_OPTION_TABS)[number]

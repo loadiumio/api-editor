@@ -330,7 +330,11 @@
     "description": "Description {count}",
     "protocol": "Protocol {count}",
     "value": "Value {count}",
-    "variable": "Variable {count}"
+    "variable": "Variable {count}",
+    "variable_name": "Variable Name {count}",
+    "expression": "Expression {count}",
+    "attribute": "Attribute {count}",
+    "match_number": "Match Number {count}"
   },
   "documentation": {
     "generate": "Generate documentation",
@@ -369,7 +373,10 @@
     "response": "No response received",
     "csv_files": "There are no CSV files uploaded",
     "script": "Script is empty",
-    "thread_group": "Thread Group is empty"
+    "thread_group": "Thread Group is empty",
+    "json_variables": "This request does not have any json path variables",
+    "regex_variables": "This request does not have any regex variables",
+    "css_variables": "This request does not have any CSS selectors"
   },
   "environment": {
     "heading": "Environment",
@@ -757,7 +764,10 @@
     "url_placeholder": "Enter a URL or paste a cURL command",
     "variables": "Variables",
     "view_my_links": "View my links",
-    "generate_name_error": "Failed to generate request name."
+    "generate_name_error": "Failed to generate request name.",
+    "json_path": "JSON Path",
+    "regex": "Regex",
+    "css_selector": "CSS Selector"
   },
   "response": {
     "audio": "Audio",
