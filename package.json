@@ -8,7 +8,6 @@
   "packageManager": "pnpm@10.2.1",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "prepare": "husky",
     "dev": "pnpm -r do-dev",
     "gen-gql": "cross-env GQL_SCHEMA_EMIT_LOCATION='../../../gql-gen/backend-schema.gql' pnpm -r generate-gql-sdl",
     "generate": "pnpm -r do-build-prod",
@@ -30,7 +29,6 @@
     "@types/node": "22.7.6",
     "cross-env": "7.0.3",
     "http-server": "14.1.1",
-    "husky": "9.1.6",
     "lint-staged": "15.2.10",
     "@intlify/shared": "10.0.5"
   },
