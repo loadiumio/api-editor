@@ -2,7 +2,7 @@
   <HoppSmartModal
     v-if="show"
     dialog
-    :title="t('collection.new')"
+    :title="t('script.new')"
     @close="hideModal"
   >
     <template #body>
