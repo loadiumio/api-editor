@@ -7,6 +7,7 @@ export const V0_SCHEMA = z.array(
       key: z.string(),
       value: z.string(),
       secret: z.literal(false),
+      description: z.string(),
     }),
     z.object({
       key: z.string(),
@@ -15,6 +16,7 @@ export const V0_SCHEMA = z.array(
     z.object({
       key: z.string(),
       value: z.string(),
+      description: z.string(),
     }),
   ])
 )

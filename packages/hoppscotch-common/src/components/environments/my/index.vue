@@ -1,66 +1,4 @@
 <template>
-  <!--<div>
-    <div
-      class="sticky top-upperPrimaryStickyFold z-10 flex flex-1 flex-shrink-0 justify-between overflow-x-auto border-b border-dividerLight bg-primary"
-    >
-      <HoppButtonSecondary
-        :icon="IconPlus"
-        :label="`${t('action.new')}`"
-        class="!rounded-none"
-        @click="displayModalAdd(true)"
-      />
-    </div>
-    <EnvironmentsMyEnvironment
-      v-for="{ env, index } in alphabeticallySortedPersonalEnvironments"
-      :key="`environment-${index}`"
-      :environment-index="index"
-      :environment="env"
-      @edit-environment="editEnvironment(index)"
-    />
-    <HoppSmartPlaceholder
-      v-if="!alphabeticallySortedPersonalEnvironments.length"
-      :src="`/api-editor/images/states/${colorMode.value}/blockchain.svg`"
-      :alt="`${t('empty.environments')}`"
-      :text="t('empty.environments')"
-    >
-      <template #body>
-        <div class="flex flex-col items-center space-y-4">
-          <span class="text-center text-secondaryLight">
-            {{ t("environment.import_or_create") }}
-          </span>
-          <div class="flex flex-col items-stretch gap-4">
-            <HoppButtonPrimary
-              :icon="IconImport"
-              :label="t('import.title')"
-              filled
-              outline
-              @click="displayModalImportExport(true)"
-            />
-            <HoppButtonSecondary
-              :icon="IconPlus"
-              :label="`${t('add.new')}`"
-              filled
-              outline
-              @click="displayModalAdd(true)"
-            />
-          </div>
-        </div>
-      </template>
-    </HoppSmartPlaceholder>
-    <EnvironmentsMyDetails
-      :show="showModalDetails"
-      :action="action"
-      :editing-environment-index="editingEnvironmentIndex"
-      :editing-variable-name="editingVariableName"
-      :is-secret-option-selected="secretOptionSelected"
-      @hide-modal="displayModalEdit(false)"
-    />
-    <EnvironmentsImportExport
-      v-if="showModalImportExport"
-      environment-type="MY_ENV"
-      @hide-modal="displayModalImportExport(false)"
-    />
-  </div>-->
   <div>
     <div class="flex flex-col">
       <div class="mb-4 flex flex-col border border-divider rounded">
@@ -253,24 +191,18 @@ onMounted(() => {
             "")
           : e.value,
         secret: e.secret,
+        description: e.description,
       },
     }))
   )
 })
 
-/*const displayModalAdd = (shouldDisplay: boolean) => {
-  action.value = "new"
-  showModalDetails.value = shouldDisplay
-}*/
 const displayModalEdit = (shouldDisplay: boolean) => {
   action.value = "edit"
   showModalDetails.value = shouldDisplay
 
   if (!shouldDisplay) resetSelectedData()
 }
-/*const displayModalImportExport = (shouldDisplay: boolean) => {
-  showModalImportExport.value = shouldDisplay
-}*/
 const editEnvironment = (environmentIndex: number) => {
   editingEnvironmentIndex.value = environmentIndex
   action.value = "edit"
@@ -323,10 +255,6 @@ const nonSecretVars = computed(() =>
   )
 )
 
-const liveEnvs = computed(() => {
-  return [...vars.value.map((x) => ({ ...x.env, source: editingName.value! }))]
-})
-
 const addEnvironmentVariable = () => {
   vars.value.push({
     id: idTicker.value++,
@@ -334,6 +262,7 @@ const addEnvironmentVariable = () => {
       key: "",
       value: "",
       secret: selectedEnvOption.value === "secret",
+      description: "",
     },
   })
 }

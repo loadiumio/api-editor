@@ -14,6 +14,7 @@ export const V1_SCHEMA = z.object({
         key: z.string(),
         value: z.string(),
         secret: z.literal(false),
+        description: z.string(),
       }),
     ])
   ),
@@ -29,6 +30,7 @@ export default defineVersion({
           key: variable.key,
           value: variable.value,
           secret: false,
+          description: variable.description
         }
       }
 

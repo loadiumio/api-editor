@@ -18,6 +18,7 @@ export const V1_SCHEMA = z.object({
         key: z.string(),
         value: z.string(),
         secret: z.literal(false).catch(false),
+        description: z.string(),
       }),
     ])
   ),

@@ -153,10 +153,10 @@ export default <HoppModule>{
     )
 
     // TODO: Global loading state to hide the resolved lang loading
-    const currentLocale = resolveCurrentLocale()
-    changeAppLanguage(currentLocale)
+    //const currentLocale = resolveCurrentLocale()
+    changeAppLanguage("en")
 
-    persistenceService.setLocalConfig("locale", currentLocale)
+    persistenceService.setLocalConfig("locale", "en")
   },
   onBeforeRouteChange(to, _, router) {
     // Convert old locale path format to new format

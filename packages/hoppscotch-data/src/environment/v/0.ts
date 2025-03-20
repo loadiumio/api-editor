@@ -8,6 +8,7 @@ export const V0_SCHEMA = z.object({
     z.object({
       key: z.string(),
       value: z.string(),
+      description: z.string(),
     })
   ),
 })

@@ -46,6 +46,7 @@ type TransformedEnvironmentVariable = {
   key: string
   value: string
   secret: boolean
+  description: string
 }
 
 /**

@@ -30,6 +30,7 @@ const findEnvIndex = (
 const setEnv = (
   envName: string,
   envValue: string,
+  envDesc: string,
   envs: TestResult["envs"]
 ): TestResult["envs"] => {
   const { global, selected } = envs
@@ -50,6 +51,7 @@ const setEnv = (
       key: envName,
       value: envValue,
       secret: false,
+      description: envDesc,
     })
   }
 
@@ -126,7 +128,7 @@ const getSharedMethods = (envs: TestResult["envs"]) => {
     return result
   }
 
-  const envSetFn = (key: any, value: any) => {
+  const envSetFn = (key: any, value: any, description: any) => {
     if (typeof key !== "string") {
       throw new Error("Expected key to be a string")
     }
@@ -135,7 +137,7 @@ const getSharedMethods = (envs: TestResult["envs"]) => {
       throw new Error("Expected value to be a string")
     }
 
-    updatedEnvs = setEnv(key, value, updatedEnvs)
+    updatedEnvs = setEnv(key, value, description, updatedEnvs)
 
     return undefined
   }
