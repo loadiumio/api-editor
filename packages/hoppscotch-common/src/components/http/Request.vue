@@ -251,18 +251,7 @@ import { WorkspaceService } from "~/services/workspace.service"
 const t = useI18n()
 const interceptorService = useService(InterceptorService)
 
-const methods = [
-  "GET",
-  "POST",
-  "PUT",
-  "PATCH",
-  "DELETE",
-  "HEAD",
-  "OPTIONS",
-  "CONNECT",
-  "TRACE",
-  "CUSTOM",
-]
+const methods = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
 
 const toast = useToast()
 

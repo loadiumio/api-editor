@@ -102,7 +102,7 @@ export function parseTemplateStringE(
   str: string,
   variables:
     | Environment["variables"]
-    | { secret: true; value: string; key: string }[],
+    | { secret: true; value: string; key: string, description: string }[],
   maskValue = false,
   showKeyIfSecret = false
 ) {
@@ -140,7 +140,7 @@ export function parseTemplateStringE(
         // Mask the value if it is a secret and explicitly specified
         if (variable.secret && maskValue) {
           return "*".repeat(
-            (variable as { secret: true; value: string; key: string }).value
+            (variable as { secret: true; value: string; key: string, description: string }).value
               .length
           )
         }
@@ -173,7 +173,7 @@ export const parseTemplateString = (
   str: string,
   variables:
     | Environment["variables"]
-    | { secret: true; value: string; key: string }[],
+    | { secret: true; value: string; key: string, description: string }[],
   maskValue = false,
   showKeyIfSecret = false
 ) =>
@@ -189,6 +189,7 @@ export const translateToNewEnvironmentVariables = (
     key: x.key,
     value: x.value,
     secret: false,
+    description: x.description
   }
 }
 

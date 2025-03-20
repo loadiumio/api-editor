@@ -222,6 +222,12 @@ const restCollectionDispatchers = defineDispatchers({
     }
   },
 
+  clearCollection() {
+    return {
+      state: [],
+    }
+  },
+
   editCollection(
     { state }: RESTCollectionStoreType,
     {
@@ -1210,6 +1216,13 @@ export function removeRESTCollection(
       collectionIndex,
       collectionID,
     },
+  })
+}
+
+export function clearRESTCollection() {
+  restCollectionStore.dispatch({
+    payload: undefined,
+    dispatcher: "clearCollection",
   })
 }
 

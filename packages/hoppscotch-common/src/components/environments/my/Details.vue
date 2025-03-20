@@ -167,6 +167,7 @@ type EnvironmentVariable = {
     value: string
     key: string
     secret: boolean
+    description: string
   }
 }
 
@@ -229,7 +230,10 @@ const tabsData: ComputedRef<
 const editingName = ref<string | null>(null)
 const editingID = ref<string>("")
 const vars = ref<EnvironmentVariable[]>([
-  { id: idTicker.value++, env: { key: "", value: "", secret: false } },
+  {
+    id: idTicker.value++,
+    env: { key: "", value: "", secret: false, description: "" },
+  },
 ])
 
 const secretEnvironmentService = useService(SecretEnvironmentService)
@@ -355,6 +359,7 @@ watch(
                 "")
               : e.value,
             secret: e.secret,
+            description: e.description,
           },
         }))
       )
@@ -378,6 +383,7 @@ const addEnvironmentVariable = () => {
       key: "",
       value: "",
       secret: selectedEnvOption.value === "secret",
+      description: "",
     },
   })
 }
@@ -413,7 +419,14 @@ const saveEnvironment = () => {
   const secretVariables = pipe(
     filteredVariables,
     A.filterMapWithIndex((i, e) =>
-      e.secret ? O.some({ key: e.key, value: e.value, varIndex: i }) : O.none
+      e.secret
+        ? O.some({
+            key: e.key,
+            value: e.value,
+            varIndex: i,
+            description: e.description,
+          })
+        : O.none
     )
   )
 

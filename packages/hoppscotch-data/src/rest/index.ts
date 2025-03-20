@@ -227,7 +227,7 @@ export function makeRESTRequest(
 export function getDefaultRESTRequest(): HoppRESTRequest {
   return {
     v: RESTReqSchemaVersion,
-    endpoint: "https://echo.hoppscotch.io",
+    endpoint: "https://loadbox4u.loadium.com/",
     name: "Untitled",
     params: [],
     headers: [],

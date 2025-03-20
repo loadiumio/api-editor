@@ -889,13 +889,6 @@ const onAddRequest = (requestName: string) => {
       title: requestName,
     }
 
-    platform.analytics?.logEvent({
-      type: "HOPP_SAVE_REQUEST",
-      workspaceType: "team",
-      platform: "rest",
-      createdNow: true,
-    })
-
     pipe(
       createRequestInCollection(folder.id, data),
       TE.match(

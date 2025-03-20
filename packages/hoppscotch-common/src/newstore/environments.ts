@@ -207,14 +207,24 @@ const dispatchers = defineDispatchers({
       key,
       value,
       secret,
-    }: { envIndex: number; key: string; value: string; secret: boolean }
+      description,
+    }: {
+      envIndex: number
+      key: string
+      value: string
+      secret: boolean
+      description: string
+    }
   ) {
     return {
       environments: environments.map((env, index) =>
         index === envIndex
           ? {
               ...env,
-              variables: [...env.variables, { key, value, secret }],
+              variables: [
+                ...env.variables,
+                { key, value, secret, description },
+              ],
             }
           : env
       ),
@@ -244,7 +254,12 @@ const dispatchers = defineDispatchers({
       vars,
     }: {
       envIndex: number
-      vars: { key: string; value: string; secret: boolean }[]
+      vars: {
+        key: string
+        value: string
+        secret: boolean
+        description: string
+      }[]
     }
   ) {
     return {
@@ -265,11 +280,13 @@ const dispatchers = defineDispatchers({
       variableIndex,
       updatedKey,
       updatedValue,
+      updatedDescription,
     }: {
       envIndex: number
       variableIndex: number
       updatedKey: string
       updatedValue: string
+      updatedDescription: string
     }
   ) {
     return {
@@ -279,7 +296,12 @@ const dispatchers = defineDispatchers({
               ...env,
               variables: env.variables.map((v, vIndex) =>
                 vIndex === variableIndex
-                  ? { key: updatedKey, value: updatedValue, secret: v.secret }
+                  ? {
+                      key: updatedKey,
+                      value: updatedValue,
+                      secret: v.secret,
+                      description: updatedDescription,
+                    }
                   : v
               ),
             }
@@ -765,7 +787,7 @@ export function updateEnvironment(envIndex: number, updatedEnv: Environment) {
 
 export function setEnvironmentVariables(
   envIndex: number,
-  vars: { key: string; value: string; secret: boolean }[]
+  vars: { key: string; value: string; secret: boolean, description: string }[]
 ) {
   environmentsStore.dispatch({
     dispatcher: "setEnvironmentVariables",
@@ -778,7 +800,12 @@ export function setEnvironmentVariables(
 
 export function addEnvironmentVariable(
   envIndex: number,
-  { key, value, secret }: { key: string; value: string; secret: boolean }
+  {
+    key,
+    value,
+    secret,
+    description,
+  }: { key: string; value: string; secret: boolean; description: string }
 ) {
   environmentsStore.dispatch({
     dispatcher: "addEnvironmentVariable",
@@ -787,6 +814,7 @@ export function addEnvironmentVariable(
       key,
       value,
       secret,
+      description,
     },
   })
 }
@@ -807,7 +835,11 @@ export function removeEnvironmentVariable(
 export function updateEnvironmentVariable(
   envIndex: number,
   variableIndex: number,
-  { key, value }: { key: string; value: string }
+  {
+    key,
+    value,
+    description,
+  }: { key: string; value: string; description: string }
 ) {
   environmentsStore.dispatch({
     dispatcher: "updateEnvironmentVariable",
@@ -816,6 +848,7 @@ export function updateEnvironmentVariable(
       variableIndex,
       updatedKey: key,
       updatedValue: value,
+      updatedDescription: description,
     },
   })
 }

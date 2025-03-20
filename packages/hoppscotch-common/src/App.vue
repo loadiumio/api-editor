@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
+import { onBeforeUnmount, onMounted, ref } from "vue"
 import ErrorPage, { ErrorPageData } from "~/pages/_.vue"
 import { HOPP_MODULES } from "@modules/."
 import { isLoadingInitialRoute } from "@modules/router"
@@ -21,10 +21,60 @@ import { useI18n } from "@composables/i18n"
 import { APP_IS_IN_DEV_MODE } from "@helpers/dev"
 import { platform } from "./platform"
 import { Toaster } from "@hoppscotch/ui"
+import { useSetting } from "@composables/settings"
+import { applySetting, toggleSetting } from "~/newstore/settings"
+import { Environment, GlobalEnvironmentVariable } from "@hoppscotch/data"
+import { setGlobalEnvVariables } from "~/newstore/environments"
+import { clearRESTCollection } from "~/newstore/collections"
+import { useService } from "dioc/vue"
+import { RESTTabService } from "~/services/tab/rest"
+import { getDefaultRESTRequest } from "@helpers/rest/default"
 
 const t = useI18n()
 
 const errorInfo = ref<ErrorPageData | null>(null)
+
+onMounted(() => {
+  window.addEventListener("message", handleMessage)
+  const sidebarLeft = useSetting("SIDEBAR_ON_LEFT")
+  if (!sidebarLeft.value) toggleSetting("SIDEBAR_ON_LEFT")
+  document.documentElement.setAttribute("data-accent", "orange")
+  applySetting("THEME_COLOR", "orange")
+  window.parent.postMessage({ status: "READY" }, "*")
+
+  const globalEnv = {
+    name: "Global",
+    v: 1,
+    variables: [
+      {
+        key: "",
+        value: "",
+        secret: false,
+        description: "",
+      },
+    ] as GlobalEnvironmentVariable[],
+  } as Environment
+  setGlobalEnvVariables(globalEnv)
+  clearRESTCollection()
+
+  const tabs = useService(RESTTabService)
+  const defaultTab = tabs.createNewTab({
+    type: "request",
+    request: getDefaultRESTRequest(),
+    isDirty: false,
+  })
+  tabs.closeOtherTabs(defaultTab.id)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener("message", handleMessage)
+})
+
+const handleMessage = (event: MessageEvent) => {
+  if (event.data.theme) {
+    applySetting("BG_COLOR", event.data.theme === "dark" ? "dark" : "light")
+  }
+}
 
 // App Crash Handler
 // If the below code gets more complicated, move this onto a module
