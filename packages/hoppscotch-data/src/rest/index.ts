@@ -18,6 +18,7 @@ import V8_VERSION from "./v/8"
 import V9_VERSION from "./v/9"
 import V10_VERSION, { HoppRESTReqBody } from "./v/10"
 import V11_VERSION, { HoppRESTAuth, HoppRESTRequestResponses } from "./v/11"
+import V12_VERSION, { LoadiumRESTJsonPathVariables, LoadiumRESTRegexVariables, LoadiumRESTCssSelectorVariables } from "./v/12"
 
 export * from "./content-types"
 
@@ -60,13 +61,19 @@ export {
   ClientCredentialsGrantTypeParams,
 } from "./v/11"
 
+export {
+  LoadiumRESTJsonPathVariables,
+  LoadiumRESTRegexVariables,
+  LoadiumRESTCssSelectorVariables,
+} from "./v/12"
+
 const versionedObject = z.object({
   // v is a stringified number
   v: z.string().regex(/^\d+$/).transform(Number),
 })
 
 export const HoppRESTRequest = createVersionedEntity({
-  latestVersion: 11,
+  latestVersion: 12,
   versionMap: {
     0: V0_VERSION,
     1: V1_VERSION,
@@ -80,6 +87,7 @@ export const HoppRESTRequest = createVersionedEntity({
     9: V9_VERSION,
     10: V10_VERSION,
     11: V11_VERSION,
+    12: V12_VERSION,
   },
   getVersion(data) {
     // For V1 onwards we have the v string storing the number
@@ -119,15 +127,33 @@ const HoppRESTRequestEq = Eq.struct<HoppRESTRequest>({
     (arr) => arr.filter((v: any) => v.key !== "" && v.value !== ""),
     lodashIsEqualEq
   ),
+  jsonPathVariables: mapThenEq(
+    (arr) => arr.filter((v: any) => v.varName !== "" && v.expression !== ""),
+    lodashIsEqualEq
+  ),
+  regexVariables: mapThenEq(
+    (arr) => arr.filter((v: any) => v.varName !== "" && v.expression !== ""),
+    lodashIsEqualEq
+  ),
+  cssSelectorVariables: mapThenEq(
+    (arr) => arr.filter((v: any) => v.varName !== "" && v.expression !== "" && v.attribute !== "" && v.matchNumber !== ""),
+    lodashIsEqualEq
+  ),
   responses: lodashIsEqualEq,
 })
 
-export const RESTReqSchemaVersion = "11"
+export const RESTReqSchemaVersion = "12"
 
 export type HoppRESTParam = HoppRESTRequest["params"][number]
 export type HoppRESTHeader = HoppRESTRequest["headers"][number]
 export type HoppRESTRequestVariable =
   HoppRESTRequest["requestVariables"][number]
+export type LoadiumRESTJsonPathVariable =
+  HoppRESTRequest["jsonPathVariables"][number]
+export type LoadiumRESTRegexVariable =
+  HoppRESTRequest["regexVariables"][number]
+export type LoadiumRESTCssSelectorVariable =
+  HoppRESTRequest["cssSelectorVariables"][number]
 
 export const isEqualHoppRESTRequest = HoppRESTRequestEq.equals
 
@@ -203,6 +229,30 @@ export function safelyExtractRESTRequest(
       }
     }
 
+    if ("jsonPathVariables" in x) {
+      const result = LoadiumRESTJsonPathVariables.safeParse(x.jsonPathVariables)
+
+      if (result.success) {
+        req.jsonPathVariables = result.data
+      }
+    }
+
+    if ("regexVariables" in x) {
+      const result = LoadiumRESTRegexVariables.safeParse(x.regexVariables)
+
+      if (result.success) {
+        req.regexVariables = result.data
+      }
+    }
+
+    if ("cssSelectorVariables" in x) {
+      const result = LoadiumRESTCssSelectorVariables.safeParse(x.cssSelectorVariables)
+
+      if (result.success) {
+        req.cssSelectorVariables = result.data
+      }
+    }
+
     if ("responses" in x) {
       const result = HoppRESTRequestResponses.safeParse(x.responses)
 
@@ -243,7 +293,10 @@ export function getDefaultRESTRequest(): HoppRESTRequest {
       body: null,
     },
     requestVariables: [],
-    responses: {},
+    jsonPathVariables: [],
+    regexVariables: [],
+    cssSelectorVariables: [],
+    responses: {}
   }
 }
 
