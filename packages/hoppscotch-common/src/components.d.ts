@@ -158,6 +158,7 @@ declare module 'vue' {
     HttpAuthorizationHAWK: typeof import('./components/http/authorization/HAWK.vue')['default']
     HttpAuthorizationNTLM: typeof import('./components/http/authorization/NTLM.vue')['default']
     HttpAuthorizationOAuth2: typeof import('./components/http/authorization/OAuth2.vue')['default']
+    HttpAvailableVariables: typeof import('./components/http/AvailableVariables.vue')['default']
     HttpBody: typeof import('./components/http/Body.vue')['default']
     HttpBodyBinary: typeof import('./components/http/BodyBinary.vue')['default']
     HttpBodyParameters: typeof import('./components/http/BodyParameters.vue')['default']

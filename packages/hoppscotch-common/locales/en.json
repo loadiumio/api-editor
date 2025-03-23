@@ -376,7 +376,8 @@
     "thread_group": "Thread Group is empty",
     "json_variables": "This request does not have any json path variables",
     "regex_variables": "This request does not have any regex variables",
-    "css_variables": "This request does not have any CSS selectors"
+    "css_variables": "This request does not have any CSS selectors",
+    "run_time_variables": "This request does not have any Runtime variables"
   },
   "environment": {
     "heading": "Environment",
@@ -460,7 +461,8 @@
     "reading_files": "Error while reading one or more files.",
     "fetching_access_tokens_list": "Something went wrong while fetching the list of tokens",
     "generate_access_token": "Something went wrong while generating the access token",
-    "delete_access_token": "Something went wrong while deleting the access token"
+    "delete_access_token": "Something went wrong while deleting the access token",
+    "no_scripts_to_export": "No scripts to export. Please create a script to get started."
   },
   "export": {
     "as_json": "Export as JSON",
@@ -1145,7 +1147,8 @@
     "failed": "Failed",
     "global_variables": "Global Variables",
     "csv_upload": "CSV Upload",
-    "script": "Script"
+    "script": "Script",
+    "all_variables": "All Variables"
   },
   "team": {
     "activity_logs": "Activity Logs",

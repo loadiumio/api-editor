@@ -509,7 +509,7 @@ const HoppMyCollectionsExporter: ImporterOrExporter = {
   importSummary: currentImportSummary,
   action: async () => {
     if (!myCollections.value.length) {
-      return toast.error(t("error.no_collections_to_export"))
+      return toast.error(t("error.no_scripts_to_export"))
     }
 
     isHoppMyCollectionExporterInProgress.value = true

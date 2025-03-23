@@ -111,6 +111,7 @@ const props = withDefaults(
     contextMenuEnabled?: boolean
     secret?: boolean
     autoCompleteEnv?: boolean
+    isDisabled?: boolean
   }>(),
   {
     modelValue: "",
@@ -127,6 +128,7 @@ const props = withDefaults(
     contextMenuEnabled: true,
     secret: false,
     autoCompleteEnvSource: false,
+    isDisabled: false,
   }
 )
 
@@ -155,6 +157,8 @@ const autoCompleteWrapper = ref<any | null>(null)
 const isSecret = ref(props.secret)
 
 const secretText = ref(props.modelValue)
+
+const isDisabled = ref(props.isDisabled)
 
 watch(
   () => secretText.value,
@@ -472,7 +476,7 @@ const initView = (el: any) => {
     parent: el,
     state: EditorState.create({
       doc: props.modelValue,
-      extensions: extensions,
+      extensions: [extensions, EditorView.editable.of(!isDisabled.value)],
     }),
   })
 }

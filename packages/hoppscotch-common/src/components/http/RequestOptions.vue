@@ -50,6 +50,14 @@
         v-model:css-variables="request.cssSelectorVariables"
       />
     </HoppSmartTab>
+    <HoppSmartTab
+      v-if="properties?.includes('allVariables') ?? true"
+      :id="'allVariables'"
+      :label="`${t('tab.all_variables')}`"
+      :align-last="true"
+    >
+      <HttpAvailableVariables :available-variables="availableVariables" />
+    </HoppSmartTab>
   </HoppSmartTabs>
 </template>
 
@@ -82,6 +90,11 @@ const props = withDefaults(
   defineProps<{
     modelValue: HoppRESTRequest | HoppRESTResponseOriginalRequest
     optionTab: RESTOptionTabs
+    availableVariables: {
+      jsonPathVariables: any[]
+      regexVariables: any[]
+      cssSelectorVariables: any[]
+    }
     properties?: string[]
     inheritedProperties?: HoppInheritedProperty
     envs?: AggregateEnvironment[]
