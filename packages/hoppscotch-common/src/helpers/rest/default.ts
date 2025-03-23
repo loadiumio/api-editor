@@ -3,7 +3,7 @@ import { HoppRESTRequest, RESTReqSchemaVersion } from "@hoppscotch/data"
 export const getDefaultRESTRequest = (): HoppRESTRequest => ({
   v: RESTReqSchemaVersion,
   endpoint: "https://loadbox4u.loadium.com/",
-  name: "Untitled",
+  name: "",
   params: [],
   headers: [],
   method: "GET",

@@ -60,7 +60,7 @@
                 updateJsonVariable(index, {
                   id: variable.id,
                   varName: $event,
-                  expression: variable.value,
+                  expression: variable.expression,
                   active: variable.active,
                 })
               "
@@ -185,7 +185,7 @@ const workingJSONPathVariables = ref<
   {
     id: idTicker.value++,
     varName: "",
-    expression: "",
+    expression: "$.",
     active: true,
   },
 ])
@@ -198,7 +198,7 @@ watch(workingJSONPathVariables, (variableList) => {
     workingJSONPathVariables.value.push({
       id: idTicker.value++,
       varName: "",
-      expression: "",
+      expression: "$.",
       active: true,
     })
   }
@@ -247,7 +247,7 @@ const addJsonVariable = () => {
   workingJSONPathVariables.value.push({
     id: idTicker.value++,
     varName: "",
-    expression: "",
+    expression: "$.",
     active: true,
   })
 }
@@ -306,7 +306,7 @@ const clearContent = () => {
     {
       id: idTicker.value++,
       varName: "",
-      expression: "",
+      expression: "$.",
       active: true,
     },
   ]

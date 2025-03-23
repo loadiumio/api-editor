@@ -219,7 +219,7 @@ const workingCssVariables = ref<
     varName: "",
     expression: "",
     attribute: "",
-    matchNumber: "",
+    matchNumber: "1",
     active: true,
   },
 ])
@@ -234,7 +234,7 @@ watch(workingCssVariables, (variableList) => {
       varName: "",
       expression: "",
       attribute: "",
-      matchNumber: "",
+      matchNumber: "1",
       active: true,
     })
   }
@@ -284,7 +284,7 @@ const addCssVariable = () => {
     varName: "",
     expression: "",
     attribute: "",
-    matchNumber: "",
+    matchNumber: "1",
     active: true,
   })
 }
@@ -343,7 +343,7 @@ const clearContent = () => {
       varName: "",
       expression: "",
       attribute: "",
-      matchNumber: "",
+      matchNumber: "1",
       active: true,
     },
   ]

@@ -60,7 +60,7 @@
                 updateRegexVariable(index, {
                   id: variable.id,
                   varName: $event,
-                  expression: variable.value,
+                  expression: variable.expression,
                   active: variable.active,
                 })
               "

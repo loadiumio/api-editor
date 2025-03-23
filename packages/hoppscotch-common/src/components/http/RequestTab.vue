@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, ref, toRaw, watch} from "vue"
+import { onBeforeUnmount, onMounted, ref, toRaw, watch} from "vue"
 import { useVModel } from "@vueuse/core"
 import { cloneDeep } from "lodash-es"
 import { isEqualHoppRESTRequest } from "@hoppscotch/data"
@@ -21,6 +21,7 @@ import { HoppTab } from "~/services/tab"
 import { HoppRequestDocument } from "~/helpers/rest/document"
 import { useReadonlyStream } from "@composables/stream"
 import { restCollections$ } from "~/newstore/collections"
+import { invokeAction } from "@helpers/actions"
 
 // TODO: Move Response and Request execution code to over here
 
@@ -70,6 +71,10 @@ onMounted(() => {
       }
     }
   }
+})
+
+onBeforeUnmount(() => {
+  invokeAction("request-response.save")
 })
 
 const tab = useVModel(props, "modelValue", emit)

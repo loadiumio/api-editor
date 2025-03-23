@@ -3,15 +3,15 @@
     <AppPaneLayout layout-id="http">
       <template #primary>
         <HoppSmartWindows
-          v-if="currentTabID"
+          v-if="currentTabID && filteredTabs.length > 0"
           :id="'rest_windows'"
+          ref="hoppSmartWindowsRef"
           v-model="currentTabID"
           @remove-tab="removeTab"
-          @add-tab="addNewTab"
           @sort="sortTabs"
         >
           <HoppSmartWindow
-            v-for="tab in activeTabs"
+            v-for="tab in filteredTabs"
             :id="tab.id"
             :key="tab.id"
             :label="getTabName(tab)"
@@ -28,21 +28,6 @@
                 @duplicate-tab="duplicateTab(tab.id)"
                 @share-tab-request="shareTabRequest(tab.id)"
               />
-            </template>
-            <template #suffix>
-              <span
-                v-if="tab.document.isDirty"
-                class="flex w-4 items-center justify-center text-secondary group-hover:hidden"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  width="1.2em"
-                  height="1.2em"
-                  class="h-1.5 w-1.5"
-                >
-                  <circle cx="12" cy="12" r="12" fill="currentColor"></circle>
-                </svg>
-              </span>
             </template>
             <HttpExampleResponseTab
               v-if="tab.document.type === 'example-response'"
@@ -82,6 +67,15 @@
             </div>
           </template>
         </HoppSmartWindows>
+        <HoppSmartPlaceholder
+          v-else
+          class="m-auto"
+          :src="`/api-editor/images/states/${colorMode.value}/pack.svg`"
+          :alt="`${t('empty.request')}`"
+          :text="t('empty.request')"
+        >
+          <template #body> {{ t("script.import_or_create_left") }} </template>
+        </HoppSmartPlaceholder>
       </template>
       <template #sidebar>
         <HttpSidebar />
@@ -174,6 +168,7 @@ import { HoppTab } from "~/services/tab"
 import { HoppRequestDocument, HoppTabDocument } from "~/helpers/rest/document"
 import { AuthorizationInspectorService } from "~/services/inspection/inspectors/authorization.inspector"
 import IconImport from "~icons/lucide/folder-down"
+import { useColorMode } from "@composables/theming"
 
 const savingRequest = ref(false)
 const confirmingCloseForTabID = ref<string | null>(null)
@@ -185,8 +180,8 @@ const exceptedTabID = ref<string | null>(null)
 const renameTabID = ref<string | null>(null)
 
 const t = useI18n()
-
 const tabs = useService(RESTTabService)
+const colorMode = useColorMode()
 
 type CollectionType = { type: "my-collections"; selectedTeam: undefined }
 
@@ -221,7 +216,16 @@ const collectionsType = ref<CollectionType>({
   selectedTeam: undefined,
 })
 
+const hoppSmartWindowsRef = ref(null)
+
 const activeTabs = tabs.getActiveTabs()
+
+const filteredTabs = computed(() =>
+  activeTabs.value.filter(
+    (tab) =>
+      tab.document.type === "request" && tab.document.request?.name?.length > 0
+  )
+)
 
 function bindRequestToURLParams() {
   const route = useRoute()

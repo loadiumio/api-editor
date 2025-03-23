@@ -377,7 +377,8 @@
     "json_variables": "This request does not have any json path variables",
     "regex_variables": "This request does not have any regex variables",
     "css_variables": "This request does not have any CSS selectors",
-    "run_time_variables": "This request does not have any Runtime variables"
+    "run_time_variables": "This request does not have any Runtime variables",
+    "request": "Request list is empty"
   },
   "environment": {
     "heading": "Environment",
@@ -1346,6 +1347,7 @@
   },
   "script": {
     "import_or_create": "Import or create a script",
+    "import_or_create_left": "Import or create a request from the left menu",
     "new": "New Script"
   }
 }
