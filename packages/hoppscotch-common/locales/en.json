@@ -378,10 +378,7 @@
     "regex_variables": "This request does not have any Regex variables",
     "css_variables": "This request does not have any CSS selectors",
     "run_time_variables": "This request does not have any Runtime variables",
-    "request": "Request list is empty",
-    "run_time_json_variables": "This request does not have any runtime Json Path variables",
-    "run_time_regex_variables": "This request does not have any runtime Regex variables",
-    "run_time_css_variables": "This request does not have any runtime CSS selectors"
+    "request": "Request list is empty"
   },
   "environment": {
     "heading": "Environment",
@@ -773,7 +770,8 @@
     "generate_name_error": "Failed to generate request name.",
     "json_path": "JSON Path",
     "regex": "Regex",
-    "css_selector": "CSS Selector"
+    "css_selector": "CSS Selector",
+    "run_time_variables": "Runtime Variables"
   },
   "response": {
     "audio": "Audio",
