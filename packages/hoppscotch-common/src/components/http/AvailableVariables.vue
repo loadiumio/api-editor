@@ -16,6 +16,12 @@
         <SmartEnvInput v-model="jsonVar.varName" :is-disabled="true" />
         <SmartEnvInput v-model="jsonVar.expression" :is-disabled="true" />
       </div>
+      <HoppSmartPlaceholder
+        v-if="availableVariables.jsonPathVariables.length < 1"
+        :src="`/api-editor/images/states/${colorMode.value}/add_files.svg`"
+        :alt="`${t('empty.run_time_json_variables')}`"
+        :text="t('empty.run_time_json_variables')"
+      />
     </div>
     <div>
       <div
@@ -33,6 +39,12 @@
         <SmartEnvInput v-model="regexVar.varName" :is-disabled="true" />
         <SmartEnvInput v-model="regexVar.expression" :is-disabled="true" />
       </div>
+      <HoppSmartPlaceholder
+        v-if="availableVariables.regexVariables.length < 1"
+        :src="`/api-editor/images/states/${colorMode.value}/add_files.svg`"
+        :alt="`${t('empty.run_time_regex_variables')}`"
+        :text="t('empty.run_time_regex_variables')"
+      />
     </div>
     <div>
       <div
@@ -52,19 +64,18 @@
         <SmartEnvInput v-model="cssVar.attribute" :is-disabled="true" />
         <SmartEnvInput v-model="cssVar.matchNumber" :is-disabled="true" />
       </div>
+      <HoppSmartPlaceholder
+        v-if="availableVariables.cssSelectorVariables.length < 1"
+        :src="`/api-editor/images/states/${colorMode.value}/add_files.svg`"
+        :alt="`${t('empty.run_time_css_variables')}`"
+        :text="t('empty.run_time_css_variables')"
+      />
     </div>
-    <!-- Empty Placeholder -->
-    <HoppSmartPlaceholder
-      v-if="variablesLength < 1"
-      :src="`/api-editor/images/states/${colorMode.value}/add_files.svg`"
-      :alt="`${t('empty.run_time_variables')}`"
-      :text="t('empty.run_time_variables')"
-    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue"
+import { ref } from "vue"
 import { useColorMode } from "@composables/theming"
 import { useI18n } from "@composables/i18n"
 
@@ -80,12 +91,4 @@ const props = defineProps<{
 }>()
 
 const availableVariables = ref(props.availableVariables)
-
-const variablesLength = computed(() => {
-  return (
-    availableVariables.value.jsonPathVariables.length +
-    availableVariables.value.regexVariables.length +
-    availableVariables.value.cssSelectorVariables.length
-  )
-})
 </script>

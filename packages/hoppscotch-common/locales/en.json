@@ -374,11 +374,14 @@
     "csv_files": "There are no CSV files uploaded",
     "script": "Script is empty",
     "thread_group": "Thread Group is empty",
-    "json_variables": "This request does not have any json path variables",
-    "regex_variables": "This request does not have any regex variables",
+    "json_variables": "This request does not have any Json Path variables",
+    "regex_variables": "This request does not have any Regex variables",
     "css_variables": "This request does not have any CSS selectors",
     "run_time_variables": "This request does not have any Runtime variables",
-    "request": "Request list is empty"
+    "request": "Request list is empty",
+    "run_time_json_variables": "This request does not have any runtime Json Path variables",
+    "run_time_regex_variables": "This request does not have any runtime Regex variables",
+    "run_time_css_variables": "This request does not have any runtime CSS selectors"
   },
   "environment": {
     "heading": "Environment",
