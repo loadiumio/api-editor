@@ -219,7 +219,7 @@ const workingCssVariables = ref<
     varName: "",
     expression: "",
     attribute: "",
-    matchNumber: "",
+    matchNumber: "1",
     active: true,
   },
 ])
@@ -234,7 +234,7 @@ watch(workingCssVariables, (variableList) => {
       varName: "",
       expression: "",
       attribute: "",
-      matchNumber: "",
+      matchNumber: "1",
       active: true,
     })
   }
@@ -256,13 +256,35 @@ watch(workingCssVariables, (newWorkingCssVariables) => {
   }
 })
 
+watch(
+  cssVariables,
+  (newCssVariableList) => {
+    const filteredWorkingCssVariables: LoadiumRESTCssSelectorVariables[] = pipe(
+      workingCssVariables.value,
+      A.filterMap(
+        flow(
+          O.fromPredicate((e) => e.varName !== ""),
+          O.map(objRemoveKey("id"))
+        )
+      )
+    )
+    if (!isEqual(newCssVariableList, filteredWorkingCssVariables)) {
+      workingCssVariables.value = pipe(
+        newCssVariableList,
+        A.map((x) => ({ id: idTicker.value++, ...x }))
+      )
+    }
+  },
+  { immediate: true }
+)
+
 const addCssVariable = () => {
   workingCssVariables.value.push({
     id: idTicker.value++,
     varName: "",
     expression: "",
     attribute: "",
-    matchNumber: "",
+    matchNumber: "1",
     active: true,
   })
 }
@@ -321,7 +343,7 @@ const clearContent = () => {
       varName: "",
       expression: "",
       attribute: "",
-      matchNumber: "",
+      matchNumber: "1",
       active: true,
     },
   ]

@@ -374,9 +374,11 @@
     "csv_files": "There are no CSV files uploaded",
     "script": "Script is empty",
     "thread_group": "Thread Group is empty",
-    "json_variables": "This request does not have any json path variables",
-    "regex_variables": "This request does not have any regex variables",
-    "css_variables": "This request does not have any CSS selectors"
+    "json_variables": "This request does not have any Json Path variables",
+    "regex_variables": "This request does not have any Regex variables",
+    "css_variables": "This request does not have any CSS selectors",
+    "run_time_variables": "This request does not have any Runtime variables",
+    "request": "Request list is empty"
   },
   "environment": {
     "heading": "Environment",
@@ -460,7 +462,8 @@
     "reading_files": "Error while reading one or more files.",
     "fetching_access_tokens_list": "Something went wrong while fetching the list of tokens",
     "generate_access_token": "Something went wrong while generating the access token",
-    "delete_access_token": "Something went wrong while deleting the access token"
+    "delete_access_token": "Something went wrong while deleting the access token",
+    "no_scripts_to_export": "No scripts to export. Please create a script to get started."
   },
   "export": {
     "as_json": "Export as JSON",
@@ -767,7 +770,8 @@
     "generate_name_error": "Failed to generate request name.",
     "json_path": "JSON Path",
     "regex": "Regex",
-    "css_selector": "CSS Selector"
+    "css_selector": "CSS Selector",
+    "run_time_variables": "Runtime Variables"
   },
   "response": {
     "audio": "Audio",
@@ -1145,7 +1149,8 @@
     "failed": "Failed",
     "global_variables": "Global Variables",
     "csv_upload": "CSV Upload",
-    "script": "Script"
+    "script": "Script",
+    "all_variables": "All Variables"
   },
   "team": {
     "activity_logs": "Activity Logs",
@@ -1343,6 +1348,7 @@
   },
   "script": {
     "import_or_create": "Import or create a script",
+    "import_or_create_left": "Import or create a request from the left menu",
     "new": "New Script"
   }
 }

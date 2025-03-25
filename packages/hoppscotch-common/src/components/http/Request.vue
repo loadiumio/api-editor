@@ -241,15 +241,12 @@ import { platform } from "~/platform"
 import { HoppRESTRequest } from "@hoppscotch/data"
 import { useService } from "dioc/vue"
 import { InspectionService } from "~/services/inspection"
-import { InterceptorService } from "~/services/interceptor.service"
 import { HoppTab } from "~/services/tab"
 import { HoppRequestDocument } from "~/helpers/rest/document"
 import { RESTTabService } from "~/services/tab/rest"
 import { getMethodLabelColor } from "~/helpers/rest/labelColoring"
-import { WorkspaceService } from "~/services/workspace.service"
 
 const t = useI18n()
-const interceptorService = useService(InterceptorService)
 
 const methods = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
 
@@ -300,8 +297,6 @@ const inspectionService = useService(InspectionService)
 
 const tabs = useService(RESTTabService)
 
-const workspaceService = useService(WorkspaceService)
-
 const newSendRequest = async () => {
   if (newEndpoint.value === "" || /^\s+$/.test(newEndpoint.value)) {
     toast.error(`${t("empty.endpoint")}`)
@@ -311,14 +306,6 @@ const newSendRequest = async () => {
   ensureMethodInEndpoint()
 
   loading.value = true
-
-  // Log the request run into analytics
-  platform.analytics?.logEvent({
-    type: "HOPP_REQUEST_RUN",
-    platform: "rest",
-    strategy: interceptorService.currentInterceptorID.value!,
-    workspaceType: workspaceService.currentWorkspace.value.type,
-  })
 
   const [cancel, streamPromise] = runRESTRequest$(tab)
   const streamResult = await streamPromise
@@ -491,15 +478,6 @@ const saveRequest = () => {
       editRESTRequest(saveCtx.folderPath, saveCtx.requestIndex, req)
 
       tab.value.document.isDirty = false
-
-      platform.analytics?.logEvent({
-        type: "HOPP_SAVE_REQUEST",
-        platform: "rest",
-        createdNow: false,
-        workspaceType: "personal",
-      })
-
-      toast.success(`${t("request.saved")}`)
     } catch (e) {
       tab.value.document.saveContext = undefined
       saveRequest()
@@ -509,13 +487,6 @@ const saveRequest = () => {
 
     // TODO: handle error case (NOTE: overwriteRequestTeams is async)
     try {
-      platform.analytics?.logEvent({
-        type: "HOPP_SAVE_REQUEST",
-        platform: "rest",
-        createdNow: false,
-        workspaceType: "team",
-      })
-
       runMutation(UpdateRequestDocument, {
         requestID: saveCtx.requestID,
         data: {

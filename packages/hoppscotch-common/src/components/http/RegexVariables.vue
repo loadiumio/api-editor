@@ -60,7 +60,7 @@
                 updateRegexVariable(index, {
                   id: variable.id,
                   varName: $event,
-                  expression: variable.value,
+                  expression: variable.expression,
                   active: variable.active,
                 })
               "
@@ -219,6 +219,28 @@ watch(workingRegexVariables, (newWorkingRegexVariables) => {
     regexVariables.value = cloneDeep(fixedRegexVariables)
   }
 })
+
+watch(
+  regexVariables,
+  (newRegexVariableList) => {
+    const filteredWorkingRegexVariables: LoadiumRESTRegexVariable[] = pipe(
+      workingRegexVariables.value,
+      A.filterMap(
+        flow(
+          O.fromPredicate((e) => e.varName !== ""),
+          O.map(objRemoveKey("id"))
+        )
+      )
+    )
+    if (!isEqual(newRegexVariableList, filteredWorkingRegexVariables)) {
+      workingRegexVariables.value = pipe(
+        newRegexVariableList,
+        A.map((x) => ({ id: idTicker.value++, ...x }))
+      )
+    }
+  },
+  { immediate: true }
+)
 
 const addRegexVariable = () => {
   workingRegexVariables.value.push({

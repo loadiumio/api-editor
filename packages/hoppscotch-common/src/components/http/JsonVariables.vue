@@ -60,7 +60,7 @@
                 updateJsonVariable(index, {
                   id: variable.id,
                   varName: $event,
-                  expression: variable.value,
+                  expression: variable.expression,
                   active: variable.active,
                 })
               "
@@ -185,7 +185,7 @@ const workingJSONPathVariables = ref<
   {
     id: idTicker.value++,
     varName: "",
-    expression: "",
+    expression: "$.",
     active: true,
   },
 ])
@@ -198,7 +198,7 @@ watch(workingJSONPathVariables, (variableList) => {
     workingJSONPathVariables.value.push({
       id: idTicker.value++,
       varName: "",
-      expression: "",
+      expression: "$.",
       active: true,
     })
   }
@@ -220,11 +220,34 @@ watch(workingJSONPathVariables, (newWorkingJSONPathVariables) => {
   }
 })
 
+watch(
+  jsonPathVariables,
+  (newJsonPathVariableList) => {
+    const filteredWorkingJSONPathVariables: LoadiumRESTJsonPathVariables[] =
+      pipe(
+        workingJSONPathVariables.value,
+        A.filterMap(
+          flow(
+            O.fromPredicate((e) => e.varName !== ""),
+            O.map(objRemoveKey("id"))
+          )
+        )
+      )
+    if (!isEqual(newJsonPathVariableList, filteredWorkingJSONPathVariables)) {
+      workingJSONPathVariables.value = pipe(
+        newJsonPathVariableList,
+        A.map((x) => ({ id: idTicker.value++, ...x }))
+      )
+    }
+  },
+  { immediate: true }
+)
+
 const addJsonVariable = () => {
   workingJSONPathVariables.value.push({
     id: idTicker.value++,
     varName: "",
-    expression: "",
+    expression: "$.",
     active: true,
   })
 }
@@ -283,7 +306,7 @@ const clearContent = () => {
     {
       id: idTicker.value++,
       varName: "",
-      expression: "",
+      expression: "$.",
       active: true,
     },
   ]
