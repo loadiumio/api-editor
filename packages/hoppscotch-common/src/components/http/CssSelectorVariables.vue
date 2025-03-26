@@ -63,7 +63,6 @@
                   expression: variable.expression,
                   attribute: variable.attribute,
                   matchNumber: variable.matchNumber,
-                  active: variable.active,
                 })
               "
             />
@@ -77,7 +76,6 @@
                   expression: $event,
                   attribute: variable.attribute,
                   matchNumber: variable.matchNumber,
-                  active: variable.active,
                 })
               "
             />
@@ -91,7 +89,6 @@
                   expression: variable.expression,
                   attribute: $event,
                   matchNumber: variable.matchNumber,
-                  active: variable.active,
                 })
               "
             />
@@ -105,35 +102,6 @@
                   expression: variable.expression,
                   attribute: variable.attribute,
                   matchNumber: $event,
-                  active: variable.active,
-                })
-              "
-            />
-            <HoppButtonSecondary
-              v-tippy="{ theme: 'tooltip' }"
-              :title="
-                variable.hasOwnProperty('active')
-                  ? variable.active
-                    ? t('action.turn_off')
-                    : t('action.turn_on')
-                  : t('action.turn_off')
-              "
-              :icon="
-                variable.hasOwnProperty('active')
-                  ? variable.active
-                    ? IconCheckCircle
-                    : IconCircle
-                  : IconCheckCircle
-              "
-              color="green"
-              @click="
-                updateCssVariable(index, {
-                  id: variable.id,
-                  varName: variable.varName,
-                  expression: variable.expression,
-                  active: variable.hasOwnProperty('active')
-                    ? !variable.active
-                    : false,
                 })
               "
             />
@@ -181,8 +149,6 @@ import { useI18n } from "~/composables/i18n"
 import { useColorMode } from "~/composables/theming"
 import { useToast } from "~/composables/toast"
 import { objRemoveKey } from "~/helpers/functional/object"
-import IconCheckCircle from "~icons/lucide/check-circle"
-import IconCircle from "~icons/lucide/circle"
 import IconGripVertical from "~icons/lucide/grip-vertical"
 import IconPlus from "~icons/lucide/plus"
 import IconTrash from "~icons/lucide/trash"
@@ -220,7 +186,6 @@ const workingCssVariables = ref<
     expression: "",
     attribute: "",
     matchNumber: "1",
-    active: true,
   },
 ])
 
@@ -235,7 +200,6 @@ watch(workingCssVariables, (variableList) => {
       expression: "",
       attribute: "",
       matchNumber: "1",
-      active: true,
     })
   }
 })
@@ -245,7 +209,7 @@ watch(workingCssVariables, (newWorkingCssVariables) => {
     newWorkingCssVariables,
     A.filterMap(
       flow(
-        O.fromPredicate((e) => e.varName !== ""),
+        O.fromPredicate((e) => e.varName !== "" && e.expression !== "" && e.attribute !== "" && e.matchNumber !== ""),
         O.map(objRemoveKey("id"))
       )
     )
@@ -263,7 +227,7 @@ watch(
       workingCssVariables.value,
       A.filterMap(
         flow(
-          O.fromPredicate((e) => e.varName !== ""),
+          O.fromPredicate((e) => e.varName !== "" && e.expression !== "" && e.attribute !== "" && e.matchNumber !== ""),
           O.map(objRemoveKey("id"))
         )
       )
@@ -285,7 +249,6 @@ const addCssVariable = () => {
     expression: "",
     attribute: "",
     matchNumber: "1",
-    active: true,
   })
 }
 
@@ -344,7 +307,6 @@ const clearContent = () => {
       expression: "",
       attribute: "",
       matchNumber: "1",
-      active: true,
     },
   ]
 }

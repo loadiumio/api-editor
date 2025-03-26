@@ -74,7 +74,7 @@
           :alt="`${t('empty.request')}`"
           :text="t('empty.request')"
         >
-          <template #body> {{ t("script.import_or_create_left") }} </template>
+          <template #body> {{ t("script.choose_import_or_create_left") }} </template>
         </HoppSmartPlaceholder>
       </template>
       <template #sidebar>
@@ -131,13 +131,6 @@
       :show="savingRequest"
       @hide-modal="onSaveModalClose"
     />
-    <AppContextMenu
-      v-if="contextMenu.show"
-      :show="contextMenu.show"
-      :position="contextMenu.position"
-      :text="contextMenu.text"
-      @hide-modal="contextMenu.show = false"
-    />
     <CollectionsImportExport
       v-if="showModalImportExport"
       :collections-type="collectionsType"
@@ -191,24 +184,6 @@ const currentUser = useReadonlyStream(
   platform.auth.getCurrentUserStream(),
   platform.auth.getCurrentUser()
 )
-
-type PopupDetails = {
-  show: boolean
-  position: {
-    top: number
-    left: number
-  }
-  text: string | null
-}
-
-const contextMenu = ref<PopupDetails>({
-  show: false,
-  position: {
-    top: 0,
-    left: 0,
-  },
-  text: null,
-})
 
 const showModalImportExport = ref(false)
 const collectionsType = ref<CollectionType>({
@@ -413,22 +388,6 @@ const shareTabRequest = (tabID: string) => {
     }
   }
 }
-
-defineActionHandler("contextmenu.open", ({ position, text }) => {
-  if (text) {
-    contextMenu.value = {
-      show: true,
-      position,
-      text,
-    }
-  } else {
-    contextMenu.value = {
-      show: false,
-      position,
-      text,
-    }
-  }
-})
 
 bindRequestToURLParams()
 

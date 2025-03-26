@@ -297,7 +297,8 @@
     "request_change": "Are you sure you want to discard current request, unsaved changes will be lost.",
     "save_unsaved_tab": "Do you want to save changes made in this tab?",
     "sync": "Would you like to restore your workspace from cloud? This will discard your local progress.",
-    "delete_access_token": "Are you sure you want to delete the access token {tokenLabel}?"
+    "delete_access_token": "Are you sure you want to delete the access token {tokenLabel}?",
+    "remove_thread_group": "Are you sure you want to permanently delete this thread group?"
   },
   "context_menu": {
     "add_parameters": "Add to parameters",
@@ -378,7 +379,10 @@
     "regex_variables": "This request does not have any Regex variables",
     "css_variables": "This request does not have any CSS selectors",
     "run_time_variables": "This request does not have any Runtime variables",
-    "request": "Request list is empty"
+    "request": "No Request selected",
+    "text_assertions": "This request does not have any Text assertions",
+    "json_path_value_assertions": "This request does not have any Json Path Value assertions",
+    "json_path_assertions": "This request does not have any Json Path assertions"
   },
   "environment": {
     "heading": "Environment",
@@ -771,7 +775,14 @@
     "json_path": "JSON Path",
     "regex": "Regex",
     "css_selector": "CSS Selector",
-    "run_time_variables": "Runtime Variables"
+    "run_time_variables": "Runtime Variables",
+    "text": "Text",
+    "json_path_value": "Json Path Value",
+    "json_path_assert": "Json Path Assert",
+    "subject": "Subject",
+    "condition": "Condition",
+    "value": "Value",
+    "expression": "Expression"
   },
   "response": {
     "audio": "Audio",
@@ -1150,7 +1161,8 @@
     "global_variables": "Global Variables",
     "csv_upload": "CSV Upload",
     "script": "Script",
-    "all_variables": "All Variables"
+    "runtime_variables": "Runtime Variables",
+    "assertions": "Assertions"
   },
   "team": {
     "activity_logs": "Activity Logs",
@@ -1348,7 +1360,7 @@
   },
   "script": {
     "import_or_create": "Import or create a script",
-    "import_or_create_left": "Import or create a request from the left menu",
+    "choose_import_or_create_left": "Choose, Import or Create a new request from the left menu",
     "new": "New Script"
   }
 }

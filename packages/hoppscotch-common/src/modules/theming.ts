@@ -1,4 +1,4 @@
-import { useSettingStatic } from "@composables/settings"
+import { useSetting, useSettingStatic } from "@composables/settings"
 import { usePreferredDark, useStorage } from "@vueuse/core"
 import { App, Ref, computed, reactive, watch } from "vue"
 
@@ -29,6 +29,10 @@ const applyColorMode = (app: App) => {
   const systemPrefersDark = usePreferredDark()
 
   const selection = computed<Exclude<HoppBgColor, "system">>(() => {
+    const currentSetting = useSetting("BG_COLOR")
+    if (currentSetting) {
+      return currentSetting.value === "dark" ? "dark" : "light"
+    }
     if (currentLocalPreference.value === "system") {
       return systemPrefersDark.value ? "dark" : "light"
     }

@@ -72,14 +72,6 @@
         </span>
       </div>
       <div v-if="!hasNoTeamAccess" class="flex">
-        <HoppButtonSecondary
-          v-if="!saveRequest"
-          v-tippy="{ theme: 'tooltip' }"
-          :icon="IconRotateCCW"
-          :title="t('action.restore')"
-          class="hidden group-hover:inline-flex"
-          @click="selectRequest()"
-        />
         <span>
           <tippy
             ref="options"
@@ -188,7 +180,6 @@ import IconMoreVertical from "~icons/lucide/more-vertical"
 import IconEdit from "~icons/lucide/edit"
 import IconCopy from "~icons/lucide/copy"
 import IconTrash2 from "~icons/lucide/trash-2"
-import IconRotateCCW from "~icons/lucide/rotate-ccw"
 import IconArrowRight from "~icons/lucide/chevron-right"
 import IconArrowDown from "~icons/lucide/chevron-down"
 import { ref, PropType, watch, computed } from "vue"

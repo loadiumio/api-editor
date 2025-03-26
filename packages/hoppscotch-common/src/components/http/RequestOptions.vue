@@ -51,9 +51,20 @@
       />
     </HoppSmartTab>
     <HoppSmartTab
+      v-if="properties?.includes('requestAssertions') ?? true"
+      :id="'requestAssertions'"
+      :label="`${t('tab.assertions')}`"
+    >
+      <HttpRequestAssertions
+        v-model:text-assertions="request.textAssertions"
+        v-model:json-path-value-assertions="request.jsonPathValueAssertions"
+        v-model:json-path-assertions="request.jsonPathAssertions"
+      />
+    </HoppSmartTab>
+    <HoppSmartTab
       v-if="properties?.includes('allVariables') ?? true"
       :id="'allVariables'"
-      :label="`${t('tab.all_variables')}`"
+      :label="`${t('tab.runtime_variables')}`"
       :align-last="true"
     >
       <HttpAvailableVariables :available-variables="availableVariables" />
@@ -78,6 +89,7 @@ const VALID_OPTION_TABS = [
   "bodyParams",
   "headers",
   "requestVariables",
+  "requestAssertions",
   "allVariables",
 ] as const
 
