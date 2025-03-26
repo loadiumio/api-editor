@@ -838,19 +838,12 @@ const onAddSleep = () => {
 }
 
 const onAddRequest = (requestName: string) => {
-  const request =
-    tabs.currentActiveTab.value.document.type === "request"
-      ? tabs.currentActiveTab.value.document.request
-      : getDefaultRESTRequest()
-
-  if (!request) return
-
   const newRequest = {
-    ...(tabs.currentActiveTab.value.document.type === "request"
-      ? cloneDeep(tabs.currentActiveTab.value.document.request)
-      : getDefaultRESTRequest()),
+    ...getDefaultRESTRequest(),
     name: requestName,
   }
+
+  if (!newRequest) return
 
   const path = editingFolderPath.value
   if (!path) return
@@ -1690,16 +1683,8 @@ const onRemoveRequest = () => {
       requestIndex,
     })
 
-    // If there is a tab attached to this request, dissociate its state and mark it dirty
     if (possibleTab && possibleTab.value.document.type === "request") {
-      possibleTab.value.document.saveContext = null
-      possibleTab.value.document.isDirty = true
-
-      // since the request is deleted, we need to remove the saved responses as well
-      possibleTab.value.document.request.responses = {}
-      if (possibleTab.value.document.request.method === "SLEEP") {
-        tabs.closeTab(possibleTab.value.id)
-      }
+      tabs.closeTab(possibleTab.value.id)
     }
 
     const requestToRemove = navigateToFolderWithIndexPath(
