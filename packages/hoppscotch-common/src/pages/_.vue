@@ -2,7 +2,7 @@
 <!-- Reserved for Critical Errors and 404 ONLY -->
 <template>
   <div
-    class="flex flex-col items-center justify-center"
+    class="hidden flex flex-col items-center justify-center"
     :class="{ 'min-h-screen': statusCode !== 404 }"
   >
     <img

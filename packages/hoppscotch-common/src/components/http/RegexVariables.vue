@@ -61,7 +61,6 @@
                   id: variable.id,
                   varName: $event,
                   expression: variable.expression,
-                  active: variable.active,
                 })
               "
             />
@@ -73,35 +72,6 @@
                   id: variable.id,
                   varName: variable.varName,
                   expression: $event,
-                  active: variable.active,
-                })
-              "
-            />
-            <HoppButtonSecondary
-              v-tippy="{ theme: 'tooltip' }"
-              :title="
-                variable.hasOwnProperty('active')
-                  ? variable.active
-                    ? t('action.turn_off')
-                    : t('action.turn_on')
-                  : t('action.turn_off')
-              "
-              :icon="
-                variable.hasOwnProperty('active')
-                  ? variable.active
-                    ? IconCheckCircle
-                    : IconCircle
-                  : IconCheckCircle
-              "
-              color="green"
-              @click="
-                updateRegexVariable(index, {
-                  id: variable.id,
-                  varName: variable.varName,
-                  expression: variable.expression,
-                  active: variable.hasOwnProperty('active')
-                    ? !variable.active
-                    : false,
                 })
               "
             />
@@ -149,8 +119,6 @@ import { useI18n } from "~/composables/i18n"
 import { useColorMode } from "~/composables/theming"
 import { useToast } from "~/composables/toast"
 import { objRemoveKey } from "~/helpers/functional/object"
-import IconCheckCircle from "~icons/lucide/check-circle"
-import IconCircle from "~icons/lucide/circle"
 import IconGripVertical from "~icons/lucide/grip-vertical"
 import IconPlus from "~icons/lucide/plus"
 import IconTrash from "~icons/lucide/trash"
@@ -186,7 +154,6 @@ const workingRegexVariables = ref<
     id: idTicker.value++,
     varName: "",
     expression: "",
-    active: true,
   },
 ])
 
@@ -199,7 +166,6 @@ watch(workingRegexVariables, (variableList) => {
       id: idTicker.value++,
       varName: "",
       expression: "",
-      active: true,
     })
   }
 })
@@ -209,7 +175,7 @@ watch(workingRegexVariables, (newWorkingRegexVariables) => {
     newWorkingRegexVariables,
     A.filterMap(
       flow(
-        O.fromPredicate((e) => e.varName !== ""),
+        O.fromPredicate((e) => e.varName !== "" && e.expression !== ""),
         O.map(objRemoveKey("id"))
       )
     )
@@ -227,7 +193,7 @@ watch(
       workingRegexVariables.value,
       A.filterMap(
         flow(
-          O.fromPredicate((e) => e.varName !== ""),
+          O.fromPredicate((e) => e.varName !== "" && e.expression !== ""),
           O.map(objRemoveKey("id"))
         )
       )
@@ -247,7 +213,6 @@ const addRegexVariable = () => {
     id: idTicker.value++,
     varName: "",
     expression: "",
-    active: true,
   })
 }
 
@@ -258,9 +223,7 @@ const updateRegexVariable = (index: number, variable: any & { id: number }) => {
 }
 
 const deleteRegexVariable = (index: number) => {
-  const regexVariablesBeforeDeletion = cloneDeep(
-    workingRegexVariables.value
-  )
+  const regexVariablesBeforeDeletion = cloneDeep(workingRegexVariables.value)
 
   if (
     !(
@@ -306,7 +269,6 @@ const clearContent = () => {
       id: idTicker.value++,
       varName: "",
       expression: "",
-      active: true,
     },
   ]
 }

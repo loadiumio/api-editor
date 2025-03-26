@@ -1510,7 +1510,7 @@ const removeCollection = (id: string) => {
     editingCollectionIndex.value = parseInt(id)
   else editingCollectionID.value = id
 
-  confirmModalTitle.value = `${t("confirm.remove_collection")}`
+  confirmModalTitle.value = `${t("confirm.remove_thread_group")}`
   displayConfirmModal(true)
 }
 
@@ -2876,7 +2876,7 @@ const runCollectionHandler = (
 }
 
 const resolveConfirmModal = (title: string | null) => {
-  if (title === `${t("confirm.remove_collection")}`) onRemoveCollection()
+  if (title === `${t("confirm.remove_thread_group")}`) onRemoveCollection()
   else if (title === `${t("confirm.remove_request")}`) onRemoveRequest()
   else if (title === `${t("confirm.remove_folder")}`) onRemoveFolder()
   else if (title === `${t("confirm.remove_response")}`) onRemoveResponse()

@@ -18,7 +18,14 @@ import V8_VERSION from "./v/8"
 import V9_VERSION from "./v/9"
 import V10_VERSION, { HoppRESTReqBody } from "./v/10"
 import V11_VERSION, { HoppRESTAuth, HoppRESTRequestResponses } from "./v/11"
-import V12_VERSION, { LoadiumRESTJsonPathVariables, LoadiumRESTRegexVariables, LoadiumRESTCssSelectorVariables } from "./v/12"
+import V12_VERSION, {
+  LoadiumRESTJsonPathVariables,
+  LoadiumRESTRegexVariables,
+  LoadiumRESTCssSelectorVariables,
+  LoadiumRESTAssertionText,
+  LoadiumRESTAssertionJsonPathValue,
+  LoadiumRESTAssertionJsonPathAssert
+} from "./v/12"
 
 export * from "./content-types"
 
@@ -65,7 +72,12 @@ export {
   LoadiumRESTJsonPathVariables,
   LoadiumRESTRegexVariables,
   LoadiumRESTCssSelectorVariables,
+  LoadiumRESTAssertionText,
+  LoadiumRESTAssertionJsonPathValue,
+  LoadiumRESTAssertionJsonPathAssert
 } from "./v/12"
+
+export { assertionTextTypes, assertionTextConditions, assertionJsonPathConditions } from "./assertion-enums"
 
 const versionedObject = z.object({
   // v is a stringified number
@@ -137,6 +149,18 @@ const HoppRESTRequestEq = Eq.struct<HoppRESTRequest>({
   ),
   cssSelectorVariables: mapThenEq(
     (arr) => arr.filter((v: any) => v.varName !== "" && v.expression !== "" && v.attribute !== "" && v.matchNumber !== ""),
+    lodashIsEqualEq
+  ),
+  textAssertions: mapThenEq(
+    (arr) => arr.filter((v: any) => v.type !== "" && v.condition !== "" && v.value !== ""),
+    lodashIsEqualEq
+  ),
+  jsonPathValueAssertions: mapThenEq(
+    (arr) => arr.filter((v: any) => v.expression !== "$." && v.condition !== "" && v.value !== ""),
+    lodashIsEqualEq
+  ),
+  jsonPathAssertions: mapThenEq(
+    (arr) => arr.filter((v: any) => v.expression !== "$."),
     lodashIsEqualEq
   ),
   responses: lodashIsEqualEq,
@@ -253,6 +277,30 @@ export function safelyExtractRESTRequest(
       }
     }
 
+    if ("textAssertions" in x) {
+      const result = LoadiumRESTAssertionText.safeParse(x.textAssertions)
+
+      if (result.success) {
+        req.textAssertions = result.data
+      }
+    }
+
+    if ("jsonPathValueAssertions" in x) {
+      const result = LoadiumRESTAssertionJsonPathValue.safeParse(x.jsonPathValueAssertions)
+
+      if (result.success) {
+        req.jsonPathValueAssertions = result.data
+      }
+    }
+
+    if ("jsonPathAssertions" in x) {
+      const result = LoadiumRESTAssertionJsonPathAssert.safeParse(x.jsonPathAssertions)
+
+      if (result.success) {
+        req.jsonPathAssertions = result.data
+      }
+    }
+
     if ("responses" in x) {
       const result = HoppRESTRequestResponses.safeParse(x.responses)
 
@@ -278,7 +326,7 @@ export function getDefaultRESTRequest(): HoppRESTRequest {
   return {
     v: RESTReqSchemaVersion,
     endpoint: "https://loadbox4u.loadium.com/",
-    name: "Untitled",
+    name: "",
     params: [],
     headers: [],
     method: "GET",
@@ -296,6 +344,9 @@ export function getDefaultRESTRequest(): HoppRESTRequest {
     jsonPathVariables: [],
     regexVariables: [],
     cssSelectorVariables: [],
+    textAssertions: [],
+    jsonPathValueAssertions: [],
+    jsonPathAssertions: [],
     responses: {}
   }
 }

@@ -63,147 +63,6 @@
         />
       </div>
     </div>
-    <div class="mt-2 flex sm:mt-0">
-      <HoppButtonPrimary
-        id="send"
-        v-tippy="{ theme: 'tooltip', delay: [500, 20], allowHTML: true }"
-        :title="`${t(
-          'action.send'
-        )} <kbd>${getSpecialKey()}</kbd><kbd>↩</kbd>`"
-        :label="`${
-          !isTabResponseLoading ? t('action.send') : t('action.cancel')
-        }`"
-        class="min-w-[5rem] flex-1 rounded-r-none"
-        @click="!isTabResponseLoading ? newSendRequest() : cancelRequest()"
-      />
-      <span class="flex">
-        <tippy
-          interactive
-          trigger="click"
-          theme="popover"
-          :on-shown="() => sendTippyActions.focus()"
-        >
-          <HoppButtonPrimary
-            v-tippy="{ theme: 'tooltip' }"
-            :title="t('app.options')"
-            :icon="IconChevronDown"
-            filled
-            class="rounded-l-none"
-          />
-          <template #content="{ hide }">
-            <div
-              ref="sendTippyActions"
-              class="flex flex-col focus:outline-none"
-              tabindex="0"
-            >
-              <HoppSmartItem
-                ref="curl"
-                :label="`${t('import.curl')}`"
-                :icon="IconFileCode"
-                @click="
-                  () => {
-                    showCurlImportModal = !showCurlImportModal
-                    hide()
-                  }
-                "
-              />
-              <HoppSmartItem
-                ref="show"
-                :label="`${t('show.code')}`"
-                :icon="IconCode2"
-                @click="
-                  () => {
-                    showCodegenModal = !showCodegenModal
-                    hide()
-                  }
-                "
-              />
-              <HoppSmartItem
-                ref="clearAll"
-                :label="`${t('action.clear_all')}`"
-                :icon="IconRotateCCW"
-                @click="
-                  () => {
-                    clearContent()
-                    hide()
-                  }
-                "
-              />
-            </div>
-          </template>
-        </tippy>
-      </span>
-      <span class="ml-2 flex rounded border border-divider transition">
-        <HoppButtonSecondary
-          v-tippy="{ theme: 'tooltip', delay: [500, 20], allowHTML: true }"
-          :title="`${t(
-            'request.save'
-          )} <kbd>${getSpecialKey()}</kbd><kbd>S</kbd>`"
-          :label="COLUMN_LAYOUT ? `${t('request.save')}` : ''"
-          filled
-          :icon="IconSave"
-          class="flex-1 rounded rounded-r-none"
-          @click="saveRequest()"
-        />
-        <span class="flex">
-          <tippy
-            interactive
-            trigger="click"
-            theme="popover"
-            :on-shown="() => saveTippyActions.focus()"
-          >
-            <HoppButtonSecondary
-              v-tippy="{ theme: 'tooltip' }"
-              :title="t('app.options')"
-              :icon="IconChevronDown"
-              filled
-              class="rounded rounded-l-none"
-            />
-            <template #content="{ hide }">
-              <div
-                ref="saveTippyActions"
-                class="flex flex-col focus:outline-none"
-                tabindex="0"
-                @keyup.escape="hide()"
-              >
-                <input
-                  id="request-name"
-                  v-model="tab.document.request.name"
-                  :placeholder="`${t('request.name')}`"
-                  name="request-name"
-                  type="text"
-                  autocomplete="off"
-                  class="input mb-2 !bg-primaryContrast"
-                  @keyup.enter="hide()"
-                />
-                <HoppSmartItem
-                  ref="saveRequestAction"
-                  :label="`${t('request.save_as')}`"
-                  :icon="IconFolderPlus"
-                  @click="
-                    () => {
-                      showSaveRequestModal = true
-                      hide()
-                    }
-                  "
-                />
-                <hr />
-              </div>
-            </template>
-          </tippy>
-        </span>
-      </span>
-    </div>
-    <HttpImportCurl
-      :text="curlText"
-      :show="showCurlImportModal"
-      @hide-modal="showCurlImportModal = false"
-    />
-    <HttpCodegenModal
-      v-if="showCodegenModal"
-      :show="showCodegenModal"
-      @hide-modal="showCodegenModal = false"
-    />
     <CollectionsSaveRequest
       v-if="showSaveRequestModal"
       mode="rest"
@@ -216,7 +75,6 @@
 
 <script setup lang="ts">
 import { useI18n } from "@composables/i18n"
-import { useSetting } from "@composables/settings"
 import { useReadonlyStream, useStreamSubscriber } from "@composables/stream"
 import { useToast } from "@composables/toast"
 import { useVModel } from "@vueuse/core"
@@ -225,16 +83,9 @@ import { computed, ref, onUnmounted } from "vue"
 import { defineActionHandler, invokeAction } from "~/helpers/actions"
 import { runMutation } from "~/helpers/backend/GQLClient"
 import { UpdateRequestDocument } from "~/helpers/backend/graphql"
-import { getPlatformSpecialKey as getSpecialKey } from "~/helpers/platformutils"
 import { runRESTRequest$ } from "~/helpers/RequestRunner"
 import { HoppRESTResponse } from "~/helpers/types/HoppRESTResponse"
 import { editRESTRequest } from "~/newstore/collections"
-import IconChevronDown from "~icons/lucide/chevron-down"
-import IconCode2 from "~icons/lucide/code-2"
-import IconFileCode from "~icons/lucide/file-code"
-import IconFolderPlus from "~icons/lucide/folder-plus"
-import IconRotateCCW from "~icons/lucide/rotate-ccw"
-import IconSave from "~icons/lucide/save"
 import { getDefaultRESTRequest } from "~/helpers/rest/default"
 import { RESTHistoryEntry, restHistory$ } from "~/newstore/history"
 import { platform } from "~/platform"
@@ -266,26 +117,12 @@ const newMethod = computed(() => {
   return tab.value.document.request.method
 })
 
-const curlText = ref("")
-
 const loading = ref(false)
 
-const isTabResponseLoading = computed(
-  () => tab.value.document.response?.type === "loading"
-)
-
-const showCurlImportModal = ref(false)
-const showCodegenModal = ref(false)
 const showSaveRequestModal = ref(false)
 
 // Template refs
 const methodTippyActions = ref<any | null>(null)
-const sendTippyActions = ref<any | null>(null)
-const saveTippyActions = ref<any | null>(null)
-const curl = ref<any | null>(null)
-const show = ref<any | null>(null)
-const clearAll = ref<any | null>(null)
-const saveRequestAction = ref<any | null>(null)
 
 const history = useReadonlyStream<RESTHistoryEntry[]>(restHistory$, [])
 
@@ -378,8 +215,6 @@ const onPasteUrl = (e: { pastedValue: string; prevValue: string }) => {
   const pastedData = e.pastedValue
 
   if (isCURL(pastedData)) {
-    showCurlImportModal.value = true
-    curlText.value = pastedData
     tab.value.document.request.endpoint = e.prevValue
   }
 }
@@ -533,21 +368,12 @@ defineActionHandler("request.method.put", () => updateMethod("PUT"))
 defineActionHandler("request.method.delete", () => updateMethod("DELETE"))
 defineActionHandler("request.method.head", () => updateMethod("HEAD"))
 
-defineActionHandler("request.import-curl", () => {
-  showCurlImportModal.value = true
-})
-defineActionHandler("request.show-code", () => {
-  showCodegenModal.value = true
-})
-
 const isCustomMethod = computed(() => {
   return (
     tab.value.document.request.method === "CUSTOM" ||
     !methods.includes(newMethod.value)
   )
 })
-
-const COLUMN_LAYOUT = useSetting("COLUMN_LAYOUT")
 
 const tabResults = inspectionService.getResultViewFor(tabs.currentTabID.value)
 </script>

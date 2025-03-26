@@ -21,5 +21,8 @@ export const getDefaultRESTRequest = (): HoppRESTRequest => ({
   jsonPathVariables: [],
   regexVariables: [],
   cssSelectorVariables: [],
+  textAssertions: [],
+  jsonPathValueAssertions: [],
+  jsonPathAssertions: [],
   responses: {},
 })
