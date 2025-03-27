@@ -50,45 +50,6 @@
             @click="hideModal"
           />
         </div>
-
-        <div
-          v-if="lastTraceID && !submittedFeedback"
-          class="flex items-center gap-2"
-        >
-          <p>{{ t("ai_experiments.feedback_cta_request_name") }}</p>
-          <template v-if="!isSubmitFeedbackPending">
-            <HoppButtonSecondary
-              :icon="IconThumbsUp"
-              outline
-              @click="
-                async () => {
-                  if (lastTraceID) {
-                    await submitFeedback('positive', lastTraceID)
-                    submittedFeedback = true
-                  }
-                }
-              "
-            />
-            <HoppButtonSecondary
-              :icon="IconThumbsDown"
-              outline
-              @click="
-                async () => {
-                  if (lastTraceID) {
-                    await submitFeedback('negative', lastTraceID)
-                    submittedFeedback = true
-                  }
-                }
-              "
-            />
-          </template>
-          <template v-else>
-            <HoppSmartSpinner />
-          </template>
-        </div>
-        <div v-if="submittedFeedback">
-          <p>{{ t("ai_experiments.feedback_thank_you") }}</p>
-        </div>
       </div>
     </template>
   </HoppSmartModal>
@@ -100,14 +61,9 @@ import { useI18n } from "@composables/i18n"
 import { useToast } from "@composables/toast"
 import { useService } from "dioc/vue"
 import { RESTTabService } from "~/services/tab/rest"
-import {
-  useRequestNameGeneration,
-  useSubmitFeedback,
-} from "~/composables/ai-experiments"
+import { useRequestNameGeneration } from "~/composables/ai-experiments"
 import { HoppRESTRequest } from "@hoppscotch/data"
 import IconSparkle from "~icons/lucide/sparkles"
-import IconThumbsUp from "~icons/lucide/thumbs-up"
-import IconThumbsDown from "~icons/lucide/thumbs-down"
 
 const toast = useToast()
 const t = useI18n()
@@ -150,7 +106,6 @@ watch(
 )
 
 const submittedFeedback = ref(false)
-const { submitFeedback, isSubmitFeedbackPending } = useSubmitFeedback()
 
 const tabs = useService(RESTTabService)
 watch(
