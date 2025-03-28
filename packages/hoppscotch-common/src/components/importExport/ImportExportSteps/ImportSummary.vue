@@ -1,23 +1,14 @@
 <script setup lang="ts">
-import { HoppCollection, HoppRESTRequest } from "@hoppscotch/data"
+import { HoppCollection } from "@hoppscotch/data"
 import { computed, Ref, ref, watch } from "vue"
 import { useI18n } from "~/composables/i18n"
-import IconInfo from "~icons/lucide/info"
 import { SupportedImportFormat } from "./../types"
 
 const t = useI18n()
 
-type Feature =
-  | "collections"
-  | "requests"
-  | "responses"
-  | "preRequestScripts"
-  | "testScripts"
+type Feature = "collections" | "requests"
 
-type FeatureStatus =
-  | "SUPPORTED"
-  | "NOT_SUPPORTED_BY_HOPPSCOTCH_IMPORT"
-  | "NOT_SUPPORTED_BY_SOURCE"
+type FeatureStatus = "SUPPORTED" | "NOT_SUPPORTED_BY_SOURCE"
 
 type FeatureWithCount = {
   count: number
@@ -38,37 +29,22 @@ const importSourceAndSupportedFeatures: Record<
   hoppscotch: {
     collections: "SUPPORTED",
     requests: "SUPPORTED",
-    responses: "SUPPORTED",
-    preRequestScripts: "SUPPORTED",
-    testScripts: "SUPPORTED",
   },
   postman: {
     collections: "SUPPORTED",
     requests: "SUPPORTED",
-    responses: "SUPPORTED",
-    preRequestScripts: "NOT_SUPPORTED_BY_HOPPSCOTCH_IMPORT",
-    testScripts: "NOT_SUPPORTED_BY_HOPPSCOTCH_IMPORT",
   },
   insomnia: {
     collections: "SUPPORTED",
     requests: "SUPPORTED",
-    responses: "NOT_SUPPORTED_BY_SOURCE",
-    preRequestScripts: "NOT_SUPPORTED_BY_HOPPSCOTCH_IMPORT",
-    testScripts: "NOT_SUPPORTED_BY_HOPPSCOTCH_IMPORT",
   },
   openapi: {
     collections: "SUPPORTED",
     requests: "SUPPORTED",
-    responses: "SUPPORTED",
-    preRequestScripts: "NOT_SUPPORTED_BY_SOURCE",
-    testScripts: "NOT_SUPPORTED_BY_SOURCE",
   },
   har: {
     collections: "SUPPORTED",
     requests: "SUPPORTED",
-    responses: "NOT_SUPPORTED_BY_HOPPSCOTCH_IMPORT",
-    preRequestScripts: "NOT_SUPPORTED_BY_SOURCE",
-    testScripts: "NOT_SUPPORTED_BY_SOURCE",
   },
 }
 
@@ -77,27 +53,11 @@ const featuresWithCount: Ref<FeatureWithCount[]> = ref([])
 const countCollections = (collections: HoppCollection[]) => {
   let collectionCount = 0
   let requestCount = 0
-  let preRequestScriptsCount = 0
-  let testScriptsCount = 0
-  let responseCount = 0
 
   const flattenHoppCollections = (_collections: HoppCollection[]) => {
     _collections.forEach((collection) => {
       collectionCount++
-
-      collection.requests.forEach((request) => {
-        requestCount++
-
-        const _request = request as HoppRESTRequest
-
-        preRequestScriptsCount += !!_request.preRequestScript?.trim() ? 1 : 0
-        testScriptsCount += !!_request.testScript?.trim() ? 1 : 0
-
-        responseCount += _request.responses
-          ? Object.values(_request.responses).length
-          : 0
-      })
-
+      requestCount += collection.requests.length
       flattenHoppCollections(collection.folders)
     })
   }
@@ -107,22 +67,13 @@ const countCollections = (collections: HoppCollection[]) => {
   return {
     collectionCount,
     requestCount,
-    responseCount,
-    preRequestScriptsCount,
-    testScriptsCount,
   }
 }
 
 watch(
   props.collections,
   (collections) => {
-    const {
-      collectionCount,
-      requestCount,
-      responseCount,
-      preRequestScriptsCount,
-      testScriptsCount,
-    } = countCollections(collections)
+    const { collectionCount, requestCount } = countCollections(collections)
 
     featuresWithCount.value = [
       {
@@ -134,21 +85,6 @@ watch(
         count: requestCount,
         label: "import.import_summary_requests_title",
         id: "requests" as const,
-      },
-      {
-        count: responseCount,
-        label: "import.import_summary_responses_title",
-        id: "responses" as const,
-      },
-      {
-        count: preRequestScriptsCount,
-        label: "import.import_summary_pre_request_scripts_title",
-        id: "preRequestScripts" as const,
-      },
-      {
-        count: testScriptsCount,
-        label: "import.import_summary_test_scripts_title",
-        id: "testScripts" as const,
       },
     ]
   },
@@ -180,21 +116,10 @@ const visibleFeatures = computed(() => {
           :class="{
             'text-green-500':
               featureSupportForImportFormat[feature.id] === 'SUPPORTED',
-            'text-amber-500':
-              featureSupportForImportFormat[feature.id] ===
-              'NOT_SUPPORTED_BY_HOPPSCOTCH_IMPORT',
           }"
         >
           <icon-lucide-check-circle
             v-if="featureSupportForImportFormat[feature.id] === 'SUPPORTED'"
-            class="svg-icons"
-          />
-
-          <IconInfo
-            v-else-if="
-              featureSupportForImportFormat[feature.id] ===
-              'NOT_SUPPORTED_BY_HOPPSCOTCH_IMPORT'
-            "
             class="svg-icons"
           />
         </span>
@@ -212,19 +137,6 @@ const visibleFeatures = computed(() => {
               : t(feature.label).slice(0, -1)
           }}
           Imported
-        </template>
-
-        <template
-          v-else-if="
-            featureSupportForImportFormat[feature.id] ===
-            'NOT_SUPPORTED_BY_HOPPSCOTCH_IMPORT'
-          "
-        >
-          {{
-            t("import.import_summary_not_supported_by_hoppscotch_import", {
-              featureLabel: t(feature.label),
-            })
-          }}
         </template>
       </p>
     </div>

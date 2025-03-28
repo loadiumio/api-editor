@@ -104,8 +104,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, ComputedRef, onMounted } from "vue"
-import { environments$, getGlobalVariables } from "~/newstore/environments"
+import { ref, computed, ComputedRef } from "vue"
+import { environments$ } from "~/newstore/environments"
 import { useColorMode } from "~/composables/theming"
 import { useReadonlyStream } from "@composables/stream"
 import { useI18n } from "~/composables/i18n"
@@ -120,8 +120,6 @@ import { uniqueID } from "~/helpers/utils/uniqueID"
 import { Environment } from "@hoppscotch/data"
 import { setGlobalEnvVariables } from "~/newstore/environments"
 import IconTrash from "~icons/lucide/trash"
-import { useService } from "dioc/vue"
-import { SecretEnvironmentService } from "~/services/secret-environment.service"
 
 const t = useI18n()
 const colorMode = useColorMode()
@@ -155,47 +153,7 @@ const selectedEnvOption = ref<SelectedEnv>("variables")
 const editingName = ref<string | null>("Global")
 const toast = useToast()
 const idTicker = ref(0)
-const vars = ref<EnvironmentVariable[]>([
-  {
-    id: idTicker.value++,
-    env: { key: "", value: "", secret: false, description: "" },
-  },
-])
-const secretEnvironmentService = useService(SecretEnvironmentService)
-
-const workingEnv = computed(() => {
-  const vars = getGlobalVariables()
-  return {
-    name: "Global",
-    variables: vars,
-  } as Environment
-})
-
-onMounted(() => {
-  editingName.value = workingEnv.value?.name ?? null
-  selectedEnvOption.value = "variables"
-
-  vars.value = pipe(
-    workingEnv.value?.variables ?? [],
-    A.mapWithIndex((index, e) => ({
-      id: idTicker.value++,
-      env: {
-        key: e.key,
-        value: e.secret
-          ? (secretEnvironmentService.getSecretEnvironmentVariable(
-              "Global",
-              index
-            )?.value ??
-            // @ts-expect-error `value` field can exist for secret environment variables as inferred while importing
-            e.value ??
-            "")
-          : e.value,
-        secret: e.secret,
-        description: e.description,
-      },
-    }))
-  )
-})
+const vars = ref<EnvironmentVariable[]>([])
 
 const displayModalEdit = (shouldDisplay: boolean) => {
   action.value = "edit"
@@ -271,6 +229,7 @@ const removeEnvironmentVariable = (id: number) => {
   const index = vars.value.findIndex((e) => e.id === id)
   if (index !== -1) {
     vars.value.splice(index, 1)
+    saveEnvironment()
   }
 }
 

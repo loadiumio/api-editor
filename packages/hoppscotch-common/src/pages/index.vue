@@ -56,12 +56,17 @@
             <!-- END Render TabContents -->
           </HoppSmartWindow>
           <template #actions>
-            <!--<EnvironmentsSelector class="h-full" />-->
             <div class="flex justify-end h-full">
               <HoppButtonSecondary
                 v-tippy="{ theme: 'tooltip' }"
+                :icon="IconExport"
+                :title="t('modal.save')"
+                @click="sendRecordData()"
+              />
+              <HoppButtonSecondary
+                v-tippy="{ theme: 'tooltip' }"
                 :icon="IconImport"
-                :title="t('modal.import_export')"
+                :title="t('modal.import')"
                 @click="displayModalImportExport(true)"
               />
             </div>
@@ -141,7 +146,7 @@
 
 <script lang="ts" setup>
 import { ref, onMounted, computed } from "vue"
-import { safelyExtractRESTRequest } from "@hoppscotch/data"
+import { safelyExtractRESTRequest, GlobalEnvironment } from "@hoppscotch/data"
 import { translateExtURLParams } from "~/helpers/RESTExtURLParams"
 import { useRoute } from "vue-router"
 import { useI18n } from "@composables/i18n"
@@ -161,7 +166,11 @@ import { HoppTab } from "~/services/tab"
 import { HoppRequestDocument, HoppTabDocument } from "~/helpers/rest/document"
 import { AuthorizationInspectorService } from "~/services/inspection/inspectors/authorization.inspector"
 import IconImport from "~icons/lucide/folder-down"
+import IconExport from "~icons/lucide/folder-up"
 import { useColorMode } from "@composables/theming"
+import { restCollections$ } from "~/newstore/collections"
+import { globalEnv$ } from "~/newstore/environments"
+import { getFiles } from "~/newstore/files"
 
 const savingRequest = ref(false)
 const confirmingCloseForTabID = ref<string | null>(null)
@@ -198,7 +207,9 @@ const activeTabs = tabs.getActiveTabs()
 const filteredTabs = computed(() =>
   activeTabs.value.filter(
     (tab) =>
-      tab.document.type === "request" && tab.document.request?.name?.length > 0
+      tab.document.type === "request" &&
+      (tab.document.request?.method === "SLEEP" ||
+        tab.document.request?.name?.length > 0)
   )
 )
 
@@ -387,6 +398,21 @@ const shareTabRequest = (tabID: string) => {
       invokeAction("modals.login.toggle")
     }
   }
+}
+
+const sendRecordData = () => {
+  const myCollections = useReadonlyStream(restCollections$, [])
+  const globalEnvs = useReadonlyStream(globalEnv$, {} as GlobalEnvironment)
+  const csvItems = getFiles()
+  window.parent.postMessage(
+    {
+      status: "RECORD",
+      collections: JSON.stringify(myCollections.value, null, 2),
+      globalVariables: JSON.stringify(globalEnvs.value),
+      csvItems: JSON.stringify(csvItems.files),
+    },
+    "*"
+  )
 }
 
 bindRequestToURLParams()

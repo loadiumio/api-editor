@@ -48,7 +48,11 @@
                 v-for="(assertionType, typeIndex) in assertionTextTypes"
                 :key="`assertionType-${index}-${typeIndex}`"
                 :label="assertionType"
-                :icon="IconCircle"
+                :icon="
+                  workingTextAssertions[index].type === typeIndex
+                    ? IconCheckCircle
+                    : IconCircle
+                "
                 @click="
                   () => {
                     changeAssertionType(index, typeIndex)
@@ -82,7 +86,11 @@
                 v-for="(conditionType, conditionIndex) in assertionTextConditions"
                 :key="`textConditionType-${index}-${conditionIndex}`"
                 :label="conditionType"
-                :icon="IconCircle"
+                :icon="
+                  workingTextAssertions[index].condition === conditionIndex
+                    ? IconCheckCircle
+                    : IconCircle
+                "
                 @click="
                   () => {
                     changeCondition(index, conditionIndex)
@@ -138,7 +146,6 @@ import {
   LoadiumRESTAssertionText,
   assertionTextTypes,
   assertionTextConditions,
-  assertionJsonPathConditions,
 } from "@hoppscotch/data"
 import { useVModel } from "@vueuse/core"
 import { useColorMode } from "@composables/theming"
@@ -155,6 +162,7 @@ import { objRemoveKey } from "@functional/object"
 import { cloneDeep, isEqual } from "lodash-es"
 import IconTrash from "~icons/lucide/trash"
 import { throwError } from "@functional/error"
+import IconCheckCircle from "~icons/lucide/check-circle"
 
 const colorMode = useColorMode()
 
