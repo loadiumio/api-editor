@@ -2,6 +2,13 @@
   <div>
     <AppPaneLayout layout-id="http">
       <template #primary>
+        <HoppButtonSecondary
+          class="absolute right-0"
+          v-tippy="{ theme: 'tooltip' }"
+          :icon="IconExport"
+          :title="t('modal.save')"
+          @click="sendRecordData()"
+        />
         <HoppSmartWindows
           v-if="currentTabID && filteredTabs.length > 0"
           :id="'rest_windows'"
@@ -63,12 +70,6 @@
                 :title="t('modal.save')"
                 @click="sendRecordData()"
               />
-              <HoppButtonSecondary
-                v-tippy="{ theme: 'tooltip' }"
-                :icon="IconImport"
-                :title="t('modal.import')"
-                @click="displayModalImportExport(true)"
-              />
             </div>
           </template>
         </HoppSmartWindows>
@@ -79,7 +80,9 @@
           :alt="`${t('empty.request')}`"
           :text="t('empty.request')"
         >
-          <template #body> {{ t("script.choose_import_or_create_left") }} </template>
+          <template #body>
+            {{ t("script.choose_import_or_create_left") }}
+          </template>
         </HoppSmartPlaceholder>
       </template>
       <template #sidebar>
@@ -135,11 +138,6 @@
       mode="rest"
       :show="savingRequest"
       @hide-modal="onSaveModalClose"
-    />
-    <CollectionsImportExport
-      v-if="showModalImportExport"
-      :collections-type="collectionsType"
-      @hide-modal="displayModalImportExport(false)"
     />
   </div>
 </template>
@@ -273,10 +271,6 @@ const removeTab = (tabID: string) => {
     tabs.closeTab(tabState.id)
     inspectionService.deleteTabInspectorResult(tabState.id)
   }
-}
-
-const displayModalImportExport = (show: boolean) => {
-  showModalImportExport.value = show
 }
 
 const closeOtherTabsAction = (tabID: string) => {

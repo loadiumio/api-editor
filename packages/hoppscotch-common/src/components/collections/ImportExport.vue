@@ -65,7 +65,6 @@ const isRESTImporterInProgress = ref(false)
 const isAllCollectionImporterInProgress = ref(false)
 const isHarImporterInProgress = ref(false)
 const isGistImporterInProgress = ref(false)
-const isLoadiumImporterInProgress = ref(false)
 
 const t = useI18n()
 const toast = useToast()
@@ -187,41 +186,6 @@ const setCurrentImportSummary = (collections: HoppCollection[]) => {
 const unsetCurrentImportSummary = () => {
   currentImportSummary.value.importedCollections = null
   currentImportSummary.value.showImportSummary = false
-}
-
-const LoadiumRecorderImporter: ImporterOrExporter = {
-  metadata: {
-    id: "loadium_record",
-    name: "import.from_loadium",
-    title: "import.from_loadium_description",
-    icon: IconFolderPlus,
-    disabled: false,
-    applicableTo: ["personal-workspace"],
-    format: "loadium",
-  },
-  importSummary: currentImportSummary,
-  component: FileSource({
-    caption: "import.from_file",
-    acceptedFileTypes: ".json",
-    onImportFromFile: async (content) => {
-      isLoadiumImporterInProgress.value = true
-      const res = await hoppRESTImporter(content)()
-
-      if (E.isRight(res)) {
-        await handleImportToStore(res.right)
-
-        setCurrentImportSummary(res.right)
-      } else {
-        showImportFailedError()
-
-        unsetCurrentImportSummary()
-      }
-
-      isLoadiumImporterInProgress.value = false
-    },
-    description: "import.from_loadium_import_summary",
-    isLoading: isLoadiumImporterInProgress,
-  }),
 }
 
 const HoppRESTImporter: ImporterOrExporter = {
@@ -636,11 +600,7 @@ const HARImporter: ImporterOrExporter = {
 }
 
 const importerModules = computed(() => {
-  const enabledImporters = [
-    HoppPostmanImporter,
-    LoadiumRecorderImporter,
-    HARImporter,
-  ]
+  const enabledImporters = [HoppPostmanImporter, HARImporter]
 
   const isTeams = props.collectionsType.type === "team-collections"
 
