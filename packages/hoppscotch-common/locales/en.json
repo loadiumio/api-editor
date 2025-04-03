@@ -651,7 +651,9 @@
     "import_export": "Import / Export",
     "response_name": "Response Name",
     "share_request": "Share Request",
-    "file": "Upload File"
+    "file": "Upload File",
+    "import": "Import",
+    "save": "Save"
   },
   "mqtt": {
     "already_subscribed": "You are already subscribed to this topic.",

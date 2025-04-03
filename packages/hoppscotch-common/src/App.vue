@@ -29,6 +29,7 @@ import { clearRESTCollection } from "~/newstore/collections"
 import { useService } from "dioc/vue"
 import { RESTTabService } from "~/services/tab/rest"
 import { getDefaultRESTRequest } from "@helpers/rest/default"
+import { fillRecordData } from "@helpers/utils/fillRecordData"
 
 const t = useI18n()
 
@@ -40,19 +41,11 @@ onMounted(() => {
   if (!sidebarLeft.value) toggleSetting("SIDEBAR_ON_LEFT")
   document.documentElement.setAttribute("data-accent", "orange")
   applySetting("THEME_COLOR", "orange")
-  window.parent.postMessage({ status: "READY" }, "*")
 
   const globalEnv = {
     name: "Global",
     v: 1,
-    variables: [
-      {
-        key: "",
-        value: "",
-        secret: false,
-        description: "",
-      },
-    ] as GlobalEnvironmentVariable[],
+    variables: [] as GlobalEnvironmentVariable[],
   } as Environment
   setGlobalEnvVariables(globalEnv)
   clearRESTCollection()
@@ -64,6 +57,7 @@ onMounted(() => {
     isDirty: false,
   })
   tabs.closeOtherTabs(defaultTab.id)
+  window.parent.postMessage({ status: "READY" }, "*")
 })
 
 onBeforeUnmount(() => {
@@ -73,6 +67,9 @@ onBeforeUnmount(() => {
 const handleMessage = (event: MessageEvent) => {
   if (event.data.theme) {
     applySetting("BG_COLOR", event.data.theme === "dark" ? "dark" : "light")
+  }
+  if (event.data.record) {
+    fillRecordData(event.data.record)
   }
 }
 

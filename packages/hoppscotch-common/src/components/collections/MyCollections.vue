@@ -345,13 +345,6 @@
                   {{ t("script.import_or_create") }}
                 </span>
                 <div class="flex flex-col items-stretch gap-4">
-                  <HoppButtonPrimary
-                    :icon="IconImport"
-                    :label="t('import.title')"
-                    filled
-                    outline
-                    @click="emit('display-modal-import-export')"
-                  />
                   <HoppButtonSecondary
                     :icon="IconPlus"
                     :label="t('add.new')"

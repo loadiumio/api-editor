@@ -62,7 +62,11 @@
                 v-for="(conditionType, conditionIndex) in assertionJsonPathConditions"
                 :key="`jsonPathValueConditionType-${index}-${conditionIndex}`"
                 :label="conditionType"
-                :icon="IconCircle"
+                :icon="
+                  workingJsonPathValues[index].condition === conditionIndex
+                    ? IconCheckCircle
+                    : IconCircle
+                "
                 @click="
                   () => {
                     changeCondition(index, conditionIndex)
@@ -133,6 +137,7 @@ import { objRemoveKey } from "@functional/object"
 import { cloneDeep, isEqual } from "lodash-es"
 import IconTrash from "~icons/lucide/trash"
 import { throwError } from "@functional/error"
+import IconCheckCircle from "~icons/lucide/check-circle"
 
 const colorMode = useColorMode()
 

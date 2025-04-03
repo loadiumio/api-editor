@@ -2,6 +2,13 @@
   <div>
     <AppPaneLayout layout-id="http">
       <template #primary>
+        <HoppButtonSecondary
+          class="absolute right-0"
+          v-tippy="{ theme: 'tooltip' }"
+          :icon="IconExport"
+          :title="t('modal.save')"
+          @click="sendRecordData()"
+        />
         <HoppSmartWindows
           v-if="currentTabID && filteredTabs.length > 0"
           :id="'rest_windows'"
@@ -56,13 +63,12 @@
             <!-- END Render TabContents -->
           </HoppSmartWindow>
           <template #actions>
-            <!--<EnvironmentsSelector class="h-full" />-->
             <div class="flex justify-end h-full">
               <HoppButtonSecondary
                 v-tippy="{ theme: 'tooltip' }"
-                :icon="IconImport"
-                :title="t('modal.import_export')"
-                @click="displayModalImportExport(true)"
+                :icon="IconExport"
+                :title="t('modal.save')"
+                @click="sendRecordData()"
               />
             </div>
           </template>
@@ -74,7 +80,9 @@
           :alt="`${t('empty.request')}`"
           :text="t('empty.request')"
         >
-          <template #body> {{ t("script.choose_import_or_create_left") }} </template>
+          <template #body>
+            {{ t("script.choose_import_or_create_left") }}
+          </template>
         </HoppSmartPlaceholder>
       </template>
       <template #sidebar>
@@ -131,17 +139,12 @@
       :show="savingRequest"
       @hide-modal="onSaveModalClose"
     />
-    <CollectionsImportExport
-      v-if="showModalImportExport"
-      :collections-type="collectionsType"
-      @hide-modal="displayModalImportExport(false)"
-    />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, onMounted, computed } from "vue"
-import { safelyExtractRESTRequest } from "@hoppscotch/data"
+import { safelyExtractRESTRequest, GlobalEnvironment } from "@hoppscotch/data"
 import { translateExtURLParams } from "~/helpers/RESTExtURLParams"
 import { useRoute } from "vue-router"
 import { useI18n } from "@composables/i18n"
@@ -161,7 +164,11 @@ import { HoppTab } from "~/services/tab"
 import { HoppRequestDocument, HoppTabDocument } from "~/helpers/rest/document"
 import { AuthorizationInspectorService } from "~/services/inspection/inspectors/authorization.inspector"
 import IconImport from "~icons/lucide/folder-down"
+import IconExport from "~icons/lucide/folder-up"
 import { useColorMode } from "@composables/theming"
+import { restCollections$ } from "~/newstore/collections"
+import { globalEnv$ } from "~/newstore/environments"
+import { getFiles } from "~/newstore/files"
 
 const savingRequest = ref(false)
 const confirmingCloseForTabID = ref<string | null>(null)
@@ -198,7 +205,9 @@ const activeTabs = tabs.getActiveTabs()
 const filteredTabs = computed(() =>
   activeTabs.value.filter(
     (tab) =>
-      tab.document.type === "request" && tab.document.request?.name?.length > 0
+      tab.document.type === "request" &&
+      (tab.document.request?.method === "SLEEP" ||
+        tab.document.request?.name?.length > 0)
   )
 )
 
@@ -262,10 +271,6 @@ const removeTab = (tabID: string) => {
     tabs.closeTab(tabState.id)
     inspectionService.deleteTabInspectorResult(tabState.id)
   }
-}
-
-const displayModalImportExport = (show: boolean) => {
-  showModalImportExport.value = show
 }
 
 const closeOtherTabsAction = (tabID: string) => {
@@ -387,6 +392,21 @@ const shareTabRequest = (tabID: string) => {
       invokeAction("modals.login.toggle")
     }
   }
+}
+
+const sendRecordData = () => {
+  const myCollections = useReadonlyStream(restCollections$, [])
+  const globalEnvs = useReadonlyStream(globalEnv$, {} as GlobalEnvironment)
+  const csvItems = getFiles()
+  window.parent.postMessage(
+    {
+      status: "RECORD",
+      collections: JSON.stringify(myCollections.value, null, 2),
+      globalVariables: JSON.stringify(globalEnvs.value),
+      csvItems: JSON.stringify(csvItems.files),
+    },
+    "*"
+  )
 }
 
 bindRequestToURLParams()

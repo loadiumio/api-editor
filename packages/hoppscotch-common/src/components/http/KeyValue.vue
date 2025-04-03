@@ -53,52 +53,6 @@
         })
       "
     />
-
-    <input
-      :value="description"
-      :placeholder="t('count.description')"
-      class="flex flex-1 px-4 bg-transparent"
-      type="text"
-      @update:value="emit('update:description', $event.target.value)"
-      @input="
-        updateEntity(index, {
-          id: entityId,
-          key: name,
-          value,
-          active: entityActive,
-          description: ($event.target as HTMLInputElement).value,
-        })
-      "
-    />
-    <span>
-      <HoppButtonSecondary
-        v-tippy="{ theme: 'tooltip' }"
-        :title="
-          isActive
-            ? entityActive
-              ? t('action.turn_off')
-              : t('action.turn_on')
-            : t('action.turn_off')
-        "
-        :icon="
-          isActive
-            ? entityActive
-              ? IconCheckCircle
-              : IconCircle
-            : IconCheckCircle
-        "
-        color="green"
-        @click="
-          updateEntity(index, {
-            id: entityId,
-            key: name,
-            value: value,
-            active: isActive ? !entityActive : false,
-            description: description ?? '',
-          })
-        "
-      />
-    </span>
     <span>
       <HoppButtonSecondary
         v-tippy="{ theme: 'tooltip' }"
@@ -113,8 +67,6 @@
 
 <script setup lang="ts">
 import IconGripVertical from "~icons/lucide/grip-vertical"
-import IconCheckCircle from "~icons/lucide/check-circle"
-import IconCircle from "~icons/lucide/circle"
 import IconTrash from "~icons/lucide/trash"
 import { useI18n } from "~/composables/i18n"
 import { AggregateEnvironment } from "~/newstore/environments"

@@ -1,9 +1,9 @@
 <template>
   <ImportExportBase
     ref="collections-import-export"
-    modal-title="modal.collections"
+    modal-title="import.title"
     :importer-modules="importerModules"
-    :exporter-modules="exporterModules"
+    :exporter-modules="[]"
     @hide-modal="emit('hide-modal')"
   />
 </template>
@@ -170,10 +170,6 @@ const isHoppMyCollectionExporterInProgress = ref(false)
 const isHoppTeamCollectionExporterInProgress = ref(false)
 const isHoppGistCollectionExporterInProgress = ref(false)
 
-const isTeamWorkspace = computed(() => {
-  return props.collectionsType.type === "team-collections"
-})
-
 const currentImportSummary: Ref<{
   showImportSummary: boolean
   importedCollections: HoppCollection[] | null
@@ -214,13 +210,6 @@ const HoppRESTImporter: ImporterOrExporter = {
         await handleImportToStore(res.right)
 
         setCurrentImportSummary(res.right)
-
-        platform.analytics?.logEvent({
-          type: "HOPP_IMPORT_COLLECTION",
-          importer: "import.from_json",
-          platform: "rest",
-          workspaceType: isTeamWorkspace.value ? "team" : "personal",
-        })
       } else {
         showImportFailedError()
 
@@ -261,13 +250,6 @@ const HoppAllCollectionImporter: ImporterOrExporter = {
       try {
         await handleImportToStore([content])
         setCurrentImportSummary([content])
-
-        // our analytics consider this as an export event, so keeping compatibility with that
-        platform.analytics?.logEvent({
-          type: "HOPP_EXPORT_COLLECTION",
-          exporter: "import_to_teams",
-          platform: "rest",
-        })
       } catch (e) {
         showImportFailedError()
         unsetCurrentImportSummary()
@@ -307,13 +289,6 @@ const HoppOpenAPIImporter: ImporterOrExporter = {
             await handleImportToStore(res.right)
 
             setCurrentImportSummary(res.right)
-
-            platform.analytics?.logEvent({
-              platform: "rest",
-              type: "HOPP_IMPORT_COLLECTION",
-              importer: "import.from_openapi",
-              workspaceType: isTeamWorkspace.value ? "team" : "personal",
-            })
           } else {
             showImportFailedError()
 
@@ -341,13 +316,6 @@ const HoppOpenAPIImporter: ImporterOrExporter = {
             await handleImportToStore(res.right)
 
             setCurrentImportSummary(res.right)
-
-            platform.analytics?.logEvent({
-              platform: "rest",
-              type: "HOPP_IMPORT_COLLECTION",
-              importer: "import.from_openapi",
-              workspaceType: isTeamWorkspace.value ? "team" : "personal",
-            })
           } else {
             showImportFailedError()
 
@@ -386,13 +354,6 @@ const HoppPostmanImporter: ImporterOrExporter = {
         await handleImportToStore(res.right)
 
         setCurrentImportSummary(res.right)
-
-        platform.analytics?.logEvent({
-          platform: "rest",
-          type: "HOPP_IMPORT_COLLECTION",
-          importer: "import.from_postman",
-          workspaceType: isTeamWorkspace.value ? "team" : "personal",
-        })
       } else {
         showImportFailedError()
 
@@ -429,13 +390,6 @@ const HoppInsomniaImporter: ImporterOrExporter = {
         await handleImportToStore(res.right)
 
         setCurrentImportSummary(res.right)
-
-        platform.analytics?.logEvent({
-          platform: "rest",
-          type: "HOPP_IMPORT_COLLECTION",
-          importer: "import.from_insomnia",
-          workspaceType: isTeamWorkspace.value ? "team" : "personal",
-        })
       } else {
         showImportFailedError()
 
@@ -476,13 +430,6 @@ const HoppGistImporter: ImporterOrExporter = {
         await handleImportToStore(res.right)
 
         setCurrentImportSummary(res.right)
-
-        platform.analytics?.logEvent({
-          platform: "rest",
-          type: "HOPP_IMPORT_COLLECTION",
-          importer: "import.from_gist",
-          workspaceType: isTeamWorkspace.value ? "team" : "personal",
-        })
       } else {
         showImportFailedError()
 
@@ -516,17 +463,11 @@ const HoppMyCollectionsExporter: ImporterOrExporter = {
 
     const message = await initializeDownloadFile(
       myCollectionsExporter(myCollections.value),
-      "hoppscotch-personal-collections"
+      "loadium-collections"
     )
 
     if (E.isRight(message)) {
       toast.success(t("state.download_started"))
-
-      platform.analytics?.logEvent({
-        type: "HOPP_EXPORT_COLLECTION",
-        exporter: "json",
-        platform: "rest",
-      })
     } else {
       toast.error(t(message.left))
     }
@@ -565,12 +506,6 @@ const HoppTeamCollectionsExporter: ImporterOrExporter = {
         E.isRight(message)
           ? toast.success(t(message.right))
           : toast.error(t(message.left))
-
-        platform.analytics?.logEvent({
-          type: "HOPP_EXPORT_COLLECTION",
-          exporter: "json",
-          platform: "rest",
-        })
       } else {
         toast.error(res.left)
       }
@@ -619,12 +554,6 @@ const HoppGistCollectionsExporter: ImporterOrExporter = {
 
       toast.success(t("export.secret_gist_success"))
 
-      platform.analytics?.logEvent({
-        type: "HOPP_EXPORT_COLLECTION",
-        exporter: "gist",
-        platform: "rest",
-      })
-
       platform.io.openExternalLink(res.right)
     } else {
       toast.error(collectionJSON.left)
@@ -658,13 +587,6 @@ const HARImporter: ImporterOrExporter = {
         await handleImportToStore(res.right)
 
         setCurrentImportSummary(res.right)
-
-        platform.analytics?.logEvent({
-          type: "HOPP_IMPORT_COLLECTION",
-          importer: "import.from_har",
-          platform: "rest",
-          workspaceType: isTeamWorkspace.value ? "team" : "personal",
-        })
       } else {
         showImportFailedError()
 
@@ -678,15 +600,7 @@ const HARImporter: ImporterOrExporter = {
 }
 
 const importerModules = computed(() => {
-  const enabledImporters = [
-    HoppRESTImporter,
-    HoppAllCollectionImporter,
-    HoppOpenAPIImporter,
-    HoppPostmanImporter,
-    HoppInsomniaImporter,
-    HoppGistImporter,
-    HARImporter,
-  ]
+  const enabledImporters = [HoppPostmanImporter, HARImporter]
 
   const isTeams = props.collectionsType.type === "team-collections"
 

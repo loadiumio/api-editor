@@ -120,8 +120,6 @@ import { uniqueID } from "~/helpers/utils/uniqueID"
 import { Environment } from "@hoppscotch/data"
 import { setGlobalEnvVariables } from "~/newstore/environments"
 import IconTrash from "~icons/lucide/trash"
-import { useService } from "dioc/vue"
-import { SecretEnvironmentService } from "~/services/secret-environment.service"
 
 const t = useI18n()
 const colorMode = useColorMode()
@@ -155,13 +153,7 @@ const selectedEnvOption = ref<SelectedEnv>("variables")
 const editingName = ref<string | null>("Global")
 const toast = useToast()
 const idTicker = ref(0)
-const vars = ref<EnvironmentVariable[]>([
-  {
-    id: idTicker.value++,
-    env: { key: "", value: "", secret: false, description: "" },
-  },
-])
-const secretEnvironmentService = useService(SecretEnvironmentService)
+const vars = ref<EnvironmentVariable[]>([])
 
 const workingEnv = computed(() => {
   const vars = getGlobalVariables()
@@ -181,15 +173,7 @@ onMounted(() => {
       id: idTicker.value++,
       env: {
         key: e.key,
-        value: e.secret
-          ? (secretEnvironmentService.getSecretEnvironmentVariable(
-              "Global",
-              index
-            )?.value ??
-            // @ts-expect-error `value` field can exist for secret environment variables as inferred while importing
-            e.value ??
-            "")
-          : e.value,
+        value: e.value,
         secret: e.secret,
         description: e.description,
       },
@@ -271,6 +255,7 @@ const removeEnvironmentVariable = (id: number) => {
   const index = vars.value.findIndex((e) => e.id === id)
   if (index !== -1) {
     vars.value.splice(index, 1)
+    saveEnvironment()
   }
 }
 
