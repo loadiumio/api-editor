@@ -3,11 +3,11 @@ import DispatchingStore, {
 } from "~/newstore/DispatchingStore"
 
 export type CSVFile = {
-  fileData: File
   variableNames: string
   delimiter: string
-  ignoreFirst: boolean
-  recycleEOF: boolean
+  ignoreFirstLine: boolean
+  recycleEndOfLine: boolean
+  filename: string
 }
 
 const defaultFileState = {

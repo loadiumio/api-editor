@@ -61,7 +61,7 @@
               <template v-else>
                 <div
                   v-for="(file, index) in csvFiles"
-                  :key="`file-${file.fileData.name}`"
+                  :key="`file-${file.filename}`"
                   @click="displayModalEdit(true, file)"
                 >
                   <div
@@ -74,7 +74,7 @@
                       </span>
                       <span class="flex min-w-0 flex-1 py-2 pr-2 transition">
                         <span class="truncate">
-                          {{ file.fileData.name }}
+                          {{ file.filename }}
                         </span>
                       </span>
                     </div>
@@ -109,15 +109,15 @@
                     <div class="flex items-center justify-between mb-4">
                       <span>{{ t("csv_import.ignore_first") }}</span>
                       <HoppSmartToggle
-                        :on="file.ignoreFirst"
-                        @change="file.ignoreFirst = !file.ignoreFirst"
+                        :on="file.ignoreFirstLine"
+                        @change="file.ignoreFirstLine = !file.ignoreFirstLine"
                       />
                     </div>
                     <div class="flex items-center justify-between">
                       <span>{{ t("csv_import.recycle_eof") }}</span>
                       <HoppSmartToggle
-                        :on="file.recycleEOF"
-                        @change="file.recycleEOF = !file.recycleEOF"
+                        :on="file.recycleEndOfLine"
+                        @change="file.recycleEndOfLine = !file.recycleEndOfLine"
                       />
                     </div>
                   </div>
@@ -209,8 +209,9 @@ const addImportedFiles = (importedFiles: any[]) => {
 }
 
 const deleteFile = (index: number) => {
-  csvFiles.value.splice(index, 1)
+  const removedFile = csvFiles.value.splice(index, 1)
   setFiles(csvFiles.value)
+  window.parent.postMessage({ status: "REMOVE_FILE", filename: removedFile[0].filename }, "*")
 }
 
 const toggleCollapse = (index: number) => {

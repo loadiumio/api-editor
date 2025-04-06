@@ -8,6 +8,7 @@ import {
 import { getDefaultRESTRequest } from "@helpers/rest/default"
 import { setGlobalEnvVariables } from "~/newstore/environments"
 import { uniqueID } from "@helpers/utils/uniqueID"
+import { CSVFile, setFiles } from "~/newstore/files"
 
 enum BodyContentTypes {
   "TEXT" = "text/plain",
@@ -114,11 +115,16 @@ export function fillRecordData(record: any) {
       v: 1,
       id: uniqueID(),
       name: "Global",
-      variables: record.userDefinedVariable.map((variable: any) => ({
+      variables: (record.userDefinedVariable?.map((variable: any) => ({
         ...variable,
         secret: false,
-      })) as GlobalEnvironmentVariable[],
+      })) || []) as GlobalEnvironmentVariable[],
     } as Environment
     setGlobalEnvVariables(globalEnv)
+    const csvFiles: CSVFile[] = []
+    record.csvItems?.forEach((item: any) => {
+      csvFiles.push(item as CSVFile)
+    })
+    setFiles(csvFiles)
   })
 }
