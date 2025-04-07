@@ -45,10 +45,11 @@ const CSVImport: ImporterOrExporter = {
     caption: "import.csv",
     onImportFromFile: async (fileContents, files) => {
       isCSVImporterInProgress.value = true
-      if (fileContents && files) {
+      if (files) {
         const filteredFiles = filterFilesByName(files)
         checkSameFileName(filteredFiles.length, files.length)
-        const CSVFiles = createFiles(fileContents, filteredFiles)
+        window.parent.postMessage({ status: "CSV_UPLOAD", files: filteredFiles }, "*")
+        const CSVFiles = createCSVFiles(filteredFiles)
         emit("hide-modal")
         emit("add-files", [...CSVFiles])
       } else {
@@ -74,25 +75,24 @@ const checkSameFileName = (filteredFileCount: number, fileCount: number) => {
   }
 }
 
-const filterFilesByName = (fileDetails: any[]) => {
+const filterFilesByName = (files: any[]) => {
   const existingFileNames = new Set(
-    props.currentFiles.map((file) => file.fileData.name)
+    props.currentFiles.map((file) => file.fileName)
   )
-  return fileDetails.filter((file: File) => !existingFileNames.has(file.name))
+  return files.filter((file: File) => !existingFileNames.has(file.name))
 }
 
-const createFiles = (fileContents: any[], files: any[]) => {
-  const filesWithContent = files.map((file, index) => {
-    file["data"] = fileContents[index]
-    return file
-  })
-  return filesWithContent.map((file: File) => ({
-    fileData: file,
-    variableNames: "",
-    delimiter: "",
-    ignoreFirst: false,
-    recycleEOF: false,
-  }))
+const createCSVFiles = (files: any[]) => {
+  return files.map(
+    (file: File) =>
+      ({
+        filename: file.name,
+        variableNames: "",
+        delimiter: "",
+        ignoreFirstLine: false,
+        recycleEndOfLine: false,
+      }) as CSVFile
+  )
 }
 
 function showImportFailedError() {

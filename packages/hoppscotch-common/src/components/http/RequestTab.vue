@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref, toRaw, watch} from "vue"
+import { onBeforeUnmount, onMounted, ref, toRaw, watch } from "vue"
 import { useVModel } from "@vueuse/core"
 import { cloneDeep } from "lodash-es"
 import { isEqualHoppRESTRequest } from "@hoppscotch/data"
