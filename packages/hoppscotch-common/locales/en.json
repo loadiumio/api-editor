@@ -1352,7 +1352,7 @@
     "delimiter": "Delimiter (use '/t' for tab)",
     "ignore_first": "Ignore first line?",
     "recycle_eof": "Recycle on End of File?",
-    "same_file_name": "You can upload files with different names.",
+    "file_name_error": "File name already exits or there is a whitespace in file name",
     "remove_file": "Are you sure you want to permanently delete this file?"
   },
   "sleep": {
