@@ -71,15 +71,15 @@ const emit = defineEmits<{
 
 const checkSameFileName = (filteredFileCount: number, fileCount: number) => {
   if (filteredFileCount !== fileCount) {
-    toast.error(`${t("csv_import.same_file_name")}`)
+    toast.error(`${t("csv_import.file_name_error")}`)
   }
 }
 
 const filterFilesByName = (files: any[]) => {
   const existingFileNames = new Set(
-    props.currentFiles.map((file) => file.fileName)
+    props.currentFiles.map((file) => file.filename)
   )
-  return files.filter((file: File) => !existingFileNames.has(file.name))
+  return files.filter((file: File) => !existingFileNames.has(file.name) && !file.name.includes(' '))
 }
 
 const createCSVFiles = (files: any[]) => {
