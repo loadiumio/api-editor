@@ -1564,6 +1564,12 @@ const onRemoveCollection = () => {
       length: myCollections.value.length,
     })
 
+    tabs.getTabs().forEach((tab) => {
+      if (tab.document.isDirty) {
+        tabs.closeTab(tab.id)
+      }
+    })
+
     toast.success(t("state.deleted"))
     displayConfirmModal(false)
   } else if (hasTeamWriteAccess.value) {

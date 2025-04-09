@@ -2,13 +2,6 @@
   <div>
     <AppPaneLayout layout-id="http">
       <template #primary>
-        <HoppButtonSecondary
-          class="absolute right-0"
-          v-tippy="{ theme: 'tooltip' }"
-          :icon="IconExport"
-          :title="t('modal.save')"
-          @click="sendRecordData()"
-        />
         <HoppSmartWindows
           v-if="currentTabID && filteredTabs.length > 0"
           :id="'rest_windows'"
@@ -16,6 +9,7 @@
           v-model="currentTabID"
           @remove-tab="removeTab"
           @sort="sortTabs"
+          @add-tab="createNewRequest"
         >
           <HoppSmartWindow
             v-for="tab in filteredTabs"
@@ -62,16 +56,6 @@
             </template>
             <!-- END Render TabContents -->
           </HoppSmartWindow>
-          <template #actions>
-            <div class="flex justify-end h-full">
-              <HoppButtonSecondary
-                v-tippy="{ theme: 'tooltip' }"
-                :icon="IconExport"
-                :title="t('modal.save')"
-                @click="sendRecordData()"
-              />
-            </div>
-          </template>
         </HoppSmartWindows>
         <HoppSmartPlaceholder
           v-else
@@ -103,48 +87,18 @@
       @hide-modal="confirmingCloseAllTabs = false"
       @resolve="onResolveConfirmCloseAllTabs"
     />
-    <HoppSmartModal
-      v-if="confirmingCloseForTabID !== null"
-      dialog
-      role="dialog"
-      aria-modal="true"
-      :title="t('modal.close_unsaved_tab')"
-      @close="confirmingCloseForTabID = null"
-    >
-      <template #body>
-        <div class="text-center">
-          {{ t("confirm.save_unsaved_tab") }}
-        </div>
-      </template>
-      <template #footer>
-        <span class="flex space-x-2">
-          <HoppButtonPrimary
-            v-focus
-            :label="t?.('action.yes')"
-            outline
-            @click="onResolveConfirmSaveTab"
-          />
-          <HoppButtonSecondary
-            :label="t?.('action.no')"
-            filled
-            outline
-            @click="onCloseConfirmSaveTab"
-          />
-        </span>
-      </template>
-    </HoppSmartModal>
     <CollectionsSaveRequest
-      v-if="savingRequest"
+      v-if="creatingRequest"
       mode="rest"
-      :show="savingRequest"
-      @hide-modal="onSaveModalClose"
+      :show="creatingRequest"
+      @hide-modal="onCreateRequestModalClose"
     />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, onMounted, computed } from "vue"
-import { safelyExtractRESTRequest, GlobalEnvironment } from "@hoppscotch/data"
+import { safelyExtractRESTRequest } from "@hoppscotch/data"
 import { translateExtURLParams } from "~/helpers/RESTExtURLParams"
 import { useRoute } from "vue-router"
 import { useI18n } from "@composables/i18n"
@@ -163,14 +117,9 @@ import { RESTTabService } from "~/services/tab/rest"
 import { HoppTab } from "~/services/tab"
 import { HoppRequestDocument, HoppTabDocument } from "~/helpers/rest/document"
 import { AuthorizationInspectorService } from "~/services/inspection/inspectors/authorization.inspector"
-import IconImport from "~icons/lucide/folder-down"
-import IconExport from "~icons/lucide/folder-up"
 import { useColorMode } from "@composables/theming"
-import { restCollections$ } from "~/newstore/collections"
-import { globalEnv$ } from "~/newstore/environments"
-import { getFiles } from "~/newstore/files"
 
-const savingRequest = ref(false)
+const creatingRequest = ref(false)
 const confirmingCloseForTabID = ref<string | null>(null)
 const confirmingCloseAllTabs = ref(false)
 const showRenamingReqNameModal = ref(false)
@@ -183,20 +132,12 @@ const t = useI18n()
 const tabs = useService(RESTTabService)
 const colorMode = useColorMode()
 
-type CollectionType = { type: "my-collections"; selectedTeam: undefined }
-
 const currentTabID = tabs.currentTabID
 
 const currentUser = useReadonlyStream(
   platform.auth.getCurrentUserStream(),
   platform.auth.getCurrentUser()
 )
-
-const showModalImportExport = ref(false)
-const collectionsType = ref<CollectionType>({
-  type: "my-collections",
-  selectedTeam: undefined,
-})
 
 const hoppSmartWindowsRef = ref(null)
 
@@ -244,6 +185,11 @@ const addNewTab = () => {
 
   tabs.setActiveTab(tab.id)
 }
+
+const createNewRequest = () => {
+  creatingRequest.value = true
+}
+
 const sortTabs = (e: { oldIndex: number; newIndex: number }) => {
   tabs.updateTabOrdering(e.oldIndex, e.newIndex)
 }
@@ -343,42 +289,8 @@ const renameReqName = () => {
   showRenamingReqNameModal.value = false
 }
 
-/**
- * This function is closed when the confirm tab is closed by some means (even saving triggers close)
- */
-const onCloseConfirmSaveTab = () => {
-  if (!savingRequest.value && confirmingCloseForTabID.value) {
-    tabs.closeTab(confirmingCloseForTabID.value)
-    inspectionService.deleteTabInspectorResult(confirmingCloseForTabID.value)
-    confirmingCloseForTabID.value = null
-  }
-}
-
-/**
- * Called when the user confirms they want to save the tab
- */
-const onResolveConfirmSaveTab = () => {
-  if (tabs.currentActiveTab.value.document.saveContext) {
-    invokeAction("request-response.save")
-
-    if (confirmingCloseForTabID.value) {
-      tabs.closeTab(confirmingCloseForTabID.value)
-      confirmingCloseForTabID.value = null
-    }
-  } else {
-    savingRequest.value = true
-  }
-}
-
-/**
- * Called when the Save Request modal is done and is closed
- */
-const onSaveModalClose = () => {
-  savingRequest.value = false
-  if (confirmingCloseForTabID.value) {
-    tabs.closeTab(confirmingCloseForTabID.value)
-    confirmingCloseForTabID.value = null
-  }
+const onCreateRequestModalClose = () => {
+  creatingRequest.value = false
 }
 
 const shareTabRequest = (tabID: string) => {
@@ -392,21 +304,6 @@ const shareTabRequest = (tabID: string) => {
       invokeAction("modals.login.toggle")
     }
   }
-}
-
-const sendRecordData = () => {
-  const myCollections = useReadonlyStream(restCollections$, [])
-  const globalEnvs = useReadonlyStream(globalEnv$, {} as GlobalEnvironment)
-  const csvItems = getFiles()
-  window.parent.postMessage(
-    {
-      status: "RECORD",
-      collections: JSON.stringify(myCollections.value, null, 2),
-      globalVariables: JSON.stringify(globalEnvs.value),
-      csvItems: JSON.stringify(csvItems.files),
-    },
-    "*"
-  )
 }
 
 bindRequestToURLParams()

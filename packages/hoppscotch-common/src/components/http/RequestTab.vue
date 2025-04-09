@@ -13,10 +13,9 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref, toRaw, watch } from "vue"
+import { onMounted, ref, toRaw, watch } from "vue"
 import { useVModel } from "@vueuse/core"
 import { cloneDeep } from "lodash-es"
-import { isEqualHoppRESTRequest } from "@hoppscotch/data"
 import { HoppTab } from "~/services/tab"
 import { HoppRequestDocument } from "~/helpers/rest/document"
 import { useReadonlyStream } from "@composables/stream"
@@ -73,10 +72,6 @@ onMounted(() => {
   }
 })
 
-onBeforeUnmount(() => {
-  invokeAction("request-response.save")
-})
-
 const tab = useVModel(props, "modelValue", emit)
 
 // TODO: Come up with a better dirty check
@@ -84,14 +79,8 @@ let oldRequest = cloneDeep(tab.value.document.request)
 watch(
   () => tab.value.document.request,
   (updatedValue) => {
-    if (
-      !tab.value.document.isDirty &&
-      !isEqualHoppRESTRequest(oldRequest, updatedValue)
-    ) {
-      tab.value.document.isDirty = true
-    }
-
     oldRequest = cloneDeep(updatedValue)
+    invokeAction("request-response.save")
   },
   { deep: true }
 )
