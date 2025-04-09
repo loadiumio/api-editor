@@ -24,12 +24,15 @@ import { Toaster } from "@hoppscotch/ui"
 import { useSetting } from "@composables/settings"
 import { applySetting, toggleSetting } from "~/newstore/settings"
 import { Environment, GlobalEnvironmentVariable } from "@hoppscotch/data"
-import { setGlobalEnvVariables } from "~/newstore/environments"
-import { clearRESTCollection } from "~/newstore/collections"
+import { globalEnv$, setGlobalEnvVariables } from "~/newstore/environments"
+import { clearRESTCollection, restCollections$ } from "~/newstore/collections"
 import { useService } from "dioc/vue"
 import { RESTTabService } from "~/services/tab/rest"
 import { getDefaultRESTRequest } from "@helpers/rest/default"
 import { fillRecordData } from "@helpers/utils/fillRecordData"
+import { useReadonlyStream } from "@composables/stream"
+import { getFiles } from "~/newstore/files"
+import { GlobalEnvironment } from "@hoppscotch/data/src"
 
 const t = useI18n()
 
@@ -70,6 +73,21 @@ const handleMessage = (event: MessageEvent) => {
   }
   if (event.data.record) {
     fillRecordData(event.data.record)
+  }
+  if (event.data.status === "GET_DATA") {
+    const myCollections = useReadonlyStream(restCollections$, [])
+    const globalEnvs = useReadonlyStream(globalEnv$, {} as GlobalEnvironment)
+    const csvItems = getFiles()
+    window.parent.postMessage(
+      {
+        status: "RECORD",
+        collections: JSON.stringify(myCollections.value, null, 2),
+        globalVariables: JSON.stringify(globalEnvs.value),
+        csvItems: JSON.stringify(csvItems.files),
+        action: event.data.action,
+      },
+      "*"
+    )
   }
 }
 
