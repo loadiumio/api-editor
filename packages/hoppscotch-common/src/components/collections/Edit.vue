@@ -2,7 +2,7 @@
   <HoppSmartModal
     v-if="show"
     dialog
-    :title="t('collection.edit')"
+    :title="t('script.edit')"
     @close="hideModal"
   >
     <template #body>

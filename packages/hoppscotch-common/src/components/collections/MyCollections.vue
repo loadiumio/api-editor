@@ -345,12 +345,19 @@
                   {{ t("script.import_or_create") }}
                 </span>
                 <div class="flex flex-col items-stretch gap-4">
+                  <HoppButtonPrimary
+                    :icon="IconImport"
+                    :label="t('import.title')"
+                    filled
+                    outline
+                    @click="emit('import-request')"
+                  />
                   <HoppButtonSecondary
                     :icon="IconPlus"
                     :label="t('add.new')"
                     filled
                     outline
-                    @click="emit('display-modal-add')"
+                    @click="emit('create-base-script')"
                   />
                 </div>
               </div>
@@ -359,8 +366,8 @@
           <HoppSmartPlaceholder
             v-else-if="node.data.type === 'collections'"
             :src="`/api-editor/images/states/${colorMode.value}/pack.svg`"
-            :alt="`${t('empty.thread_group')}`"
-            :text="t('empty.thread_group')"
+            :alt="`${t('empty.script')}`"
+            :text="t('empty.script')"
           >
             <template #body>
               <HoppButtonSecondary
@@ -481,6 +488,8 @@ type ResponsePayload = {
 
 const emit = defineEmits<{
   (event: "display-modal-add"): void
+  (event: "create-base-script"): void
+  (event: "import-request"): void
   (
     event: "add-request",
     payload: {
