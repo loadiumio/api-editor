@@ -138,18 +138,6 @@
                     "
                   />
                   <HoppSmartItem
-                    ref="exportAction"
-                    :icon="IconDownload"
-                    :label="t('export.title')"
-                    :loading="exportLoading"
-                    @click="
-                      () => {
-                        emit('export-data'),
-                          collectionsType === 'my-collections' ? hide() : null
-                      }
-                    "
-                  />
-                  <HoppSmartItem
                     ref="deleteAction"
                     :icon="IconTrash2"
                     :label="t('action.delete')"
@@ -197,7 +185,6 @@ import {
 } from "~/newstore/reordering"
 import IconCheckCircle from "~icons/lucide/check-circle"
 import IconCopy from "~icons/lucide/copy"
-import IconDownload from "~icons/lucide/download"
 import IconEdit from "~icons/lucide/edit"
 import IconFilePlus from "~icons/lucide/file-plus"
 import IconFolder from "~icons/lucide/folder"
@@ -268,7 +255,6 @@ const requestAction = ref<HTMLButtonElement | null>(null)
 const edit = ref<HTMLButtonElement | null>(null)
 const duplicateAction = ref<HTMLButtonElement | null>(null)
 const deleteAction = ref<HTMLButtonElement | null>(null)
-const exportAction = ref<HTMLButtonElement | null>(null)
 const options = ref<TippyComponent | null>(null)
 const sleepAction = ref<HTMLButtonElement | null>(null)
 

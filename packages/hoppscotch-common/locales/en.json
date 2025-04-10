@@ -770,7 +770,7 @@
     "title": "Request",
     "type": "Request type",
     "url": "URL",
-    "url_placeholder": "Enter a URL or paste a cURL command",
+    "url_placeholder": "https://example.com/",
     "variables": "Variables",
     "view_my_links": "View my links",
     "generate_name_error": "Failed to generate request name.",
@@ -1363,6 +1363,7 @@
   "script": {
     "import_or_create": "Import or create a script",
     "choose_import_or_create_left": "Choose, Import or Create a new request from the left menu",
-    "new": "New Script"
+    "new": "New Script",
+    "edit": "Edit Script"
   }
 }

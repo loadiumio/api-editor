@@ -75,6 +75,8 @@
       @update-request-order="updateRequestOrder"
       @update-collection-order="updateCollectionOrder"
       @add-sleep="addSleep"
+      @create-base-script="createBaseScript"
+      @import-request="importRequest"
     />
     <CollectionsTeamCollections
       v-else
@@ -810,6 +812,27 @@ const addSleep = (payload: {
   editingFolder.value = folder
   editingFolderPath.value = path
   onAddSleep()
+}
+
+const createBaseScript = () => {
+  const baseRequest = getDefaultRESTRequest()
+  baseRequest.name = "Request1"
+  addRESTCollection(
+    makeCollection({
+      name: "Script",
+      folders: [],
+      requests: [baseRequest],
+      headers: [],
+      auth: {
+        authType: "none",
+        authActive: true,
+      },
+    })
+  )
+}
+
+const importRequest = () => {
+  window.parent.postMessage({ status: "IMPORT" }, "*")
 }
 
 const requestContext = computed(() => {
