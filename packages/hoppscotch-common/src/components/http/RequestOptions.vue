@@ -54,6 +54,7 @@
       v-if="properties?.includes('requestAssertions') ?? true"
       :id="'requestAssertions'"
       :label="`${t('tab.assertions')}`"
+      :info="`${newAssertionsCount}`"
     >
       <HttpRequestAssertions
         v-model:text-assertions="request.textAssertions"
@@ -66,6 +67,7 @@
       :id="'allVariables'"
       :label="`${t('tab.runtime_variables')}`"
       :align-last="true"
+      :info="`${newAvailableVariablesCount}`"
     >
       <HttpAvailableVariables :available-variables="availableVariables" />
     </HoppSmartTab>
@@ -79,7 +81,7 @@ import {
   HoppRESTResponseOriginalRequest,
 } from "@hoppscotch/data"
 import { useVModel } from "@vueuse/core"
-import { computed } from "vue"
+import { computed, watch } from "vue"
 import { defineActionHandler } from "~/helpers/actions"
 import { HoppInheritedProperty } from "~/helpers/types/HoppInheritedProperties"
 import { AggregateEnvironment } from "~/newstore/environments"
@@ -129,31 +131,59 @@ const changeOptionTab = (e: RESTOptionTabs) => {
 }
 
 const newActiveParamsCount = computed(() => {
-  const count = request.value.params.filter(
-    (x) => x.active && (x.key || x.value)
-  ).length
-
+  const count = request.value.params.filter((x) => x.key || x.value).length
   return count ? count : null
 })
 
 const newActiveHeadersCount = computed(() => {
-  const count = request.value.headers.filter(
-    (x) => x.active && (x.key || x.value)
-  ).length
-
+  const count = request.value.headers.filter((x) => x.key || x.value).length
   return count ? count : null
 })
 
 const newActiveRequestVariablesCount = computed(() => {
-  const count = request.value.requestVariables.filter(
-    (x) => x.active && (x.key || x.value)
-  ).length
+  let count = request.value.jsonPathVariables.filter((x) => x.varName || x.expression).length
+  count += request.value.regexVariables.filter((x) => x.varName || x.expression).length
+  count += request.value.cssSelectorVariables.filter((x) => x.varName || x.expression).length
+  return count ? count : null
+})
+
+const newAssertionsCount = computed(() => {
+  let count = request.value.textAssertions.filter((x) => x.value).length
+  count += request.value.jsonPathValueAssertions.filter((x) => x.value).length
+  count += request.value.jsonPathAssertions.filter((x) => x.expression).length
+  return count ? count : null
+})
+
+const newAvailableVariablesCount = computed(() => {
+  let count = props.availableVariables.jsonPathVariables.length
+  count += props.availableVariables.regexVariables.length
+  count += props.availableVariables.cssSelectorVariables.length
   return count ? count : null
 })
 
 const isBodyFilled = computed(() => {
   return Boolean(request.value.body.body && request.value.body.body.length > 0)
 })
+
+watch(
+  () => request.value.params,
+  () => {
+    const baseUrl = request.value.endpoint?.split("?")[0] || ""
+    const searchParams = new URLSearchParams()
+
+    request.value.params.forEach((param: { key: string; value: string }) => {
+      const key = param.key ?? ""
+      const value = param.value ?? ""
+      if (key || value) {
+        searchParams.append(key, value)
+      }
+    })
+
+    const queryString = searchParams.toString()
+
+    request.value.endpoint = queryString ? `${baseUrl}?${queryString}` : baseUrl
+  }
+)
 
 defineActionHandler("request.open-tab", ({ tab }) => {
   selectedOptionTab.value = tab as RESTOptionTabs

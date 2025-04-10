@@ -303,7 +303,6 @@ const saveRequest = () => {
   const saveCtx = tab.value.document.saveContext
 
   if (!saveCtx) {
-    console.log(tab.value.document)
     tabs.closeTab(tab.value.id)
     return
   }

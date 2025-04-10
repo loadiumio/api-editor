@@ -52,14 +52,6 @@
             class="flex flex-shrink-0 items-center justify-between border-b border-dividerLight bg-primary pl-4"
           >
             <span>{{ t("collection_runner.collection_id") }}</span>
-
-            <!--<HoppButtonSecondary
-              v-tippy="{ theme: 'tooltip' }"
-              to="https://docs.hoppscotch.io/documentation/clients/cli/overview#running-collections-present-on-the-api-client"
-              blank
-              :title="t('app.wiki')"
-              :icon="IconHelpCircle"
-            />-->
           </div>
 
           <div class="p-4">
@@ -136,7 +128,6 @@ import { copyToClipboard } from "~/helpers/utils/clipboard"
 import { PersistenceService } from "~/services/persistence"
 import IconCheck from "~icons/lucide/check"
 import IconCopy from "~icons/lucide/copy"
-import IconHelpCircle from "~icons/lucide/help-circle"
 import { RESTOptionTabs } from "../http/RequestOptions.vue"
 
 const persistenceService = useService(PersistenceService)
