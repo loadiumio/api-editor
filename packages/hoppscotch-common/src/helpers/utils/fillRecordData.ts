@@ -23,7 +23,7 @@ export function fillRecordData(record: any) {
   if (filteredCollections.length === 0) return
   filteredCollections.forEach((collection: any) => {
     const requestList: HoppRESTRequest[] = []
-    collection.items?.forEach((request: any) => {
+    collection.items?.forEach((request: any, index: number) => {
       if (request.type === "SLEEP") {
         const newSleep: HoppRESTRequest = {
           ...getDefaultRESTRequest(),
@@ -41,7 +41,7 @@ export function fillRecordData(record: any) {
       } else {
         const newRequest: HoppRESTRequest = {
           ...getDefaultRESTRequest(),
-          name: request.data.name ? request.data.name : "-",
+          name: request.data.name ? request.data.name : `Request ${index + 1}`,
           endpoint: request.data.url,
           method: request.data.method,
           params: request.data.queryParameters,
