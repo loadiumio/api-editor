@@ -398,7 +398,7 @@
 
 <script setup lang="ts">
 import IconPlus from "~icons/lucide/plus"
-import IconImport from "~icons/lucide/folder-down"
+import IconImport from "~icons/lucide/folder-up"
 import { HoppCollection, HoppRESTRequest } from "@hoppscotch/data"
 import { computed, PropType, Ref, toRef } from "vue"
 import { GetMyTeamsQuery } from "~/helpers/backend/graphql"

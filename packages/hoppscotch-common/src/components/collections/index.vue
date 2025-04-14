@@ -816,7 +816,7 @@ const addSleep = (payload: {
 
 const createBaseScript = () => {
   const baseRequest = getDefaultRESTRequest()
-  baseRequest.name = "Request1"
+  baseRequest.name = "Request"
   addRESTCollection(
     makeCollection({
       name: "Script",
