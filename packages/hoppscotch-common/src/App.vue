@@ -39,6 +39,14 @@ const t = useI18n()
 const errorInfo = ref<ErrorPageData | null>(null)
 
 onMounted(() => {
+  const isInIframe = window.self !== window.top
+  if (!isInIframe) {
+    window.location.href =
+      import.meta.env.MODE === "development"
+        ? "https://loadbox4u.loadium.io/"
+        : "https://loadium.io/"
+    return
+  }
   window.addEventListener("message", handleMessage)
   const sidebarLeft = useSetting("SIDEBAR_ON_LEFT")
   if (!sidebarLeft.value) toggleSetting("SIDEBAR_ON_LEFT")

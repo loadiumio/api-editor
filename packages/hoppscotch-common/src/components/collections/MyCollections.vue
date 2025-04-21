@@ -354,7 +354,7 @@
                   />
                   <HoppButtonSecondary
                     :icon="IconPlus"
-                    :label="t('add.new')"
+                    :label="t('action.create')"
                     filled
                     outline
                     @click="emit('create-base-script')"
