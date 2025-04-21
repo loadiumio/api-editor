@@ -829,6 +829,13 @@ const createBaseScript = () => {
       },
     })
   )
+
+  selectRequest({
+    request: baseRequest,
+    folderPath: "0",
+    requestIndex: "0",
+    isActive: true,
+  })
 }
 
 const importRequest = () => {
