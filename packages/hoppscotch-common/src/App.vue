@@ -37,6 +37,7 @@ import { GlobalEnvironment } from "@hoppscotch/data/src"
 const t = useI18n()
 
 const errorInfo = ref<ErrorPageData | null>(null)
+let fallbackTimeout: any
 
 onMounted(() => {
   window.addEventListener("message", handleMessage)
@@ -61,10 +62,14 @@ onMounted(() => {
   })
   tabs.closeOtherTabs(defaultTab.id)
   window.parent.postMessage({ status: "READY" }, "*")
+  fallbackTimeout = setTimeout(() => {
+    window.location.href = "https://loadium.io/"
+  }, 3000)
 })
 
 onBeforeUnmount(() => {
   window.removeEventListener("message", handleMessage)
+  clearTimeout(fallbackTimeout)
 })
 
 const handleMessage = (event: MessageEvent) => {
