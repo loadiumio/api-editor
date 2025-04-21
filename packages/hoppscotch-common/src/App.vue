@@ -75,6 +75,7 @@ onBeforeUnmount(() => {
 const handleMessage = (event: MessageEvent) => {
   if (event.data.theme) {
     applySetting("BG_COLOR", event.data.theme === "dark" ? "dark" : "light")
+    clearTimeout(fallbackTimeout)
   }
   if (event.data.record) {
     fillRecordData(event.data.record)
