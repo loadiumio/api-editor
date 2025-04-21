@@ -37,9 +37,13 @@ import { GlobalEnvironment } from "@hoppscotch/data/src"
 const t = useI18n()
 
 const errorInfo = ref<ErrorPageData | null>(null)
-let fallbackTimeout: any
 
 onMounted(() => {
+  const isInIframe = window.self !== window.top
+  if (!isInIframe) {
+    window.location.href = "https://loadium.io/"
+    return
+  }
   window.addEventListener("message", handleMessage)
   const sidebarLeft = useSetting("SIDEBAR_ON_LEFT")
   if (!sidebarLeft.value) toggleSetting("SIDEBAR_ON_LEFT")
@@ -62,20 +66,15 @@ onMounted(() => {
   })
   tabs.closeOtherTabs(defaultTab.id)
   window.parent.postMessage({ status: "READY" }, "*")
-  fallbackTimeout = setTimeout(() => {
-    window.location.href = "https://loadium.io/"
-  }, 3000)
 })
 
 onBeforeUnmount(() => {
   window.removeEventListener("message", handleMessage)
-  clearTimeout(fallbackTimeout)
 })
 
 const handleMessage = (event: MessageEvent) => {
   if (event.data.theme) {
     applySetting("BG_COLOR", event.data.theme === "dark" ? "dark" : "light")
-    clearTimeout(fallbackTimeout)
   }
   if (event.data.record) {
     fillRecordData(event.data.record)
