@@ -13,5 +13,4 @@ if [ "$ENABLE_SUBPATH_BASED_ACCESS" = "true" ]; then
 else
   curlCheck "http://localhost:3000" || exit 1
   curlCheck "http://localhost:3100" || exit 1
-  curlCheck "http://localhost:3170/ping" || exit 1
 fi
