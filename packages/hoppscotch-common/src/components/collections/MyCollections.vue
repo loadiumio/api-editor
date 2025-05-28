@@ -350,6 +350,7 @@
                     :label="t('import.title')"
                     filled
                     outline
+                    style="background-color: #ff481d; border-color: #ff481d"
                     @click="emit('import-request')"
                   />
                   <HoppButtonSecondary
