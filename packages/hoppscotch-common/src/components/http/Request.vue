@@ -63,6 +63,11 @@
         />
       </div>
     </div>
+    <HttpImportCurl
+      :text="curlText"
+      :show="showCurlImportModal"
+      @hide-modal="showCurlImportModal = false"
+    />
     <CollectionsSaveRequest
       v-if="showSaveRequestModal"
       mode="rest"
@@ -120,9 +125,12 @@ const newMethod = computed(() => {
 const loading = ref(false)
 
 const showSaveRequestModal = ref(false)
+const showCurlImportModal = ref(false)
 
 // Template refs
 const methodTippyActions = ref<any | null>(null)
+
+const curlText = ref("")
 
 const history = useReadonlyStream<RESTHistoryEntry[]>(restHistory$, [])
 
@@ -213,8 +221,9 @@ const onPasteUrl = (e: { pastedValue: string; prevValue: string }) => {
   if (!e) return
 
   const pastedData = e.pastedValue
-
   if (isCURL(pastedData)) {
+    showCurlImportModal.value = true
+    curlText.value = pastedData
     tab.value.document.request.endpoint = e.prevValue
   }
 }
@@ -367,6 +376,10 @@ defineActionHandler("request.method.post", () => updateMethod("POST"))
 defineActionHandler("request.method.put", () => updateMethod("PUT"))
 defineActionHandler("request.method.delete", () => updateMethod("DELETE"))
 defineActionHandler("request.method.head", () => updateMethod("HEAD"))
+
+defineActionHandler("request.import-curl", () => {
+  showCurlImportModal.value = true
+})
 
 const isCustomMethod = computed(() => {
   return (

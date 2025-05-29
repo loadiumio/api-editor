@@ -84,7 +84,6 @@ import IconWrapText from "~icons/lucide/wrap-text"
 import IconClipboard from "~icons/lucide/clipboard"
 import IconCheck from "~icons/lucide/check"
 import IconTrash2 from "~icons/lucide/trash-2"
-import { platform } from "~/platform"
 import { RESTTabService } from "~/services/tab/rest"
 import { useService } from "dioc/vue"
 import { useNestedSetting } from "~/composables/settings"
@@ -143,13 +142,10 @@ const handleImport = () => {
   try {
     const req = parseCurlToHoppRESTReq(text)
 
-    platform.analytics?.logEvent({
-      type: "HOPP_REST_IMPORT_CURL",
-    })
-
     if (tabs.currentActiveTab.value.document.type === "example-response") return
-
+    const requestName = tabs.currentActiveTab.value.document.request?.name
     tabs.currentActiveTab.value.document.request = req
+    tabs.currentActiveTab.value.document.request.name = requestName ?? "Request"
   } catch (e) {
     console.error(e)
     toast.error(`${t("error.curl_invalid_format")}`)
