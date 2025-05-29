@@ -203,5 +203,11 @@ export const parseCurlCommand = (curlCommand: string) => {
     body: finalBody,
     requestVariables: defaultRESTReq.requestVariables,
     responses: {},
+    jsonPathVariables: [],
+    regexVariables: [],
+    cssSelectorVariables: [],
+    textAssertions: [],
+    jsonPathValueAssertions: [],
+    jsonPathAssertions: [],
   })
 }
