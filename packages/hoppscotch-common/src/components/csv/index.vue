@@ -51,6 +51,7 @@
                         :label="t('import.upload_title')"
                         filled
                         outline
+                        style="background-color: #ff481d; border-color: #ff481d"
                         @click="displayModalImport(true)"
                       />
                     </div>
