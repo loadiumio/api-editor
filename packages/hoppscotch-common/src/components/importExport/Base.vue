@@ -120,6 +120,9 @@ const chooseImporterOrExporter = defineStep(
         selectedExporter.action()
       }
     },
+    "onLoadium-selected": () => {
+      window.parent.postMessage({ status: "LOADIUM_RECORDER" }, "*")
+    },
   })
 )
 

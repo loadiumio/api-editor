@@ -600,7 +600,10 @@ const HARImporter: ImporterOrExporter = {
 }
 
 const importerModules = computed(() => {
-  const enabledImporters = [HoppPostmanImporter, HARImporter]
+  const enabledImporters = [
+    HoppPostmanImporter,
+    HARImporter,
+  ]
 
   const isTeams = props.collectionsType.type === "team-collections"
 

@@ -13,6 +13,9 @@ import DispatchingStore, {
   defineDispatchers,
 } from "~/newstore/DispatchingStore"
 import { SecretEnvironmentService } from "~/services/secret-environment.service"
+import { ref } from "vue"
+
+export const globalEnvTracker = ref(0)
 
 export type SelectedEnvironmentIndex =
   | { type: "NO_ENV_SELECTED" }

@@ -30,7 +30,8 @@ import {
 import { stringArrayJoin } from "~/helpers/functional/array"
 import { PMRawLanguage } from "~/types/pm-coll-exts"
 import { IMPORTER_INVALID_FILE_FORMAT } from "."
-import { HoppRESTRequestResponses } from "@hoppscotch/data"
+import { addGlobalEnvVariable, globalEnvTracker } from "~/newstore/environments"
+import {addRESTCollection} from "~/newstore/collections";
 
 const safeParseJSON = (jsonStr: string) => O.tryCatch(() => JSON.parse(jsonStr))
 
@@ -88,8 +89,8 @@ const getHoppReqHeaders = (
       const description = parseDescription(header.description)
 
       return <HoppRESTHeader>{
-        key: replacePMVarTemplating(header.key),
-        value: replacePMVarTemplating(header.value),
+        key: header.key,
+        value: header.value,
         active: !header.disabled,
         description,
       }
@@ -112,8 +113,8 @@ const getHoppReqParams = (
         const description = parseDescription(param.description)
 
         return <HoppRESTHeader>{
-          key: replacePMVarTemplating(param.key),
-          value: replacePMVarTemplating(param.value ?? ""),
+          key: param.key,
+          value: param.value ?? "",
           active: !param.disabled,
           description,
         }
@@ -137,8 +138,8 @@ const getHoppReqVariables = (
       ),
       A.map((variable) => {
         return <HoppRESTRequestVariable>{
-          key: replacePMVarTemplating(variable.key ?? ""),
-          value: replacePMVarTemplating(variable.value ?? ""),
+          key: variable.key ?? "",
+          value: variable.value ?? "",
           active: !variable.disabled,
         }
       })
@@ -146,7 +147,7 @@ const getHoppReqVariables = (
   }
 }
 
-const getHoppResponses = (
+/*const getHoppResponses = (
   responses: Item["responses"]
 ): HoppRESTRequestResponses => {
   return Object.fromEntries(
@@ -184,7 +185,7 @@ const getHoppResponses = (
       })
     )
   )
-}
+}*/
 
 type PMRequestAuthDef<
   AuthType extends
@@ -212,21 +213,15 @@ const getHoppReqAuth = (
     return {
       authType: "basic",
       authActive: true,
-      username: replacePMVarTemplating(
-        getVariableValue(auth.basic, "username") ?? ""
-      ),
-      password: replacePMVarTemplating(
-        getVariableValue(auth.basic, "password") ?? ""
-      ),
+      username: getVariableValue(auth.basic, "username") ?? "",
+      password: getVariableValue(auth.basic, "password") ?? "",
     }
   } else if (auth.type === "apikey") {
     return {
       authType: "api-key",
       authActive: true,
-      key: replacePMVarTemplating(getVariableValue(auth.apikey, "key") ?? ""),
-      value: replacePMVarTemplating(
-        getVariableValue(auth.apikey, "value") ?? ""
-      ),
+      key: getVariableValue(auth.apikey, "key") ?? "",
+      value: getVariableValue(auth.apikey, "value") ?? "",
       addTo:
         (getVariableValue(auth.apikey, "in") ?? "query") === "query"
           ? "QUERY_PARAMS"
@@ -236,26 +231,14 @@ const getHoppReqAuth = (
     return {
       authType: "bearer",
       authActive: true,
-      token: replacePMVarTemplating(
-        getVariableValue(auth.bearer, "token") ?? ""
-      ),
+      token: getVariableValue(auth.bearer, "token") ?? "",
     }
   } else if (auth.type === "oauth2") {
-    const accessTokenURL = replacePMVarTemplating(
-      getVariableValue(auth.oauth2, "accessTokenUrl") ?? ""
-    )
-    const authURL = replacePMVarTemplating(
-      getVariableValue(auth.oauth2, "authUrl") ?? ""
-    )
-    const clientId = replacePMVarTemplating(
-      getVariableValue(auth.oauth2, "clientId") ?? ""
-    )
-    const scope = replacePMVarTemplating(
-      getVariableValue(auth.oauth2, "scope") ?? ""
-    )
-    const token = replacePMVarTemplating(
-      getVariableValue(auth.oauth2, "accessToken") ?? ""
-    )
+    const accessTokenURL = getVariableValue(auth.oauth2, "accessTokenUrl") ?? ""
+    const authURL = getVariableValue(auth.oauth2, "authUrl") ?? ""
+    const clientId = getVariableValue(auth.oauth2, "clientId") ?? ""
+    const scope = getVariableValue(auth.oauth2, "scope") ?? ""
+    const token = getVariableValue(auth.oauth2, "accessToken") ?? ""
 
     return {
       authType: "oauth-2",
@@ -294,10 +277,8 @@ const getHoppReqBody = ({
         A.map(
           (param) =>
             <FormDataKeyValue>{
-              key: replacePMVarTemplating(param.key),
-              value: replacePMVarTemplating(
-                param.type === "text" ? String(param.value) : ""
-              ),
+              key: param.key,
+              value: param.type === "text" ? String(param.value) : "",
               active: !param.disabled,
               isFile: false, // TODO: Preserve isFile state ?
             }
@@ -309,12 +290,7 @@ const getHoppReqBody = ({
       contentType: "application/x-www-form-urlencoded",
       body: pipe(
         body.urlencoded?.all() ?? [],
-        A.map(
-          (param) =>
-            `${replacePMVarTemplating(
-              param.key ?? ""
-            )}: ${replacePMVarTemplating(String(param.value ?? ""))}`
-        ),
+        A.map((param) => `${param.key ?? ""}: ${String(param.value ?? "")}`),
         stringArrayJoin("\n")
       ),
     }
@@ -353,9 +329,7 @@ const getHoppReqBody = ({
       ),
 
       // Extract and parse body
-      O.bind("body", () =>
-        pipe(body.raw, O.fromNullable, O.map(replacePMVarTemplating))
-      ),
+      O.bind("body", () => pipe(body.raw, O.fromNullable)),
 
       // Return null content-type if failed, else return parsed
       O.match(
@@ -381,11 +355,7 @@ const getHoppReqBody = ({
 
 const getHoppReqURL = (url: Item["request"]["url"] | null): string => {
   if (!url) return ""
-  return pipe(
-    url.toString(false),
-    S.replace(/\?.+/g, ""),
-    replacePMVarTemplating
-  )
+  return pipe(url.toString(false), S.replace(/\?.+/g, ""))
 }
 
 const getHoppRequest = (item: Item): HoppRESTRequest => {
@@ -401,11 +371,16 @@ const getHoppRequest = (item: Item): HoppRESTRequest => {
       headers: item.request.headers,
     }),
     requestVariables: getHoppReqVariables(item.request.url.variables),
-    responses: getHoppResponses(item.responses),
-
-    // TODO: Decide about this
+    // responses: getHoppResponses(item.responses),
+    responses: {},
     preRequestScript: "",
     testScript: "",
+    jsonPathVariables: [],
+    regexVariables: [],
+    cssSelectorVariables: [],
+    textAssertions: [],
+    jsonPathValueAssertions: [],
+    jsonPathAssertions: [],
   })
 }
 
@@ -423,6 +398,24 @@ const getHoppFolder = (ig: ItemGroup<Item>): HoppCollection =>
   })
 
 export const getHoppCollections = (collections: PMCollection[]) => {
+  const importedVariables: VariableDefinition[] = []
+  collections.forEach((collection) => {
+    importedVariables.push(collection.variables.members)
+  })
+
+  importedVariables.forEach((variable) => {
+    if (variable.key !== undefined && variable.key !== "") {
+      const globalVariable = {
+        value: variable.value as string,
+        key: variable.key,
+        secret: false,
+        description: "",
+      }
+      addGlobalEnvVariable(globalVariable)
+    }
+    globalEnvTracker.value++
+  })
+  //addRESTCollection(collections)
   return collections.map(getHoppFolder)
 }
 

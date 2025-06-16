@@ -32,28 +32,28 @@ export const segmentedContentTypes: SegmentedContentType[] = [
     title: "request.content_type_titles.text",
     contentTypes: [
       "application/json",
-      /*"application/ld+json",
+      "application/ld+json",
       "application/hal+json",
       "application/vnd.api+json",
       "application/xml",
-      "text/xml",*/
+      "text/xml",
     ],
   },
   {
     title: "request.content_type_titles.structured",
     contentTypes: [
       "application/x-www-form-urlencoded",
-      /*"multipart/form-data"*/
+      "multipart/form-data"
     ],
   },
-  /*{
+  {
     title: "request.content_type_titles.binary",
     contentTypes: ["application/octet-stream"],
-  },*/
+  },
   {
     title: "request.content_type_titles.others",
     contentTypes: [
-      /*"text/html",*/
+      "text/html",
       "text/plain",
     ],
   },
