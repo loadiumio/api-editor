@@ -400,7 +400,7 @@ const getHoppFolder = (ig: ItemGroup<Item>): HoppCollection =>
 export const getHoppCollections = (collections: PMCollection[]) => {
   const importedVariables: VariableDefinition[] = []
   collections.forEach((collection) => {
-    importedVariables.push(collection.variables.members)
+    importedVariables.push(...collection.variables.members)
   })
 
   importedVariables.forEach((variable) => {
@@ -415,7 +415,6 @@ export const getHoppCollections = (collections: PMCollection[]) => {
     }
     globalEnvTracker.value++
   })
-  //addRESTCollection(collections)
   return collections.map(getHoppFolder)
 }
 
