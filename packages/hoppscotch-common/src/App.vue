@@ -83,7 +83,7 @@ const handleMessage = (event: MessageEvent) => {
     fillRecordData(event.data.record)
   }
   if (event.data.status === "GET_DATA") {
-    const myCollections = useReadonlyStream(restCollections$, [])
+    const myCollections = useReadonlyStream(restCollections$, [], "deep")
     const globalEnvs = useReadonlyStream(globalEnv$, {} as GlobalEnvironment)
     const csvItems = getFiles()
     window.parent.postMessage(

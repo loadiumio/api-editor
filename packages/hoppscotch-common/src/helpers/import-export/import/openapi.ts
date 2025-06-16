@@ -798,7 +798,7 @@ const convertPathToHoppReqs = (
             (info.parameters as OpenAPIParamsType[] | undefined) ?? []
           ),
 
-          responses: parseOpenAPIResponses(doc, info, {
+          /*responses: parseOpenAPIResponses(doc, info, {
             name: info.operationId ?? info.summary ?? "Untitled Request",
             auth: parseOpenAPIAuth(doc, info),
             body: parseOpenAPIBody(doc, info),
@@ -815,7 +815,14 @@ const convertPathToHoppReqs = (
               (info.parameters as OpenAPIParamsType[] | undefined) ?? []
             ),
             v: "3",
-          }),
+          }),*/
+          responses: {},
+          jsonPathVariables: [],
+          regexVariables: [],
+          cssSelectorVariables: [],
+          textAssertions: [],
+          jsonPathValueAssertions: [],
+          jsonPathAssertions: [],
         }),
         metadata: {
           tags: info.tags ?? [],

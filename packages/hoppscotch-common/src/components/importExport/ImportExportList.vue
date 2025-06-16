@@ -8,12 +8,16 @@
         :label="t(`${importer.name}`)"
         @click="emit('importer-selected', importer.id)"
       />
+      <HoppSmartItem
+        :label="t('import.from_loadium')"
+        :icon="IconBlocks"
+        @click="emit('loadium-selected')"
+      />
     </div>
     <hr />
     <div class="flex flex-col space-y-2">
       <template v-for="exporter in exporters" :key="exporter.id">
         <!-- adding the title to a span if the item is visible, otherwise the title won't be shown -->
-
         <span
           v-if="exporter.disabled && exporter.title"
           v-tippy="{ theme: 'tooltip' }"
@@ -48,6 +52,7 @@
 <script setup lang="ts">
 import { useI18n } from "@composables/i18n"
 import { Component } from "vue"
+import IconBlocks from "~icons/lucide/blocks"
 
 const t = useI18n()
 
@@ -69,5 +74,6 @@ defineProps<{
 const emit = defineEmits<{
   (e: "importer-selected", importerID: string): void
   (e: "exporter-selected", exporterID: string): void
+  (e: "loadium-selected"): void
 }>()
 </script>
