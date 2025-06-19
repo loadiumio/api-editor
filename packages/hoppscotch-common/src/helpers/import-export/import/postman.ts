@@ -30,16 +30,18 @@ import {
 import { stringArrayJoin } from "~/helpers/functional/array"
 import { PMRawLanguage } from "~/types/pm-coll-exts"
 import { IMPORTER_INVALID_FILE_FORMAT } from "."
-import { addGlobalEnvVariable, globalEnvTracker } from "~/newstore/environments"
-import {addRESTCollection} from "~/newstore/collections";
+import {
+  addGlobalEnvVariable,
+  globalEnvTracker,
+} from "~/newstore/environments"
 
 const safeParseJSON = (jsonStr: string) => O.tryCatch(() => JSON.parse(jsonStr))
 
 const isPMItem = (x: unknown): x is Item => Item.isItem(x)
 
 const replacePMVarTemplating = flow(
-  S.replace(/{{\s*/g, "<<"),
-  S.replace(/\s*}}/g, ">>")
+  S.replace(/{{\s*/g, "${"),
+  S.replace(/\s*}}/g, "}")
 )
 
 const PMRawLanguageOptionsToContentTypeMap: Record<
@@ -113,8 +115,8 @@ const getHoppReqParams = (
         const description = parseDescription(param.description)
 
         return <HoppRESTHeader>{
-          key: param.key,
-          value: param.value ?? "",
+          key: replacePMVarTemplating(param.key),
+          value: replacePMVarTemplating(param.value ?? ""),
           active: !param.disabled,
           description,
         }
@@ -138,8 +140,8 @@ const getHoppReqVariables = (
       ),
       A.map((variable) => {
         return <HoppRESTRequestVariable>{
-          key: variable.key ?? "",
-          value: variable.value ?? "",
+          key: replacePMVarTemplating(variable.key ?? ""),
+          value: replacePMVarTemplating(variable.value ?? ""),
           active: !variable.disabled,
         }
       })
@@ -213,15 +215,21 @@ const getHoppReqAuth = (
     return {
       authType: "basic",
       authActive: true,
-      username: getVariableValue(auth.basic, "username") ?? "",
-      password: getVariableValue(auth.basic, "password") ?? "",
+      username: replacePMVarTemplating(
+        getVariableValue(auth.basic, "username") ?? ""
+      ),
+      password: replacePMVarTemplating(
+        getVariableValue(auth.basic, "password") ?? ""
+      ),
     }
   } else if (auth.type === "apikey") {
     return {
       authType: "api-key",
       authActive: true,
-      key: getVariableValue(auth.apikey, "key") ?? "",
-      value: getVariableValue(auth.apikey, "value") ?? "",
+      key: replacePMVarTemplating(getVariableValue(auth.apikey, "key") ?? ""),
+      value: replacePMVarTemplating(
+        getVariableValue(auth.apikey, "value") ?? ""
+      ),
       addTo:
         (getVariableValue(auth.apikey, "in") ?? "query") === "query"
           ? "QUERY_PARAMS"
@@ -231,14 +239,26 @@ const getHoppReqAuth = (
     return {
       authType: "bearer",
       authActive: true,
-      token: getVariableValue(auth.bearer, "token") ?? "",
+      token: replacePMVarTemplating(
+        getVariableValue(auth.bearer, "token") ?? ""
+      ),
     }
   } else if (auth.type === "oauth2") {
-    const accessTokenURL = getVariableValue(auth.oauth2, "accessTokenUrl") ?? ""
-    const authURL = getVariableValue(auth.oauth2, "authUrl") ?? ""
-    const clientId = getVariableValue(auth.oauth2, "clientId") ?? ""
-    const scope = getVariableValue(auth.oauth2, "scope") ?? ""
-    const token = getVariableValue(auth.oauth2, "accessToken") ?? ""
+    const accessTokenURL = replacePMVarTemplating(
+      getVariableValue(auth.oauth2, "accessTokenUrl") ?? ""
+    )
+    const authURL = replacePMVarTemplating(
+      getVariableValue(auth.oauth2, "authUrl") ?? ""
+    )
+    const clientId = replacePMVarTemplating(
+      getVariableValue(auth.oauth2, "clientId") ?? ""
+    )
+    const scope = replacePMVarTemplating(
+      getVariableValue(auth.oauth2, "scope") ?? ""
+    )
+    const token = replacePMVarTemplating(
+      getVariableValue(auth.oauth2, "accessToken") ?? ""
+    )
 
     return {
       authType: "oauth-2",
@@ -277,8 +297,10 @@ const getHoppReqBody = ({
         A.map(
           (param) =>
             <FormDataKeyValue>{
-              key: param.key,
-              value: param.type === "text" ? String(param.value) : "",
+              key: replacePMVarTemplating(param.key),
+              value: replacePMVarTemplating(
+                param.type === "text" ? String(param.value) : ""
+              ),
               active: !param.disabled,
               isFile: false, // TODO: Preserve isFile state ?
             }
@@ -290,7 +312,12 @@ const getHoppReqBody = ({
       contentType: "application/x-www-form-urlencoded",
       body: pipe(
         body.urlencoded?.all() ?? [],
-        A.map((param) => `${param.key ?? ""}: ${String(param.value ?? "")}`),
+        A.map(
+          (param) =>
+            `${replacePMVarTemplating(
+              param.key ?? ""
+            )}: ${replacePMVarTemplating(String(param.value ?? ""))}`
+        ),
         stringArrayJoin("\n")
       ),
     }
@@ -329,7 +356,9 @@ const getHoppReqBody = ({
       ),
 
       // Extract and parse body
-      O.bind("body", () => pipe(body.raw, O.fromNullable)),
+      O.bind("body", () =>
+        pipe(body.raw, O.fromNullable, O.map(replacePMVarTemplating))
+      ),
 
       // Return null content-type if failed, else return parsed
       O.match(
@@ -355,7 +384,11 @@ const getHoppReqBody = ({
 
 const getHoppReqURL = (url: Item["request"]["url"] | null): string => {
   if (!url) return ""
-  return pipe(url.toString(false), S.replace(/\?.+/g, ""))
+  return pipe(
+    url.toString(false),
+    S.replace(/\?.+/g, ""),
+    replacePMVarTemplating
+  )
 }
 
 const getHoppRequest = (item: Item): HoppRESTRequest => {
@@ -365,7 +398,7 @@ const getHoppRequest = (item: Item): HoppRESTRequest => {
     method: item.request.method.toUpperCase(),
     headers: getHoppReqHeaders(item.request.headers),
     params: getHoppReqParams(item.request.url.query),
-    auth: getHoppReqAuth(item.request.auth),
+    auth: { authType: "none", authActive: true }, // getHoppReqAuth(item.request.auth),
     body: getHoppReqBody({
       body: item.request.body,
       headers: item.request.headers,
@@ -393,7 +426,7 @@ const getHoppFolder = (ig: ItemGroup<Item>): HoppCollection =>
       A.map(getHoppFolder)
     ),
     requests: pipe(ig.items.all(), A.filter(isPMItem), A.map(getHoppRequest)),
-    auth: getHoppReqAuth(ig.auth),
+    auth: { authType: "none", authActive: true }, //getHoppReqAuth(ig.auth),
     headers: [],
   })
 
