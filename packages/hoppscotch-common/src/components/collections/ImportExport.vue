@@ -354,6 +354,7 @@ const HoppPostmanImporter: ImporterOrExporter = {
         await handleImportToStore(res.right)
 
         setCurrentImportSummary(res.right)
+        window.parent.postMessage({ status: "CONVERTER" }, "*")
       } else {
         showImportFailedError()
 
@@ -587,6 +588,7 @@ const HARImporter: ImporterOrExporter = {
         await handleImportToStore(res.right)
 
         setCurrentImportSummary(res.right)
+        window.parent.postMessage({ status: "CONVERTER" }, "*")
       } else {
         showImportFailedError()
 
