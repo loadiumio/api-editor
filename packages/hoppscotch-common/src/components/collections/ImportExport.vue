@@ -289,6 +289,7 @@ const HoppOpenAPIImporter: ImporterOrExporter = {
             await handleImportToStore(res.right)
 
             setCurrentImportSummary(res.right)
+            window.parent.postMessage({ status: "CONVERTER" }, "*")
           } else {
             showImportFailedError()
 
@@ -316,6 +317,7 @@ const HoppOpenAPIImporter: ImporterOrExporter = {
             await handleImportToStore(res.right)
 
             setCurrentImportSummary(res.right)
+            window.parent.postMessage({ status: "CONVERTER" }, "*")
           } else {
             showImportFailedError()
 
@@ -605,6 +607,7 @@ const importerModules = computed(() => {
   const enabledImporters = [
     HoppPostmanImporter,
     HARImporter,
+    HoppOpenAPIImporter,
   ]
 
   const isTeams = props.collectionsType.type === "team-collections"

@@ -101,8 +101,8 @@ type OpenAPIOperationType =
 
 // Removes the OpenAPI Path Templating to the Hoppscotch Templating (<< ? >>)
 const replaceOpenApiPathTemplating = flow(
-  S.replace(/{/g, "<<"),
-  S.replace(/}/g, ">>")
+  S.replace(/{/g, "${"),
+  S.replace(/}/g, "}")
 )
 
 const parseOpenAPIParams = (params: OpenAPIParamsType[]): HoppRESTParam[] =>
