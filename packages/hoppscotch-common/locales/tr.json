@@ -356,6 +356,7 @@
   },
   "export": {
     "as_json": "JSON olarak dışa aktar",
+    "as_jmx": "JMX olarak dışa aktar",
     "create_secret_gist": "Gizli Gist oluştur",
     "create_secret_gist_tooltip_text": "Gizli Gist olarak dışa aktar",
     "failed": "Dışa aktarma sırasında bir şeyler ters gitti.",

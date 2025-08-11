@@ -34,3 +34,37 @@ export const initializeDownloadFile = async (
 
   return E.left("state.download_failed")
 }
+
+/**
+ * Create a downloadable JMX file from collections and prompts the user to download it.
+ * @param contentsXML - JMX XML string of the collections
+ * @param name - Name of the test plan set as the file name
+ * @returns {Promise<E.Right<string> | E.Left<string>>} - Returns a promise that resolves to an `Either` with `i18n` key for the status message
+ */
+export const initializeDownloadJMXFile = async (
+  contentsXML: string,
+  name: string | null
+) => {
+  const file = new Blob([contentsXML], { type: "application/xml" })
+  const url = URL.createObjectURL(file)
+
+  const fileName = name ?? url.split("/").pop()!.split("#")[0].split("?")[0]
+
+  const result = await platform.io.saveFileWithDialog({
+    data: contentsXML,
+    contentType: "application/xml",
+    suggestedFilename: `${fileName}.jmx`,
+    filters: [
+      {
+        name: "JMeter Test Plan",
+        extensions: ["jmx"],
+      },
+    ],
+  })
+
+  if (result.type === "unknown" || result.type === "saved") {
+    return E.right("state.download_started")
+  }
+
+  return E.left("state.download_failed")
+}

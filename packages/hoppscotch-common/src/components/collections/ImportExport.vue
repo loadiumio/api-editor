@@ -3,7 +3,7 @@
     ref="collections-import-export"
     modal-title="import.title"
     :importer-modules="importerModules"
-    :exporter-modules="[]"
+    :exporter-modules="exporterModules"
     @hide-modal="emit('hide-modal')"
   />
 </template>
@@ -48,10 +48,11 @@ import { getTeamCollectionJSON } from "~/helpers/backend/helpers"
 
 import { platform } from "~/platform"
 
-import { initializeDownloadFile } from "~/helpers/import-export/export"
+import { initializeDownloadFile, initializeDownloadJMXFile } from "~/helpers/import-export/export"
 import { gistExporter } from "~/helpers/import-export/export/gist"
 import { myCollectionsExporter } from "~/helpers/import-export/export/myCollections"
 import { teamCollectionsExporter } from "~/helpers/import-export/export/teamCollections"
+import { jmxCollectionsExporter } from "~/helpers/import-export/export/jmx"
 
 import { ImporterOrExporter } from "~/components/importExport/types"
 import { GistSource } from "~/helpers/import-export/import/import-sources/GistSource"
@@ -169,6 +170,7 @@ const emit = defineEmits<{
 const isHoppMyCollectionExporterInProgress = ref(false)
 const isHoppTeamCollectionExporterInProgress = ref(false)
 const isHoppGistCollectionExporterInProgress = ref(false)
+const isJMXExporterInProgress = ref(false)
 
 const currentImportSummary: Ref<{
   showImportSummary: boolean
@@ -563,6 +565,46 @@ const HoppGistCollectionsExporter: ImporterOrExporter = {
   },
 }
 
+const HoppJMXExporter: ImporterOrExporter = {
+  metadata: {
+    id: "hopp_jmx_exporter",
+    name: "export.as_jmx",
+    title: "Export as JMX",
+    icon: IconFile,
+    disabled: false,
+    applicableTo: ["personal-workspace", "team-workspace"],
+    isLoading: isJMXExporterInProgress,
+    format: "hoppscotch",
+  },
+  importSummary: currentImportSummary,
+  action: async () => {
+    if (!myCollections.value.length) {
+      return toast.error(t("error.no_scripts_to_export"))
+    }
+
+    isJMXExporterInProgress.value = true
+
+    try {
+      const jmxContent = jmxCollectionsExporter(myCollections.value)
+      const message = await initializeDownloadJMXFile(
+        jmxContent,
+        "loadium-test-plan"
+      )
+
+      if (E.isRight(message)) {
+        toast.success(t("state.download_started"))
+      } else {
+        toast.error(t(message.left))
+      }
+    } catch (error) {
+      toast.error("Failed to export as JMX")
+      console.error("JMX Export Error:", error)
+    }
+
+    isJMXExporterInProgress.value = false
+  },
+}
+
 const HARImporter: ImporterOrExporter = {
   metadata: {
     id: "har",
@@ -619,6 +661,7 @@ const exporterModules = computed(() => {
   const enabledExporters = [
     HoppMyCollectionsExporter,
     HoppTeamCollectionsExporter,
+    HoppJMXExporter,
   ]
 
   if (platform.platformFeatureFlags.exportAsGIST) {
