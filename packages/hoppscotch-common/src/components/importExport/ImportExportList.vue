@@ -9,6 +9,7 @@
         @click="emit('importer-selected', importer.id)"
       />
       <HoppSmartItem
+        v-if="!isUpload"
         :label="t('import.from_loadium')"
         :icon="IconBlocks"
         @click="emit('loadium-selected')"
@@ -66,10 +67,13 @@ type ImportExportEntryMeta = {
   isVisible?: boolean
 }
 
-defineProps<{
+const props = defineProps<{
   importers: ImportExportEntryMeta[]
   exporters: ImportExportEntryMeta[]
+  isUpload?: boolean
 }>()
+
+const { isUpload = false } = props
 
 const emit = defineEmits<{
   (e: "importer-selected", importerID: string): void
