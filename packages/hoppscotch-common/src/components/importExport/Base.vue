@@ -92,6 +92,7 @@ const chooseImporterOrExporter = defineStep(
       disabled: exporter.metadata.disabled,
       loading: exporter.metadata.isLoading?.value ?? false,
     })),
+    isUpload: props.isUpload,
     "onImporter-selected": (id: string) => {
       selectedImporterID.value = id
 
