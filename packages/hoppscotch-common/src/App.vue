@@ -9,6 +9,11 @@
     <ErrorPage v-if="errorInfo !== null" :error="errorInfo" />
     <RouterView v-else />
     <Toaster rich-colors />
+    <CollectionsImportExport
+      v-if="showModalImportExport"
+      :collections-type="collectionsType"
+      @hide-modal="displayModalImportExport(false)"
+    />
   </div>
 </template>
 
@@ -33,10 +38,23 @@ import { fillRecordData } from "@helpers/utils/fillRecordData"
 import { useReadonlyStream } from "@composables/stream"
 import { getFiles } from "~/newstore/files"
 import { GlobalEnvironment } from "@hoppscotch/data/src"
+import { TeamWorkspace } from "~/services/workspace.service"
 
 const t = useI18n()
 
+type CollectionType =
+  | {
+      type: "team-collections"
+      selectedTeam: TeamWorkspace
+    }
+  | { type: "my-collections"; selectedTeam: undefined }
+
 const errorInfo = ref<ErrorPageData | null>(null)
+const showModalImportExport = ref(false)
+const collectionsType = ref<CollectionType>({
+  type: "my-collections",
+  selectedTeam: undefined,
+})
 
 onMounted(() => {
   const isInIframe = window.self !== window.top
@@ -54,8 +72,9 @@ onMounted(() => {
   applySetting("THEME_COLOR", "orange")
 
   const globalEnv = {
-    name: "Global",
     v: 1,
+    id: "Global",
+    name: "Global",
     variables: [] as GlobalEnvironmentVariable[],
   } as Environment
   setGlobalEnvVariables(globalEnv)
@@ -82,8 +101,11 @@ const handleMessage = (event: MessageEvent) => {
   if (event.data.record) {
     fillRecordData(event.data.record)
   }
+  if (event.data.isConverter) {
+    displayModalImportExport(true)
+  }
   if (event.data.status === "GET_DATA") {
-    const myCollections = useReadonlyStream(restCollections$, [])
+    const myCollections = useReadonlyStream(restCollections$, [], "deep")
     const globalEnvs = useReadonlyStream(globalEnv$, {} as GlobalEnvironment)
     const csvItems = getFiles()
     window.parent.postMessage(
@@ -97,6 +119,10 @@ const handleMessage = (event: MessageEvent) => {
       "*"
     )
   }
+}
+
+const displayModalImportExport = (show: boolean) => {
+  showModalImportExport.value = show
 }
 
 // App Crash Handler

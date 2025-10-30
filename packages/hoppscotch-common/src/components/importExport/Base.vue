@@ -92,6 +92,7 @@ const chooseImporterOrExporter = defineStep(
       disabled: exporter.metadata.disabled,
       loading: exporter.metadata.isLoading?.value ?? false,
     })),
+    isUpload: props.isUpload,
     "onImporter-selected": (id: string) => {
       selectedImporterID.value = id
 
@@ -119,6 +120,9 @@ const chooseImporterOrExporter = defineStep(
       if (selectedExporter && selectedExporter.action) {
         selectedExporter.action()
       }
+    },
+    "onLoadium-selected": () => {
+      window.parent.postMessage({ status: "LOADIUM_RECORDER" }, "*")
     },
   })
 )

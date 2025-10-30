@@ -145,6 +145,7 @@
             </span>
             <span>
               <HoppButtonSecondary
+                v-if="header.source === 'body'"
                 v-tippy="{ theme: 'tooltip' }"
                 :icon="IconArrowUpRight"
                 :title="changeTabTooltip(header.source)"
@@ -287,7 +288,6 @@ import IconArrowUpRight from "~icons/lucide/arrow-up-right"
 import IconEdit from "~icons/lucide/edit"
 import IconEye from "~icons/lucide/eye"
 import IconEyeOff from "~icons/lucide/eye-off"
-import IconHelpCircle from "~icons/lucide/help-circle"
 import IconInfo from "~icons/lucide/info"
 import IconLock from "~icons/lucide/lock"
 import IconPlus from "~icons/lucide/plus"

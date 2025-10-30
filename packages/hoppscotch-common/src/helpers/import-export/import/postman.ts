@@ -30,15 +30,18 @@ import {
 import { stringArrayJoin } from "~/helpers/functional/array"
 import { PMRawLanguage } from "~/types/pm-coll-exts"
 import { IMPORTER_INVALID_FILE_FORMAT } from "."
-import { HoppRESTRequestResponses } from "@hoppscotch/data"
+import {
+  addGlobalEnvVariable,
+  globalEnvTracker,
+} from "~/newstore/environments"
 
 const safeParseJSON = (jsonStr: string) => O.tryCatch(() => JSON.parse(jsonStr))
 
 const isPMItem = (x: unknown): x is Item => Item.isItem(x)
 
 const replacePMVarTemplating = flow(
-  S.replace(/{{\s*/g, "<<"),
-  S.replace(/\s*}}/g, ">>")
+  S.replace(/{{\s*/g, "${"),
+  S.replace(/\s*}}/g, "}")
 )
 
 const PMRawLanguageOptionsToContentTypeMap: Record<
@@ -88,8 +91,8 @@ const getHoppReqHeaders = (
       const description = parseDescription(header.description)
 
       return <HoppRESTHeader>{
-        key: replacePMVarTemplating(header.key),
-        value: replacePMVarTemplating(header.value),
+        key: header.key,
+        value: header.value,
         active: !header.disabled,
         description,
       }
@@ -146,7 +149,7 @@ const getHoppReqVariables = (
   }
 }
 
-const getHoppResponses = (
+/*const getHoppResponses = (
   responses: Item["responses"]
 ): HoppRESTRequestResponses => {
   return Object.fromEntries(
@@ -184,7 +187,7 @@ const getHoppResponses = (
       })
     )
   )
-}
+}*/
 
 type PMRequestAuthDef<
   AuthType extends
@@ -395,17 +398,22 @@ const getHoppRequest = (item: Item): HoppRESTRequest => {
     method: item.request.method.toUpperCase(),
     headers: getHoppReqHeaders(item.request.headers),
     params: getHoppReqParams(item.request.url.query),
-    auth: getHoppReqAuth(item.request.auth),
+    auth: { authType: "none", authActive: true }, // getHoppReqAuth(item.request.auth),
     body: getHoppReqBody({
       body: item.request.body,
       headers: item.request.headers,
     }),
     requestVariables: getHoppReqVariables(item.request.url.variables),
-    responses: getHoppResponses(item.responses),
-
-    // TODO: Decide about this
+    // responses: getHoppResponses(item.responses),
+    responses: {},
     preRequestScript: "",
     testScript: "",
+    jsonPathVariables: [],
+    regexVariables: [],
+    cssSelectorVariables: [],
+    textAssertions: [],
+    jsonPathValueAssertions: [],
+    jsonPathAssertions: [],
   })
 }
 
@@ -418,11 +426,28 @@ const getHoppFolder = (ig: ItemGroup<Item>): HoppCollection =>
       A.map(getHoppFolder)
     ),
     requests: pipe(ig.items.all(), A.filter(isPMItem), A.map(getHoppRequest)),
-    auth: getHoppReqAuth(ig.auth),
+    auth: { authType: "none", authActive: true }, //getHoppReqAuth(ig.auth),
     headers: [],
   })
 
 export const getHoppCollections = (collections: PMCollection[]) => {
+  const importedVariables: VariableDefinition[] = []
+  collections.forEach((collection) => {
+    importedVariables.push(...collection.variables.members)
+  })
+
+  importedVariables.forEach((variable) => {
+    if (variable.key !== undefined && variable.key !== "") {
+      const globalVariable = {
+        value: variable.value as string,
+        key: variable.key,
+        secret: false,
+        description: "",
+      }
+      addGlobalEnvVariable(globalVariable)
+    }
+    globalEnvTracker.value++
+  })
   return collections.map(getHoppFolder)
 }
 

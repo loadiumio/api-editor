@@ -232,6 +232,12 @@ const getHoppRequest = (req: InsomniaRequestResource): HoppRESTRequest =>
 
     //insomnia doesn't have saved response
     responses: {},
+    jsonPathVariables: [],
+    regexVariables: [],
+    cssSelectorVariables: [],
+    textAssertions: [],
+    jsonPathValueAssertions: [],
+    jsonPathAssertions: [],
   })
 
 const getHoppFolder = (

@@ -14,6 +14,13 @@
         class="!rounded-none"
         @click="emit('display-modal-add')"
       />
+      <HoppButtonSecondary
+        v-if="!saveRequest"
+        v-tippy="{ theme: 'tooltip' }"
+        :icon="IconImport"
+        :title="t('modal.import_export')"
+        @click="emit('display-modal-import-export')"
+      />
     </div>
     <div class="flex flex-1 flex-col">
       <HoppSmartTree :adapter="myAdapter">
@@ -351,7 +358,7 @@
                     filled
                     outline
                     style="background-color: #ff481d; border-color: #ff481d"
-                    @click="emit('import-request')"
+                    @click="emit('display-modal-import-export')"
                   />
                   <HoppButtonSecondary
                     :icon="IconPlus"

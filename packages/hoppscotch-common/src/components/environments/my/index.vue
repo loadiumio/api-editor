@@ -104,7 +104,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, ComputedRef, onMounted } from "vue"
+import { ref, computed, ComputedRef, onMounted, watch } from "vue"
 import { environments$, getGlobalVariables } from "~/newstore/environments"
 import { useColorMode } from "~/composables/theming"
 import { useReadonlyStream } from "@composables/stream"
@@ -116,9 +116,11 @@ import { useToast } from "~/composables/toast"
 import * as A from "fp-ts/Array"
 import * as O from "fp-ts/Option"
 import { flow, pipe } from "fp-ts/function"
-import { uniqueID } from "~/helpers/utils/uniqueID"
 import { Environment } from "@hoppscotch/data"
-import { setGlobalEnvVariables } from "~/newstore/environments"
+import {
+  setGlobalEnvVariables,
+  globalEnvTracker,
+} from "~/newstore/environments"
 import IconTrash from "~icons/lucide/trash"
 
 const t = useI18n()
@@ -239,6 +241,25 @@ const nonSecretVars = computed(() =>
   )
 )
 
+watch(
+  globalEnvTracker,
+  () => {
+    vars.value = pipe(
+      workingEnv.value?.variables ?? [],
+      A.mapWithIndex((index, e) => ({
+        id: idTicker.value++,
+        env: {
+          key: e.key,
+          value: e.value,
+          secret: e.secret,
+          description: e.description,
+        },
+      }))
+    )
+  },
+  { deep: true, immediate: true }
+)
+
 const addEnvironmentVariable = () => {
   vars.value.push({
     id: idTicker.value++,
@@ -284,10 +305,9 @@ const saveEnvironment = () => {
     filteredVariables,
     A.map((e) => (e.secret ? { key: e.key, secret: e.secret } : e))
   )
-
   const environmentUpdated: Environment = {
     v: 1,
-    id: uniqueID(),
+    id: "Global",
     name: editingName.value,
     variables,
   }

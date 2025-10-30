@@ -101,8 +101,8 @@ type OpenAPIOperationType =
 
 // Removes the OpenAPI Path Templating to the Hoppscotch Templating (<< ? >>)
 const replaceOpenApiPathTemplating = flow(
-  S.replace(/{/g, "<<"),
-  S.replace(/}/g, ">>")
+  S.replace(/{/g, "${"),
+  S.replace(/}/g, "}")
 )
 
 const parseOpenAPIParams = (params: OpenAPIParamsType[]): HoppRESTParam[] =>
@@ -735,11 +735,11 @@ const parseOpenAPIUrl = (
    * Relevant v3 reference: https://swagger.io/specification/#server-object
    **/
   if (objectHasProperty(doc, "servers")) {
-    return doc.servers?.[0]?.url ?? "<<baseUrl>>"
+    return doc.servers?.[0]?.url ?? "${baseUrl}"
   }
 
   // If the document is neither v2 nor v3 then return a env variable as placeholder
-  return "<<baseUrl>>"
+  return "${baseUrl}"
 }
 
 const convertPathToHoppReqs = (
@@ -798,7 +798,7 @@ const convertPathToHoppReqs = (
             (info.parameters as OpenAPIParamsType[] | undefined) ?? []
           ),
 
-          responses: parseOpenAPIResponses(doc, info, {
+          /*responses: parseOpenAPIResponses(doc, info, {
             name: info.operationId ?? info.summary ?? "Untitled Request",
             auth: parseOpenAPIAuth(doc, info),
             body: parseOpenAPIBody(doc, info),
@@ -815,7 +815,14 @@ const convertPathToHoppReqs = (
               (info.parameters as OpenAPIParamsType[] | undefined) ?? []
             ),
             v: "3",
-          }),
+          }),*/
+          responses: {},
+          jsonPathVariables: [],
+          regexVariables: [],
+          cssSelectorVariables: [],
+          textAssertions: [],
+          jsonPathValueAssertions: [],
+          jsonPathAssertions: [],
         }),
         metadata: {
           tags: info.tags ?? [],

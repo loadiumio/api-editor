@@ -36,50 +36,71 @@ const availableVariables = ref({
   cssSelectorVariables: [] as any[],
 })
 
+const requestList = [] as any[]
+
 onMounted(() => {
   const collections = useReadonlyStream(restCollections$, [], "deep")
   const saveContext = cloneDeep(tab.value.document.saveContext)
   if (saveContext) {
-    const folderPathInt = parseInt(saveContext.folderPath, 10)
+    const folderPathValues = saveContext.folderPath.split("/").map(Number)
     const requestIndexInt = parseInt(saveContext.requestIndex, 10)
-    for (
-      let collectionIndex = 0;
-      collectionIndex <= folderPathInt;
-      collectionIndex++
-    ) {
-      const collection = collections.value[collectionIndex]
-      const requestsToProcess =
-        collectionIndex === folderPathInt
-          ? requestIndexInt
-          : collection.requests.length
-      for (
-        let requestIndex = 0;
-        requestIndex < requestsToProcess;
-        requestIndex++
-      ) {
-        const request = collection.requests[requestIndex]
-        availableVariables.value.jsonPathVariables.push(
-          ...toRaw(request.jsonPathVariables)
-        )
-        availableVariables.value.cssSelectorVariables.push(
-          ...toRaw(request.cssSelectorVariables)
-        )
-        availableVariables.value.regexVariables.push(
-          ...toRaw(request.regexVariables)
-        )
-      }
-    }
+
+    search(folderPathValues, collections.value[folderPathValues[0]], requestIndexInt)
+
+    requestList.forEach((request) => {
+      availableVariables.value.jsonPathVariables.push(
+        ...toRaw(request.jsonPathVariables)
+      )
+      availableVariables.value.cssSelectorVariables.push(
+        ...toRaw(request.cssSelectorVariables)
+      )
+      availableVariables.value.regexVariables.push(
+        ...toRaw(request.regexVariables)
+      )
+    })
   }
 })
+
+const search = (
+  folderPathValues: number[],
+  collection: any,
+  requestIndex: number
+) => {
+  if (!folderPathValues.length) {
+    for (const folder of collection.folders) {
+      search([], folder, requestIndex)
+    }
+    requestList.push(...collection.requests)
+    return
+  }
+  if (folderPathValues.length === 1) {
+    for (const folder of collection.folders) {
+      search([], folder, requestIndex)
+    }
+    for (let i = 0; i < requestIndex; i++) {
+      requestList.push(collection.requests[i])
+    }
+    return
+  }
+
+  const newFolderPathValues = folderPathValues.slice(1)
+  for (let i = 0; i < newFolderPathValues[0]; i++) {
+    search([], collection.folders[i], requestIndex)
+  }
+
+  search(
+    newFolderPathValues,
+    collection.folders[newFolderPathValues[0]],
+    requestIndex
+  )
+}
 
 const tab = useVModel(props, "modelValue", emit)
 
 // TODO: Come up with a better dirty check
-let oldRequest = cloneDeep(tab.value.document.request)
 watch(
   () => tab.value.document.request,
-  (updatedValue) => {
-    oldRequest = cloneDeep(updatedValue)
+  () => {
     invokeAction("request-response.save")
   },
   { deep: true }
