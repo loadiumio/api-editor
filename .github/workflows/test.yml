@@ -34,6 +34,9 @@ jobs:
         with:
           version: 8
 
+      - name: Use taobao registry
+        run: npm config set registry https://registry.npmmirror.com/
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
