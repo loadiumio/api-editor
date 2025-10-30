@@ -36,7 +36,7 @@ jobs:
           run_install: false
 
       - name: Install dependencies
-        run: pnpm -w install --no-frozen-lockfile
+        run: pnpm install
 
       - name: Build project
         run: npm run generate
