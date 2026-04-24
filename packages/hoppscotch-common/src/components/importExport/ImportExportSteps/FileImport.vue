@@ -58,7 +58,6 @@
         :label="t('import.title')"
         :loading="loading"
         class="w-full"
-        style="background-color: #ff481d; border-color: #ff481d"
         @click="emit('importFromFile', fileContent, fileDetails)"
       />
     </div>

@@ -59,13 +59,13 @@
 }
 
 @mixin orange-theme {
-  --accent-color: theme("colors.orange.500");
-  --accent-light-color: theme("colors.orange.400");
-  --accent-dark-color: theme("colors.orange.600");
+  --accent-color: #ff481d;
+  --accent-light-color: #ff6a45;
+  --accent-dark-color: #e03a10;
   --accent-contrast-color: theme("colors.white");
-  --gradient-from-color: theme("colors.orange.400");
-  --gradient-via-color: theme("colors.orange.500");
-  --gradient-to-color: theme("colors.orange.600");
+  --gradient-from-color: #ff6a45;
+  --gradient-via-color: #ff481d;
+  --gradient-to-color: #e03a10;
 }
 
 @mixin red-theme {
