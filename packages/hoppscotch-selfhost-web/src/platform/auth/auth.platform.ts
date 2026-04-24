@@ -88,6 +88,8 @@ function setUser(user: HoppUser | null) {
 }
 
 async function setInitialUser() {
+  setUser(null);
+  return;
   isGettingInitialUser.value = true
   const res = await getInitialUserDetails()
 
